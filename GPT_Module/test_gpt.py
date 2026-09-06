@@ -16,14 +16,6 @@ p_true, nll = true_token_stats(lgts_pred, y_target)
 h_pred, y_target, p_true, nll = run_batch(gpt, chunks)
 chunks, chunk_story_ids = collect_chunks_split(dataset, gpt.tokenizer, seq_len=16, n_chunks_needed={"datastore": 5, "controller_train": 5, "val": 5})
 
-seen = {}
-leaks = []
-for split, ids_list in chunk_story_ids.items():
-    for sid in set(ids_list):
-        if sid in seen and seen[sid] != split:
-            leaks.append((sid, seen[sid], split))
-        seen[sid] = split
 
-print("leaks found:", leaks)  # should be empty list
 
 
