@@ -569,13 +569,62 @@ Both systems improved meaningfully from tuning — DIME's margin over GPT-only (
 went from razor-thin (2.792, barely distinguishable) to solid (2.745). Saved to
 `DIME/results/grid_search_results.json`.
 
-## What's next: Phase D step 12 — Q-read controller (fitted-Q MLP)
+## Phase D step 12 — Q-read controller (DONE, verified — genuine improvement)
 
-`reward = NLL_GPT − NLL_action` — replace the fixed hyperparameters with a learned
-policy (an MLP) that decides, per query, how to read from memory. Step 13 then
-applies the same Q-read code to both raw and DIME memory for a fair comparison.
-Training this controller is exactly the kind of thing that must use
-`controller_train`, not `val` — same rule as the grid search.
+Framed as a one-shot contextual bandit, not full RL (no state transitions — each
+query is an independent decision): **state** = query features knowable *without*
+the true label, **action** = binary (retrieve at the Phase-D-11-tuned config, or
+don't), **reward** = `NLL_GPT − NLL_action` (computed offline from `controller_train`
+labels, fine as a training target — labels are always used to supervise training;
+the leakage risk is specifically about what goes into the *state*, not the reward).
+
+**Caught before coding, not after:** GPT's own NLL/`p_true` requires already knowing
+the true next token, so it can't be a state feature — at real decision time you don't
+have the answer yet, that's what you're predicting. Used **entropy of GPT's full
+distribution** instead (knowable without the label) plus nearest-neighbor distance
+and the retrieved cluster's own entropy/purity — same class of concern as
+`utility_weighted`'s leakage check, one level closer to an actual bug this time.
+
+New pieces: `predictive_entropy` (`helpers.py`, entropy from logits, no label
+needed), `run_batch_with_entropy` (`extract.py`, sibling to `run_batch` — didn't
+touch `run_batch`'s signature since 7 existing scripts unpack it positionally),
+`retrieval_purity_entropy` + `train_q_read_controller` (`DIME/q_read.py` — handles
+both raw kNN's plain-token retrieved values and DIME's `Counter`s; MLP via
+`sklearn.neural_network.MLPRegressor`, not hand-written — the thing under study is
+DIME's mechanism, not general ML algorithms, same reasoning as using sklearn for
+k-means/NearestNeighbors rather than re-deriving them).
+
+**Isolation tests (done):** entropy on a peaked vs. flat 3-token distribution gave
+`≈0` and `≈log(3)=1.0986` exactly. Retrieval entropy/purity on a 9:1 vs. 5:5 split
+gave `0.325`/`0.9` and `log(2)=0.693`/`0.5` exactly. MLP trained on synthetic data
+with a known linear relationship (`reward = 2*x0 - x1`) predicted `[2.19,-0.95,-1.12]`
+vs. true `[2,-1,-1]` — correctly recovered the relationship.
+
+**Real-scale run (`run_q_read_baseline.py` + `submit_q_read_baseline.sh`, tuned
+`minibatch_kmeans` config `k=20,tau=2.0,alpha=0.05` from step 11):**
+
+```
+controller_train: 9652 examples, mean reward = 0.0443
+mean NLL, GPT-only:           2.7984323501586914
+mean NLL, always mixed:       2.7451901708278066
+mean NLL, Q-read (adaptive):  2.7428829272220168
+fraction of val queries where Q-read chose to retrieve: 0.8999787188763567
+```
+
+**Q-read (2.743) beats the single fixed tuned config (2.745)** — modest but genuine,
+and exactly the result Phase D is chasing: a per-query decision beating one global
+choice for everyone. It retrieved for ~90% of `val` queries and correctly identified
+the other ~10% as cases where trusting GPT alone was better. Saved to
+`DIME/results/q_read_baseline.json`.
+
+## What's next: Phase D step 13 — apply the same Q-read code to raw memory
+
+Fairness check: run the identical Q-read pipeline (same feature set, same training
+approach) on **raw kNN** instead of `minibatch_kmeans`, using raw kNN's own tuned
+config from step 11 (`k=50, tau=2.0, alpha=0.1`). Confirms the Q-read mechanism
+itself isn't somehow specific to compressed memory, and gives a like-for-like
+adaptive-vs-fixed comparison for both memory types before Phase E's equal-budget
+baselines.
 
 ## Working conventions established in this project
 
