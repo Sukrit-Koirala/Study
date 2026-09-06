@@ -1,0 +1,5 @@
+GPT-only baseline job started: Sat Sep  5 07:40:22 PM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+mean NLL on val: 2.798432154698415
+GPT-only baseline job done: Sat Sep  5 07:42:05 PM CDT 2026
