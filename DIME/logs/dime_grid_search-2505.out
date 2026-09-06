@@ -1,0 +1,8 @@
+DIME grid search job started: Sun Sep  6 04:25:07 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+raw kNN best on controller_train: {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.6594414062060365}
+DIME (minibatch_kmeans) best on controller_train: {'k': 20, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7038574683331595}
+raw kNN: best config {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.6594414062060365} -> val mean NLL: 2.6940908318605463
+DIME minibatch_kmeans: best config {'k': 20, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7038574683331595} -> val mean NLL: 2.7451901708278066
+DIME grid search job done: Sun Sep  6 04:26:28 AM CDT 2026

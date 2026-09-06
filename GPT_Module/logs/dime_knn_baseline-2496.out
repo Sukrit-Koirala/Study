@@ -1,0 +1,7 @@
+Raw kNN baseline job started: Sun Sep  6 01:13:48 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+datastore size: (49657, 768)
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean raw kNN-mixed NLL: 2.757404052302226
+Raw kNN baseline job done: Sun Sep  6 01:15:02 AM CDT 2026

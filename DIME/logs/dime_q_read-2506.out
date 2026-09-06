@@ -1,0 +1,9 @@
+DIME Q-read controller job started: Sun Sep  6 04:57:53 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+controller_train: 9652 examples, mean reward = 0.0443
+mean NLL, GPT-only:           2.7984323501586914
+mean NLL, always mixed:       2.7451901708278066
+mean NLL, Q-read (adaptive):  2.7428829272220168
+fraction of val queries where Q-read chose to retrieve: 0.8999787188763567
+DIME Q-read controller job done: Sun Sep  6 04:58:56 AM CDT 2026

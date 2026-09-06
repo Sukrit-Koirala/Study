@@ -1,0 +1,18 @@
+{
+  "phase": "D12_q_read_controller",
+  "model": "gpt2",
+  "seq_len": 128,
+  "dime_method": "minibatch_kmeans",
+  "n_clusters": 500,
+  "tuned_config": {
+    "k": 20,
+    "tau": 2.0,
+    "alpha": 0.05
+  },
+  "n_controller_train": 9652,
+  "n_val": 14097,
+  "frac_val_retrieved": 0.8999787188763567,
+  "mean_nll_gpt_only": 2.7984323501586914,
+  "mean_nll_always_mixed": 2.7451901708278066,
+  "mean_nll_q_read": 2.7428829272220168
+}
