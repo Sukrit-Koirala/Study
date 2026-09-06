@@ -1,22 +1,17 @@
 import numpy as np
-from collections import Counter
-from state_object import query_kmeans_partition
+import sys,os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "GPT_Module"))
+from knn import mix_knn_and_lm
+from grid_search import grid_search_hyperparams
 
-rng = np.random.default_rng(11)
+distances = np.array([[0.1, 10.0]])          # one query, k_max=2 — dominant near neighbor, far noisy one
+retrieved = np.array([[5, 99]])              # nearest neighbor's value EXACTLY matches true target (5)
+true_targets = np.array([5])
+p_lm_true = np.array([0.5])                  # GPT itself is mediocre here
 
-ct_blob_a = rng.normal(loc=0.0,   scale=0.1, size=(5, 4)).astype(np.float32)
-ct_blob_b = rng.normal(loc=20.0,  scale=0.1, size=(5, 4)).astype(np.float32)
-ct_blob_c = rng.normal(loc=-20.0, scale=0.1, size=(5, 4)).astype(np.float32)
-ct_keys = np.concatenate([ct_blob_a, ct_blob_b, ct_blob_c], axis=0)
+results, best = grid_search_hyperparams(
+    distances, retrieved, true_targets, p_lm_true, mix_knn_and_lm,
+    k_values=[2], tau_values=[0.5, 1.0, 2.0], alpha_values=[0.1, 0.5, 0.9]
+)
 
-ds_blob_a = rng.normal(loc=0.5,   scale=0.1, size=(5, 4)).astype(np.float32)   # offset from ct_blob_a's center
-ds_blob_b = rng.normal(loc=20.5,  scale=0.1, size=(5, 4)).astype(np.float32)   # offset from ct_blob_b's center
-ds_blob_c = rng.normal(loc=-19.5, scale=0.1, size=(5, 4)).astype(np.float32)   # offset from ct_blob_c's center
-ds_keys = np.concatenate([ds_blob_a, ds_blob_b, ds_blob_c], axis=0)
-ds_values = np.array([10]*5 + [20]*5 + [30]*5)
-
-compressed_keys, compressed_dists = query_kmeans_partition(ds_keys, ds_values, ct_keys, n_clusters=3, seed=42)
-
-print("compressed_keys shape:", compressed_keys.shape)
-for i, d in enumerate(compressed_dists):
-    print(f"cluster {i}: {dict(d)}")
+print("best config:", best)
