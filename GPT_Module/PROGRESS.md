@@ -617,14 +617,55 @@ choice for everyone. It retrieved for ~90% of `val` queries and correctly identi
 the other ~10% as cases where trusting GPT alone was better. Saved to
 `DIME/results/q_read_baseline.json`.
 
-## What's next: Phase D step 13 — apply the same Q-read code to raw memory
+## Phase D step 13 — same Q-read code on raw kNN (DONE, verified — completes Phase D)
 
-Fairness check: run the identical Q-read pipeline (same feature set, same training
-approach) on **raw kNN** instead of `minibatch_kmeans`, using raw kNN's own tuned
-config from step 11 (`k=50, tau=2.0, alpha=0.1`). Confirms the Q-read mechanism
-itself isn't somehow specific to compressed memory, and gives a like-for-like
-adaptive-vs-fixed comparison for both memory types before Phase E's equal-budget
-baselines.
+`run_q_read_raw_baseline.py` + `submit_q_read_raw_baseline.sh` — identical pipeline
+to step 12, swapped to the raw (uncompressed) datastore, `mix_knn_and_lm`, and raw
+kNN's own tuned config from step 11 (`k=50, tau=2.0, alpha=0.1`). One expected
+quirk noted going in: `retrieval_purity_entropy` returns a *constant*
+`entropy=0, purity=1` for every raw kNN query (its retrieved values are always plain
+token ids, never `Counter`s — no real distribution to measure), so those two
+features carry no information here; the MLP leans on GPT's own entropy and
+nearest-neighbor distance instead.
+
+**Real result:**
+
+```
+controller_train: 9652 examples, mean reward = 0.0887
+mean NLL, GPT-only:           2.7984323501586914
+mean NLL, always mixed:       2.6940908318605463
+mean NLL, Q-read (adaptive):  2.6893500226508866
+fraction of val queries where Q-read chose to retrieve: 0.7317869050152515
+```
+
+**Q-read (2.689) beats always-mixed (2.694) again** — confirms the mechanism isn't
+specific to compressed memory. Interesting difference from the DIME run: it retrieved
+for only ~73% of queries here (vs. ~90% for `minibatch_kmeans`), i.e. it learned to
+be *more* selective with raw kNN — plausible, since a single raw nearest-neighbor
+match is noisier per-query than a compressed cluster's averaged vote, so skipping it
+more often when the features look unfavorable pays off more. Saved to
+`DIME/results/q_read_raw_baseline.json`.
+
+**Full Phase D comparison table (both memory types, all three approaches):**
+
+| | GPT-only | untuned fixed | tuned fixed (grid search) | Q-read (adaptive) |
+|---|---|---|---|---|
+| raw kNN | 2.798 | 2.757 | 2.694 | **2.689** |
+| minibatch_kmeans | 2.798 | 2.792 | 2.745 | **2.743** |
+
+Every step of Phase D improved both systems, and the ordering (raw kNN always ahead
+of compressed, as expected since compression trades some fidelity for far fewer
+stored entries) held at every stage. **This completes Phase D.**
+
+## What's next: Phase E — Comparison baselines at equal budget
+
+Step 14: 6 equal-budget raw variants (`raw_random`, `raw_high_gpt_loss`, etc.) — the
+real fairness question Phase D's numbers can't answer yet: raw kNN has ~49,657
+entries vs. DIME's 500 clusters, a ~99x budget difference. Phase E builds raw-memory
+variants capped at the *same* entry budget as DIME (e.g. 500 raw entries, selected by
+different criteria — random subsample, highest-GPT-loss subsample, etc.) so
+DIME can finally be compared against raw retrieval at an equal storage cost, not just
+against the full uncompressed 49,657-entry version.
 
 ## Working conventions established in this project
 
