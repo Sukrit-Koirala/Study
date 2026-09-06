@@ -173,14 +173,79 @@ that directory submits, `squeue -u sukrit.koirala` checks status, `logs/*.out`/`
 hold output (must `mkdir -p logs` once before first submission, since SLURM needs the
 output path to exist upfront and git doesn't track empty dirs).
 
-## What's next: Phase B step 5 — Full raw kNN baseline
+## Phase B step 5 — Full raw kNN baseline (DONE, verified at toy scale)
 
-Every datastore example becomes its own retrievable unit (no compression yet — that's
-Phase C). Needs: (a) encoding the `datastore` split into retrievable hidden-state
-vectors, (b) a nearest-neighbor lookup at read time for each `val`/query position,
-(c) combining GPT's own next-token distribution with the retrieved neighbors' target
-tokens — the actual "kNN-LM" mixing happens in step 6, so step 5 is just building the
-raw retrievable memory + lookup mechanism first.
+Built the raw (uncompressed) retrievable memory: every datastore position is its own
+`(key, value)` entry — key = hidden state, value = the true next token at that
+position. Two new pieces:
+
+- **`knn.py`** — pure retrieval math, no model needed: `build_datastore(keys, values)`
+  wraps `sklearn.neighbors.NearestNeighbors` (brute-force/tree search — fine at current
+  scale, revisit only if/when this becomes the bottleneck), `query_knn(index, values,
+  query_keys, k)` returns `[M, k]` distances and retrieved token ids.
+- **`extract.py` → `build_datastore_from_chunks(gpt, chunks, batch_size=256)`** —
+  orchestration: runs `run_batch` over chunks in batches, flattens `[B, L, D]` hidden
+  states and `[B, L]` target tokens down to `[B*L, D]` keys / `[B*L]` values (every
+  position is an independent retrievable unit, chunk/position identity doesn't matter
+  for the datastore).
+
+**Isolation test (dummy vectors, done first):** 20 random 768-dim keys with known
+values 0–19; queried with key #5 + tiny noise; got back value 5 as the closest match,
+confirming the retrieval math alone is correct before touching real hidden states.
+
+**Real-data test (`test_knn.py`, toy scale — `seq_len=32`,
+`{"datastore": 40, "controller_train": 5, "val": 5}`):** datastore built from 1240 real
+positions (`(1240, 768)` keys, `(1240,)` values). Queried with 10 real `val` hidden
+states, decoded true next token vs. top-5 retrieved tokens. Real output confirmed the
+mechanism is correctly wired, not just running-without-crashing:
+- Exact matches: true token `' a'` retrieved `[' a', ' a', ' a', ...]`; true token `','`
+  retrieved `[',', ...]` — nearby hidden states really do share next-token identity.
+- Semantic-neighbor matches: true token `' time'` retrieved `[' little', ' big', ...]`;
+  true token `' small'` retrieved `[' peaceful', ' big', ' little', ...]` — plausible
+  same-slot fillers even without an exact match.
+- Distances ranged ~5–24 — wide range expected at this scale (1240 entries can't
+  densely cover a 50257-token vocabulary yet); should tighten once the real datastore
+  has thousands of entries.
+
+**Not yet done:** real-scale run (thousands of datastore entries, not 1240) — same
+"just a parameter change" pattern as A2/A3, likely folded into building the actual
+Phase B/C datastore later.
+
+## Phase B step 6 — Read-time mixing formula (math DONE, verified in isolation)
+
+Classic kNN-LM formula, added to `knn.py` next to the retrieval functions:
+`mix_knn_and_lm(distances, retrieved_values, true_targets, p_lm_true, tau=1.0,
+alpha=0.25)`. Per query position: (1) `softmax(-distance / tau)` turns the `k`
+retrieved distances into a distribution over just those neighbors, (2) sum the weight
+of whichever neighbors' value equals the true target → `p_knn_true` (0 if none
+match), (3) `p_mixed = alpha * p_knn_true + (1 - alpha) * p_lm_true`, (4)
+`nll_mixed = -log(p_mixed)`. `k`/`tau`/`alpha` are fixed hyperparameters for now —
+tuning them via grid search is Phase D step 11, not now.
+
+**Isolation test (dummy numbers, done):** two queries with identical GPT confidence
+(`p_lm_true=0.3`, pure-LM NLL `1.204` both times) and identical retrieved distances,
+but one where the nearest neighbor's value matched the true target and one where none
+did. Real output: `nll_mixed = [0.750, 1.492]` — matched the predicted direction
+exactly: retrieval agreeing pulled NLL *down* from 1.204, retrieval disagreeing pushed
+it *up*. Confirms the formula behaves correctly, not just runs without crashing.
+
+**Not yet done:** wiring this into real retrieval output (like `test_knn.py`'s
+real-data test) to get an actual "raw kNN mean NLL" number on real `val` positions —
+needed before this can be meaningfully compared to the GPT-only baseline (2.798), and
+before the real-scale SLURM run that produces the final comparable Phase B step 5+6
+result.
+
+## What's next: real-data small-scale test, then the SLURM run
+
+1. Wire `mix_knn_and_lm` into the real retrieval pipeline (`test_knn.py`'s setup):
+   for each real `val` query, get `p_lm_true` (already available from
+   `true_token_stats`), query the datastore for `distances`/`retrieved_values`, run
+   `mix_knn_and_lm`, and compute a real mean `nll_mixed` over the toy-scale `val` set.
+   Sanity-check it's in a plausible range compared to 2.798 (not necessarily better —
+   toy-scale datastore is small — but not nonsensical either).
+2. Once that's confirmed, combine real-scale datastore construction (step 5, scaled
+   up like the GPT-only baseline was) with this mixing formula into one SLURM job,
+   producing the actual comparable "raw kNN baseline" mean NLL for `results/`.
 
 ## Working conventions established in this project
 

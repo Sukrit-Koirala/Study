@@ -1,15 +1,19 @@
 import numpy as np
-from knn import build_datastore, query_knn
+from knn import mix_knn_and_lm
 
-rng = np.random.default_rng(42)
-keys = rng.normal(size=(20, 768)).astype(np.float32)
-values = np.arange(20)  # value i is just "i", so we know exactly what should come back
+distances = np.array([
+    [0.1, 5.0, 6.0],
+    [0.1, 5.0, 6.0],
+])
+retrieved_values = np.array([
+    [5, 2, 9],   # nearest neighbor's value MATCHES true target (5)
+    [2, 9, 3],   # no neighbor matches true target (7)
+])
+true_targets = np.array([5, 7])
+p_lm_true = np.array([0.3, 0.3])
 
-index, stored_values = build_datastore(keys, values)
+p_mixed, nll_mixed = mix_knn_and_lm(distances, retrieved_values, true_targets, p_lm_true, tau=1.0, alpha=0.25)
 
-# query = key #5 plus tiny noise — should retrieve value 5 as the closest match
-query = keys[5:6] + rng.normal(scale=0.01, size=(1, 768)).astype(np.float32)
-distances, retrieved = query_knn(index, stored_values, query, k=3)
-
-print("distances:", distances)
-print("retrieved values (should have 5 first):", retrieved)
+print("p_mixed:", p_mixed)
+print("nll_mixed:", nll_mixed)
+print("pure LM NLL (no retrieval):", -np.log(p_lm_true))

@@ -14,7 +14,7 @@ hidden, logits = gpt.forward(input_ids)
 h_pred, lgts_pred, y_target = shift_for_next_token(hidden, logits, input_ids)
 p_true, nll = true_token_stats(lgts_pred, y_target)
 h_pred, y_target, p_true, nll = run_batch(gpt, chunks)
-chunks, chunk_story_ids = collect_chunks_split(dataset, gpt.tokenizer, seq_len=16, n_chunks_needed={"datastore": 5, "controller_train": 5, "val": 5})
+chunks, chunk_story_ids = collect_chunks_split(dataset, gpt.tokenizer, seq_len=32, n_chunks_needed={"datastore": 5, "controller_train": 5, "val": 5})
 
 
 
