@@ -56,6 +56,32 @@ def minibatch_kmeans_partition(keys, values, n_clusters, seed=42):
     return compressed_keys, compressed_dists
 
 
+def utility_weighted_partition(keys, values, nll, n_clusters, seed=42):
+    """Same clustering as minibatch_kmeans_partition, but each raw entry's
+    contribution to its cluster's token distribution is weighted by GPT's own
+    NLL at that position (+ a small floor), not a flat count of 1, positions
+    where GPT struggled count for more than ones it already predicted well."""
+    km = MiniBatchKMeans(n_clusters=n_clusters, random_state=seed)
+    assignment = km.fit_predict(keys)
+    compressed_keys = km.cluster_centers_.astype(np.float32)
+
+    floor = 0.1
+    weights = nll + floor #To keep small values relevant
+
+    compressed_dists = []
+    for c in range(n_clusters):
+        member_mask = assignment == c
+        member_values = values[member_mask]
+        member_weights = weights[member_mask]
+        dist = Counter()
+        for tok, w in zip(member_values.tolist(), member_weights.tolist()):
+            dist[tok] += w
+        compressed_dists.append(dist)
+
+    return compressed_keys, compressed_dists
+
+
+
 
 
 

@@ -1,16 +1,14 @@
 import numpy as np
 from collections import Counter
-from state_object import minibatch_kmeans_partition
+from state_object import utility_weighted_partition
 
-rng = np.random.default_rng(7)
-blob_a = rng.normal(loc=0.0,   scale=0.1, size=(5, 4)).astype(np.float32)
-blob_b = rng.normal(loc=20.0,  scale=0.1, size=(5, 4)).astype(np.float32)
-blob_c = rng.normal(loc=-20.0, scale=0.1, size=(5, 4)).astype(np.float32)
-keys = np.concatenate([blob_a, blob_b, blob_c], axis=0)
-values = np.array([10]*5 + [20]*5 + [30]*5)  # blob A's positions are all tagged 10, etc.
+keys = np.array([[0.0, 0.0], [0.1, 0.1]], dtype=np.float32)  # 2 points, same tiny cluster
+values = np.array([10, 20])       # position 0 -> token 10, position 1 -> token 20
+nll    = np.array([0.1, 5.0])     # position 0: GPT was confident. position 1: GPT struggled a lot
 
-compressed_keys, compressed_dists = minibatch_kmeans_partition(keys, values, n_clusters=3, seed=42)
+compressed_keys, compressed_dists = utility_weighted_partition(keys, values, nll, n_clusters=1, seed=42)
 
-print("compressed_keys shape:", compressed_keys.shape)
-for i, d in enumerate(compressed_dists):
-    print(f"cluster {i}: {dict(d)}")
+print("cluster 0 weighted distribution:", dict(compressed_dists[0]))
+# unweighted count would be {10: 1, 20: 1} — equal.
+# weighted should show token 20 with much more mass than token 10 (5.1 vs 0.2),
+# reflecting that GPT needed help there far more than at position 0.
