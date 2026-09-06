@@ -80,6 +80,25 @@ def utility_weighted_partition(keys, values, nll, n_clusters, seed=42):
 
     return compressed_keys, compressed_dists
 
+def query_kmeans_partition(ds_keys, ds_values, ct_keys, n_clusters, seed = 42):
+    """Cluster controller_train's hidden states (not the datastore's), then assign
+    each datastore entry to its nearest controller_train-derived centroid."""
+    km = MiniBatchKMeans(n_clusters=n_clusters, random_state=seed)
+    km.fit(ct_keys)  # geometry comes from controller_train, not the datastore
+
+    assignment = km.predict(ds_keys)  # assign each datastore entry to nearest CT-derived centroid
+    compressed_keys = km.cluster_centers_.astype(np.float32)
+
+    compressed_dists = []
+    for c in range(n_clusters):
+        member_mask = assignment == c
+        member_values = ds_values[member_mask]
+        compressed_dists.append(Counter(member_values.tolist()) if member_values.shape[0] > 0 else Counter())
+
+    return compressed_keys, compressed_dists
+
+
+
 
 
 
