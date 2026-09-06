@@ -50,9 +50,10 @@ dime_index, dime_stored_values = build_datastore(compressed_keys, compressed_val
 ct_keys, ct_true_targets, ct_p_lm_true = encode_split(chunks["controller_train"])
 val_keys, val_true_targets, val_p_lm_true = encode_split(chunks["val"])
 
-k_values = [3, 5, 10, 20]
-tau_values = [0.5, 1.0, 2.0, 5.0]
-alpha_values = [0.1, 0.25, 0.5, 0.75]
+k_values = [10, 20, 30, 50]        # dropped k=3 (never competitive), extended upward for raw kNN's sake
+tau_values = [1.0, 2.0, 5.0, 10.0]  # dropped 0.5 (never competitive), extended slightly upward
+alpha_values = [0.01, 0.05, 0.1, 0.25]  # dropped 0.5/0.75 (clearly much worse), extended downward — this is the important change
+
 k_max = max(k_values)
 
 # --- Raw kNN grid search on controller_train ---
