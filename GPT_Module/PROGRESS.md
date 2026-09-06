@@ -714,17 +714,59 @@ both did *worse* than unbiased `raw_random` — the same lesson `utility_weighte
 taught in Phase C, resurfacing at the selection level. Saved to
 `DIME/results/equal_budget_raw_variants.json`.
 
-## What's next: Phase F — Prove it's not an illusion
+## Phase F step 15 — state-object ablations (DONE, verified — strong "not an illusion" result)
 
-Step 15: state-object ablations (majority-token, top-k truncation, shuffled) — these
-fall out naturally from the state object's design (full token-count `Counter` per
-cluster), per the design note made back in Phase C step 7: majority-token = truncate
-to the top-1 entry, top-k truncation = keep only the top-k entries by count, shuffled
-= scramble which distribution belongs to which cluster. Step 16: efficiency analysis
-(entry-count, latency, real byte measurements). Step 17: rigor (significance testing
-— is DIME's margin over raw-at-equal-budget statistically real, not just one seed's
-luck; every run so far has per-position NLL saved specifically to make this possible
-later).
+`run_state_object_ablations.py` + `submit_state_object_ablations.sh` (written
+directly, diagnostic) — three ablations on the tuned `minibatch_kmeans` compressed
+datastore (`k=20,tau=2.0,alpha=0.05`), reusing the same fitted `NearestNeighbors`
+index across all of them (only the stored *values* array changes per ablation, not
+the keys/geometry):
+
+- **majority-token**: collapse each cluster's full `Counter` to just its single most
+  common token (keeping its full count)
+- **top-5 truncation**: keep only the 5 most frequent tokens per cluster, drop the rest
+- **shuffled**: keep every centroid in its correct geometric position, but randomly
+  reassign *which* cluster's distribution it reports — breaks the correspondence
+  between "where a query sits" and "what actually follows there," the direct
+  illusion-check
+
+**Real result:**
+
+```
+full (unablated):      2.7451901708278066
+majority-token:        2.764617674191417
+top-5 truncation:      2.7471423633757466
+shuffled (illusion check): 2.8349186427610755
+```
+
+| Variant | Mean NLL | vs. full |
+|---|---|---|
+| full (unablated) | 2.745 | — |
+| top-5 truncation | 2.747 | +0.07% (basically free) |
+| majority-token | 2.765 | +0.71% (real, modest loss) |
+| shuffled | 2.835 | +3.27% — **worse than GPT-only (2.798)** |
+
+**`shuffled` scoring worse than doing nothing at all is the key finding** — direct,
+strong evidence DIME's benefit is real, not an artifact of the mixing formula or
+GPT's own behavior: when a centroid's geometric position is right but its reported
+distribution is wrong, the mixing formula confidently blends in actively-misleading
+votes, actively hurting rather than just failing to help. If shuffling had barely
+changed the result, that would have been the red flag; instead it confirms the
+(location → content) correspondence is doing real work. Separately, `top-5
+truncation ≈ full` is a strong efficiency signal for step 16 — sparse top-5 storage
+loses almost nothing, a real lever for byte-level savings. `majority-token` sits
+between the two, as expected: real degradation from a single-token reduction, but
+nowhere near as damaging as breaking the correspondence entirely, and still clearly
+better than GPT-only. Saved to `DIME/results/state_object_ablations.json`.
+
+## What's next: Phase F step 16 — efficiency analysis
+
+Entry-count, latency, and real byte measurements (not just formulas) — e.g. actual
+memory footprint of the tuned `minibatch_kmeans` state (500 entries × keys +
+`Counter`-based distributions) vs. raw kNN's 49,657 entries, real retrieval latency
+for each, and — informed by step 15's top-5-truncation finding — a sparse top-K
+byte/quality tradeoff table (top-5's near-zero quality loss suggests a large real
+byte savings opportunity worth actually measuring, not assuming).
 
 ## Working conventions established in this project
 
