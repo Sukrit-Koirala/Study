@@ -657,15 +657,74 @@ Every step of Phase D improved both systems, and the ordering (raw kNN always ah
 of compressed, as expected since compression trades some fidelity for far fewer
 stored entries) held at every stage. **This completes Phase D.**
 
-## What's next: Phase E — Comparison baselines at equal budget
+## Phase E step 14 — 6 equal-budget raw variants (DONE, verified — completes Phase E)
 
-Step 14: 6 equal-budget raw variants (`raw_random`, `raw_high_gpt_loss`, etc.) — the
-real fairness question Phase D's numbers can't answer yet: raw kNN has ~49,657
-entries vs. DIME's 500 clusters, a ~99x budget difference. Phase E builds raw-memory
-variants capped at the *same* entry budget as DIME (e.g. 500 raw entries, selected by
-different criteria — random subsample, highest-GPT-loss subsample, etc.) so
-DIME can finally be compared against raw retrieval at an equal storage cost, not just
-against the full uncompressed 49,657-entry version.
+`run_equal_budget_raw_variants.py` + `submit_equal_budget_raw_variants.sh` (written
+directly — flagged as "just a diagnostic script," so skipped the type-it-yourself
+step this time) — six criteria for selecting 500 raw datastore entries (same budget
+as DIME's 500 clusters), all evaluated with raw kNN's tuned config from step 11
+(`k=50,tau=2.0,alpha=0.1`, reused as-is rather than re-tuned per variant — a
+deliberate simplification for a diagnostic pass):
+
+- `raw_random` — uniform random 500 (baseline control)
+- `raw_high_gpt_loss` / `raw_low_gpt_loss` — the 500 hardest / easiest positions by NLL
+- `raw_high_entropy` / `raw_low_entropy` — the 500 with the most / least spread-out
+  GPT belief overall
+- `raw_kmeans_representative` — cluster into 500 groups like DIME does, but keep the
+  single *real* raw entry closest to each centroid instead of merging into a
+  synthetic prototype+distribution (diversity-driven selection, without compressing)
+
+**Real result — one of the strongest findings in the project:**
+
+```
+raw_random                   n= 500  mean NLL = 2.8075
+raw_high_gpt_loss            n= 500  mean NLL = 2.8606
+raw_low_gpt_loss             n= 500  mean NLL = 2.9016
+raw_high_entropy             n= 500  mean NLL = 2.8805
+raw_low_entropy              n= 500  mean NLL = 2.9017
+raw_kmeans_representative    n= 500  mean NLL = 2.7818
+```
+
+**Every single equal-budget raw variant is worse than GPT-only (2.798)** — none of
+the six 500-entry raw selections beat doing nothing at all. **DIME's
+`minibatch_kmeans` (2.745, also 500 entries) beats every one of them**, including
+the best raw variant (`raw_kmeans_representative`, 2.782). Full table:
+
+| Method | Entries | Mean NLL |
+|---|---|---|
+| raw kNN (full, tuned) | 49,657 | 2.694 (best overall) |
+| minibatch_kmeans (DIME, tuned) | 500 | **2.745** |
+| GPT-only (no retrieval) | — | 2.798 |
+| raw_kmeans_representative | 500 | 2.782 |
+| raw_random | 500 | 2.808 |
+| raw_high_gpt_loss | 500 | 2.861 |
+| raw_high_entropy | 500 | 2.881 |
+| raw_low_gpt_loss | 500 | 2.902 |
+| raw_low_entropy | 500 | 2.902 |
+
+**Why this matters:** this directly answers the fairness question Phase E exists to
+ask — is DIME's benefit just "500 well-chosen pointers," or something about
+compression specifically? It's the latter. No selection criterion for 500 *individual*
+raw examples comes close to DIME's 500 *compressed clusters*, because a single raw
+point's true-next-token is one noisy sample, while a cluster's pooled distribution is
+many samples' worth of averaged signal — broader, denser coverage per stored unit
+than any single point can offer, however well-chosen. Also: biasing selection toward
+hard (`high_gpt_loss`/`high_entropy`) or easy (`low_gpt_loss`/`low_entropy`) examples
+both did *worse* than unbiased `raw_random` — the same lesson `utility_weighted`
+taught in Phase C, resurfacing at the selection level. Saved to
+`DIME/results/equal_budget_raw_variants.json`.
+
+## What's next: Phase F — Prove it's not an illusion
+
+Step 15: state-object ablations (majority-token, top-k truncation, shuffled) — these
+fall out naturally from the state object's design (full token-count `Counter` per
+cluster), per the design note made back in Phase C step 7: majority-token = truncate
+to the top-1 entry, top-k truncation = keep only the top-k entries by count, shuffled
+= scramble which distribution belongs to which cluster. Step 16: efficiency analysis
+(entry-count, latency, real byte measurements). Step 17: rigor (significance testing
+— is DIME's margin over raw-at-equal-budget statistically real, not just one seed's
+luck; every run so far has per-position NLL saved specifically to make this possible
+later).
 
 ## Working conventions established in this project
 
