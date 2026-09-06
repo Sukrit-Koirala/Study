@@ -759,14 +759,54 @@ between the two, as expected: real degradation from a single-token reduction, bu
 nowhere near as damaging as breaking the correspondence entirely, and still clearly
 better than GPT-only. Saved to `DIME/results/state_object_ablations.json`.
 
-## What's next: Phase F step 16 — efficiency analysis
+## Phase F step 16 — efficiency analysis (DONE, verified — real measurements, not formulas)
 
-Entry-count, latency, and real byte measurements (not just formulas) — e.g. actual
-memory footprint of the tuned `minibatch_kmeans` state (500 entries × keys +
-`Counter`-based distributions) vs. raw kNN's 49,657 entries, real retrieval latency
-for each, and — informed by step 15's top-5-truncation finding — a sparse top-K
-byte/quality tradeoff table (top-5's near-zero quality loss suggests a large real
-byte savings opportunity worth actually measuring, not assuming).
+`run_efficiency_analysis.py` + `submit_efficiency_analysis.sh` — real, measured
+numbers (`.nbytes` on the actual numpy arrays, `pickle.dumps` on the actual `Counter`
+objects for a genuine serialized size, `time.perf_counter()` wall-clock timing with
+warmup), not hypothetical formula-based estimates:
+
+```
+=== Entry count ===
+raw kNN: 49657  DIME: 500  compression: 99.3x
+=== Real measured bytes ===
+raw kNN total:         152.94 MB
+DIME full:             1.65 MB  (92.6x smaller than raw)
+DIME top-5 truncation: 1.55 MB  (98.5x smaller than raw)
+DIME majority-token:   1.54 MB  (99.1x smaller than raw)
+=== Retrieval latency (ms per query) ===
+raw kNN (k=50):               0.3516 ms/query
+DIME minibatch_kmeans (k=20): 0.0060 ms/query
+```
+
+| Metric | Raw kNN | DIME (minibatch_kmeans) | Ratio |
+|---|---|---|---|
+| Entries | 49,657 | 500 | 99.3x fewer |
+| Bytes (measured) | 152.94 MB | 1.65 MB (full dist.) | 92.6x smaller |
+| Latency (ms/query) | 0.3516 | 0.0060 | 58.6x faster |
+
+All three metrics reinforce the case DIME already made on NLL quality — a genuine
+practical efficiency win, not just a modeling curiosity. **One honest nuance worth
+keeping, not overclaiming:** the byte savings from truncating *values*
+(full→top-5→majority: 1.65→1.55→1.54 MB) are tiny next to the savings from
+clustering itself (152.94→1.65 MB) — because the 500 clusters' **keys alone**
+already cost ~1.54 MB (`500×768×4 bytes`), dominating the total. Step 15's "top-5
+truncation loses almost no quality" finding is real, but its *byte* payoff here is
+modest, since there wasn't much value-side weight to trim — the real byte win
+already happened when the datastore shrank from 49,657 keys to 500. This is exactly
+what "real measurements, not formulas" is meant to catch: a formula-based guess could
+have overstated how much value-truncation would save. Saved to
+`DIME/results/efficiency_analysis.json`.
+
+## What's next: Phase F step 17 — rigor (significance testing)
+
+Is DIME's margin over the equal-budget raw variants (Phase E) and over GPT-only
+statistically real, or could it be noise from one particular random split/seed? Every
+run this project has done has saved **per-position NLL** (not just the mean)
+specifically to make this possible — e.g. a paired test (same `val` positions,
+different methods) between `minibatch_kmeans`'s per-position NLL and
+`raw_kmeans_representative`'s (Phase E's best raw variant) per-position NLL, checking
+whether DIME's win holds up as statistically significant, not just a favorable mean.
 
 ## Working conventions established in this project
 
