@@ -45,6 +45,19 @@ print("raw kNN tuned ceiling:", raw_best, "-> val mean NLL:", raw_ceiling_nll)
 n_clusters_sweep = [4000, 15000, 40000, 100000]
 sweep_results = []
 
+results = {
+    "phase": "compression_sweep_wikitext103_gpt2-medium",
+    "model": "gpt2-medium",
+    "dataset": "wikitext103",
+    "seq_len": 128,
+    "n_datastore": len(ds_values),
+    "grid": {"k_values": k_values, "tau_values": tau_values, "alpha_values": alpha_values},
+    "raw_knn_tuned_ceiling": {"best_config": raw_best, "val_mean_nll": raw_ceiling_nll},
+    "sweep": sweep_results,
+    "complete": False,
+}
+save_results("results/compression_sweep.json", results)
+
 for n_clusters in n_clusters_sweep:
     ratio = len(ds_values) / n_clusters
     print(f"\n--- n_clusters={n_clusters} ({ratio:.1f}x compression) ---")
@@ -75,17 +88,9 @@ for n_clusters in n_clusters_sweep:
         "beats_raw_ceiling": beats_raw,
     })
 
-results = {
-    "phase": "compression_sweep_wikitext103_gpt2-medium",
-    "model": "gpt2-medium",
-    "dataset": "wikitext103",
-    "seq_len": 128,
-    "n_datastore": len(ds_values),
-    "grid": {"k_values": k_values, "tau_values": tau_values, "alpha_values": alpha_values},
-    "raw_knn_tuned_ceiling": {"best_config": raw_best, "val_mean_nll": raw_ceiling_nll},
-    "sweep": sweep_results,
-}
+    save_results("results/compression_sweep.json", results)
 
+results["complete"] = True
 save_results("results/compression_sweep.json", results)
 
 print("\n=== SWEEP SUMMARY ===")
