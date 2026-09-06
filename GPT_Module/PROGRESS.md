@@ -148,13 +148,39 @@ split) — per the established pattern (see A2 note above), that's just a parame
 change, not a new mechanism, and will likely happen alongside building the real
 datastore/controller_train/val for Phase B.
 
-## What's next: Phase B — Naive end-to-end memory (kNN-LM baseline)
+## Phase B step 4 — GPT-only NLL baseline (DONE, verified)
 
-Step 4: GPT-only NLL (reference number) — run the frozen GPT-2 alone (no memory/
-retrieval at all) over the `val` split and report its mean NLL. This becomes the
-baseline every later memory variant (raw kNN, compressed DIME memory, etc.) is
-compared against — if a memory-augmented setup doesn't beat this number, the memory
-isn't helping.
+Ran the frozen GPT-2 alone (no memory/retrieval) over the `val` split
+(`seq_len=128`, `n_chunks={"datastore": 350, "controller_train": 75, "val": 75}`) via
+`run_gpt_baseline` (`extract.py`) + `save_results` (`results_io.py`), submitted as a
+SLURM job (`submit_baseline.sh`) on an L40S node. Real output:
+
+```
+GPU: NVIDIA L40S
+mean NLL on val: 2.798432154698415
+```
+
+Finished in under 2 minutes — plenty of headroom to scale up chunk counts later
+without worrying about runtime. Result + per-chunk NLL saved to
+`GPT_Module/results/gpt_only_baseline.json`. This is the reference number every later
+memory variant (raw kNN, compressed DIME memory, etc.) must beat — if a
+memory-augmented setup doesn't get *below* 2.798, the memory isn't helping.
+
+Also established this run: **SLURM workflow** — code lives in a git repo, pushed
+locally and `git pull`ed on the cluster at
+`~/ondemand/upload_me/Research/Study/GPT_Module`; `sbatch submit_baseline.sh` from
+that directory submits, `squeue -u sukrit.koirala` checks status, `logs/*.out`/`*.err`
+hold output (must `mkdir -p logs` once before first submission, since SLURM needs the
+output path to exist upfront and git doesn't track empty dirs).
+
+## What's next: Phase B step 5 — Full raw kNN baseline
+
+Every datastore example becomes its own retrievable unit (no compression yet — that's
+Phase C). Needs: (a) encoding the `datastore` split into retrievable hidden-state
+vectors, (b) a nearest-neighbor lookup at read time for each `val`/query position,
+(c) combining GPT's own next-token distribution with the retrieved neighbors' target
+tokens — the actual "kNN-LM" mixing happens in step 6, so step 5 is just building the
+raw retrievable memory + lookup mechanism first.
 
 ## Working conventions established in this project
 
