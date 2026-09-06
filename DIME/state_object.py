@@ -1,5 +1,6 @@
 import numpy as np
 from collections import Counter
+from sklearn.cluster import MiniBatchKMeans
 
 # We will be adding different methods of clustering here
 
@@ -33,6 +34,28 @@ def random_partition(keys, values, n_clusters, seed=42):
     return compressed_keys, compressed_dists
 
 #Basically we created a function that returns the avg keys from a random cluster and its compressed distribution
+
+
+def minibatch_kmeans_partition(keys, values, n_clusters, seed=42):
+    """keys: [N, D] raw datastore keys. values: [N] raw datastore target token ids.
+    Returns compressed_keys [n_clusters, D] (k-means centroids) and compressed_dists
+    (list of Counter, one per cluster: {token_id: count})."""
+
+    #Clustering via K nearest neighbours ig
+    km = MiniBatchKMeans(n_clusters=n_clusters,random_state=seed)
+    assignment = km.fit_predict(keys)
+
+    compressed_keys = km.cluster_centers_.astype(np.float32)  # k-means already gives centroids directly
+
+    compressed_dists = []
+    for c in range(n_clusters):
+        member_mask = assignment == c
+        member_values = values[member_mask]
+        compressed_dists.append(Counter(member_values.tolist()) if member_values.shape[0] > 0 else Counter())
+
+    return compressed_keys, compressed_dists
+
+
 
 
 
