@@ -36,10 +36,14 @@ n_clusters = 4000  # ~95x compression, matching the ratio already validated on T
 compressed_keys, compressed_dists = minibatch_kmeans_partition(ds_keys, ds_values, n_clusters=n_clusters, seed=42)
 dime_index, dime_stored_values = build_datastore(compressed_keys, np.array(compressed_dists, dtype=object))
 
-# --- 2. Grid search on controller_train (reusing the shape that worked for TinyStories, widened for the bigger datastore) ---
-k_values = [10, 20, 50, 100]
+# --- 2. Grid search on controller_train ---
+# Round 2: round 1's winners hit the boundary on k (100, the max tested) for both
+# raw kNN and DIME, and on alpha (0.25, the max tested) for raw kNN specifically.
+# Expanded both ranges based on that; tau stayed interior for both winners in round 1
+# so left unchanged.
+k_values = [50, 100, 200, 300]
 tau_values = [0.5, 1.0, 2.0, 5.0]
-alpha_values = [0.01, 0.05, 0.1, 0.25]
+alpha_values = [0.05, 0.1, 0.25, 0.5]
 k_max = max(k_values)
 
 raw_distances_ct, raw_retrieved_ct = query_knn(raw_index, raw_stored_values, ct_keys, k=k_max)
@@ -48,6 +52,7 @@ raw_grid_results, raw_best = grid_search_hyperparams(
     mix_knn_and_lm, k_values, tau_values, alpha_values
 )
 print("raw kNN best on controller_train:", raw_best)
+print("raw kNN top5:", raw_grid_results[:5])
 
 dime_distances_ct, dime_retrieved_ct = query_knn(dime_index, dime_stored_values, ct_keys, k=k_max)
 dime_grid_results, dime_best = grid_search_hyperparams(
@@ -55,6 +60,7 @@ dime_grid_results, dime_best = grid_search_hyperparams(
     mix_dime_and_lm, k_values, tau_values, alpha_values
 )
 print("DIME (minibatch_kmeans) best on controller_train:", dime_best)
+print("DIME top5:", dime_grid_results[:5])
 
 # --- 3. Evaluate winning configs on val — touched exactly once, here ---
 raw_distances_val, raw_retrieved_val = query_knn(raw_index, raw_stored_values, val_keys, k=raw_best["k"])
@@ -114,8 +120,8 @@ results = {
     "n_controller_train": len(ct_values),
     "n_val": len(val_values),
     "grid": {"k_values": k_values, "tau_values": tau_values, "alpha_values": alpha_values},
-    "raw_knn": {"best_config": raw_best, "val_mean_nll": float(nll_raw_val.mean())},
-    "dime_minibatch_kmeans": {"best_config": dime_best, "val_mean_nll": float(nll_dime_val.mean())},
+    "raw_knn": {"best_config": raw_best, "val_mean_nll": float(nll_raw_val.mean()), "ct_grid_top5": raw_grid_results[:5]},
+    "dime_minibatch_kmeans": {"best_config": dime_best, "val_mean_nll": float(nll_dime_val.mean()), "ct_grid_top5": dime_grid_results[:5]},
     "raw_kmeans_representative": {"n_selected": int(len(selected_idx)), "val_mean_nll": float(nll_raw_rep_val.mean())},
     "gpt_only_mean_nll": float(nll_gpt_only_val.mean()),
     "significance_tests": [test_gpt_vs_dime, test_rawrep_vs_dime],
