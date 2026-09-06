@@ -290,14 +290,130 @@ pieces from `GPT_Module` (`FrozenGPT2`, `build_datastore_from_chunks`, `results_
 etc.) rather than duplicating them. `GPT_Module/` keeps model mechanics + the raw
 kNN-LM baseline (Phases A/B) unchanged.
 
-## What's next: Phase C — Compress the memory (the actual DIME idea)
+## Phase C step 7 — `random_partition` sanity control (DONE, verified)
 
-Step 7: `random_partition` (sanity control) — randomly group the datastore's ~49.7K
-entries into a small number of clusters (no smart clustering yet, that's step 8's
-`minibatch_kmeans`), collapse each cluster into one compressed "state object," and see
-how much NLL degrades vs. the uncompressed raw-kNN number (2.757) purely from
-compression itself, with no clever cluster-assignment logic. This is the control that
-later, smarter compression methods (steps 8–10) need to beat.
+Split DIME-specific code into its own sibling folder, `Study/DIME/` (reusing
+`GPT_Module` pieces via `sys.path.insert`, not duplicating them — see "Folder-level
+split" design note above, now done):
+
+- **`DIME/state_object.py` → `random_partition(keys, values, n_clusters, seed=42)`** —
+  randomly assigns each raw datastore entry to one of `n_clusters` groups, collapses
+  each group into one compressed state object: `compressed_keys[c]` = mean of the
+  group's key vectors (a centroid), `compressed_dists[c]` = a `Counter` of the group's
+  raw target tokens (full observed distribution, no top-K truncation — that's
+  deliberately deferred to Phase F per the design note above).
+- **`DIME/mixing.py` → `mix_dime_and_lm(...)`** — generalizes `mix_knn_and_lm`: instead
+  of checking "does the retrieved value equal the true token," it looks up "what
+  fraction of this retrieved cluster's distribution was the true token" (raw kNN is
+  the special case where every "cluster" has exactly one member — a point-mass
+  distribution).
+- **`DIME/run_dime_baseline.py`** — orchestration: builds the raw datastore (reusing
+  `build_datastore_from_chunks`), compresses it via `random_partition`, feeds the
+  compressed `(keys, Counters)` into `GPT_Module/knn.py`'s generic
+  `build_datastore`/`query_knn` (confirming those work unchanged on object-dtype
+  values, not just raw token ids), then mixes with `mix_dime_and_lm`.
+
+**Isolation tests (done):** `random_partition` on 12 dummy entries/3 clusters — every
+entry accounted for exactly once (`4+3+5=12`), structurally correct (caught and fixed
+two bugs along the way: `compressed_dists = [0]` instead of `[]`, and a `sys.path`
+`"."` vs `".."` typo in `mixing.py`). `mix_dime_and_lm` on hand-checkable dummy
+Counters — partial-match case landed between the earlier full-match (0.750) and
+no-match (1.492) results, exactly as predicted.
+
+**Real-scale run (`seq_len=128`, same split as Phase B, `n_clusters=500` — ~100x
+fewer stored entries than raw kNN's 49,657):**
+
+```
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean random-partition DIME NLL: 2.994753195180113
+```
+
+**Random-partition DIME (2.995) is worse than both GPT-only (2.798) and raw kNN
+(2.757)** — and this is the expected, correct result for a sanity control, not a bug.
+The sanity-check print showed why: random clusters mix ~100 semantically unrelated
+positions together, so each cluster's token distribution is a scattershot with no
+coherent pattern (mostly count-1 entries across dozens of unrelated tokens), and
+averaging unrelated key vectors into one centroid produces a much less informative key
+(retrieval distances of 141-148, vs. raw kNN's 5-24). Blending in this diffuse,
+near-noise signal at `alpha=0.25` dilutes GPT's own good guesses rather than
+reinforcing them — same mechanism as the "disagreement" case in the isolation tests,
+just happening almost every time instead of occasionally. This proves compression by
+entry-count alone doesn't preserve retrieval's benefit — the clustering has to
+actually group *similar* contexts together, which is exactly what step 8 needs to fix.
+
+## Phase C step 8 — `minibatch_kmeans` (DONE, verified at real scale)
+
+Added `minibatch_kmeans_partition(keys, values, n_clusters, seed=42)` to
+`state_object.py` — same `(compressed_keys, compressed_dists)` return shape as
+`random_partition`, but centroids come from `sklearn.cluster.MiniBatchKMeans.fit_predict`
+(iteratively fitted, not just averaged-after-random-grouping) so entries with
+*similar* hidden states land in the same cluster. Everything downstream
+(`build_datastore`, `query_knn`, `mix_dime_and_lm`) reused unchanged.
+
+**Isolation test (done):** three well-separated dummy 4D "blobs" (offset by 20, only
+`scale=0.1` spread — trivially separable), each tagged with its own distinct token.
+k-means recovered them *exactly*: three pure, single-token clusters (`{20: 5}`,
+`{30: 5}`, `{10: 5}`) — unlike `random_partition`'s messy 50-token mixes, direct proof
+clustering groups genuinely similar keys together.
+
+**Real-scale run (`run_dime_kmeans_baseline.py` + `submit_dime_kmeans_baseline.sh`,
+same split/seed, `n_clusters=500`):**
+
+```
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean minibatch_kmeans DIME NLL: 2.7923980578792857
+```
+
+Comparison table so far:
+
+| Method | Mean NLL |
+|---|---|
+| GPT-only (no retrieval) | 2.798 |
+| random_partition (dumb control) | 2.995 (worse) |
+| **minibatch_kmeans** | **2.792** (slightly better than GPT-only) |
+| raw kNN (uncompressed, 49,657 entries) | 2.757 (best) |
+
+Smart clustering recovered almost everything `random_partition` destroyed —
+sanity-check retrieval distances dropped from ~141-148 (random) to 6.8-45.6 (k-means),
+confirming centroids now sit near real local structure instead of averaging unrelated
+noise. `minibatch_kmeans` even edges out GPT-only slightly, though it doesn't fully
+match raw kNN — expected, since compressing ~49,657 positions into 500 clusters
+(~99x compression) necessarily loses some position-level distinction that full-fidelity
+retrieval keeps. Saved to `DIME/results/minibatch_kmeans_baseline.json`.
+
+## Rule locked in before Phase D: `controller_train` is for tuning, `val` is not
+
+`controller_train` has existed since Phase A3 but has never been used — every run so
+far (Phase B, Phase C steps 7-8) only touched `datastore` and `val`, and every
+hyperparameter (`k`, `tau`, `alpha`, `n_clusters`) was picked arbitrarily, never
+searched for. That's fine so far, since no tuning against `val` has happened. But
+Phase D step 11 ("fixed-hyperparameter grid search") changes that — and the grid
+search **must** run against `controller_train`, never directly against `val`.
+Picking whichever hyperparameter combination scores best on `val` and then reporting
+that same `val` score as "the result" is the textbook leakage problem: it overfits
+the hyperparameters to the exact number being reported, making every downstream
+Phase E/F comparison meaningless. `val` gets touched exactly once — at the end, to
+report the final number for whatever configuration won on `controller_train`.
+
+Also worth noting on `utility_weighted` (Phase C step 9, below): weighting datastore
+entries by GPT's own NLL doesn't leak `val` — the NLL comes from GPT's forward pass
+on the *datastore* positions themselves, a property of each stored example, same
+category of thing raw kNN/minibatch_kmeans already use (the entry's own true target
+token). But it's not guaranteed to help: NLL conflates *reducible* uncertainty
+(retrieval can fix — a recurring pattern GPT hasn't connected) with *irreducible*
+uncertainty (retrieval can't fix — genuinely ambiguous/rare tokens), so weighting up
+high-NLL positions might just amplify noise in some clusters. Go in expecting "maybe
+helps, maybe doesn't, maybe slightly hurts" — any of those is a legitimate result, not
+a sign of a bug.
+
+## What's next: Phase C step 9 — `utility_weighted`
+
+Weight clusters by GPT's own NLL/entropy at construction time (not just k-means
+proximity) — the idea being some clusters carry more useful signal than others
+(e.g. positions where GPT itself was uncertain may benefit more from retrieval than
+positions it already predicts confidently). Needs deciding exactly how "utility"
+factors into clustering or read-time weighting — a design decision, not yet spec'd
+beyond the roadmap's one-line description.
 
 ## Working conventions established in this project
 

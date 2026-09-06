@@ -38,6 +38,21 @@ def build_datastore_from_chunks(gpt,chunks,batch_size=256):
     values = np.concatenate(all_values, axis=0)
     return keys, values
 
+def build_datastore_with_nll_from_chunks(gpt, chunks, batch_size=256):
+    all_keys, all_values, all_nll = [], [], []
+    for i in range(0, len(chunks), batch_size):
+        batch = chunks[i:i + batch_size]
+        h_pred, y_target, p_true, nll = run_batch(gpt, batch)
+        B, L, D = h_pred.shape
+        all_keys.append(h_pred.reshape(B * L, D).cpu().numpy())
+        all_values.append(y_target.reshape(B * L).cpu().numpy())
+        all_nll.append(nll.reshape(B * L).cpu().numpy())
+    keys = np.concatenate(all_keys, axis=0)
+    values = np.concatenate(all_values, axis=0)
+    nll_all = np.concatenate(all_nll, axis=0)
+    return keys, values, nll_all
+
+
 
 
 
