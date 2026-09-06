@@ -1,8 +1,7 @@
 import numpy as np
+from sklearn.neural_network import MLPRegressor
 
 #This function handles both a single entry/state_object
-import numpy as np
-
 def retrieval_purity_entropy(retrieved_top1):
     """retrieved_top1: the nearest retrieved item per query — either a plain token id
     (raw kNN, degenerate point-mass distribution) or a Counter (compressed DIME).
@@ -22,5 +21,14 @@ def retrieval_purity_entropy(retrieved_top1):
             entropies.append(0.0)
             purities.append(1.0)
     return np.array(entropies), np.array(purities)
+
+
+#Trainning Wrapper
+def train_q_read_controller(X, y, seed=42):
+    """X: [N, n_features] state features. y: [N] observed reward (NLL_GPT - NLL_action).
+    Returns a fitted regressor predicting expected reward from state features."""
+    model = MLPRegressor(hidden_layer_sizes=(16,), random_state=seed, max_iter=2000)
+    model.fit(X, y)
+    return model
 
 
