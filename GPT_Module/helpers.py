@@ -39,4 +39,10 @@ def collect_chunks(dataset, tokenizer, seq_len, n_chunks_needed):
 
     return chunks
 
+def predictive_entropy(lgts_pred):
+    """Entropy of GPT's own full next-token distribution — doesn't require
+    knowing the true token, unlike NLL. High entropy = GPT is unsure; low = confident."""
+    probs = torch.softmax(lgts_pred.float(), dim=-1)  # [B, L-1, V]
+    entropy = -(probs * torch.log(probs + 1e-12)).sum(dim=-1)  # [B, L-1]
+    return entropy
 

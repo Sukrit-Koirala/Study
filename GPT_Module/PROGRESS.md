@@ -406,14 +406,176 @@ high-NLL positions might just amplify noise in some clusters. Go in expecting "m
 helps, maybe doesn't, maybe slightly hurts" — any of those is a legitimate result, not
 a sign of a bug.
 
-## What's next: Phase C step 9 — `utility_weighted`
+## Phase C step 9 — `utility_weighted` (DONE, verified at real scale)
 
-Weight clusters by GPT's own NLL/entropy at construction time (not just k-means
-proximity) — the idea being some clusters carry more useful signal than others
-(e.g. positions where GPT itself was uncertain may benefit more from retrieval than
-positions it already predicts confidently). Needs deciding exactly how "utility"
-factors into clustering or read-time weighting — a design decision, not yet spec'd
-beyond the roadmap's one-line description.
+Design (informed by reading — not copying — the reference repo's
+`build_predictive_states.py`; also found and didn't replicate a dead-code
+inconsistency there, where the fancier percentile-clipped/`utility_positive` weights
+it computes are silently discarded in favor of plain `nll_gpt + floor`): same
+clustering as `minibatch_kmeans` (identical `MiniBatchKMeans` step), but each raw
+entry's contribution to its cluster's token distribution is weighted by GPT's own
+NLL at that position (+ a `0.1` floor) instead of a flat count of 1 — added
+`build_datastore_with_nll_from_chunks` (`extract.py`) to carry per-position NLL, and
+`utility_weighted_partition` (`state_object.py`). `mixing.py` needed zero changes —
+`mix_dime_and_lm` already does `count / total` generically on whatever's in a
+`Counter`, so float weighted-sums work identically to integer counts.
+
+**Critical-thinking pass (done before running, not after):** confirmed no `val`
+leakage — the NLL weighting comes from the *datastore* split's own GPT forward pass,
+a property of each stored example, same category of thing raw kNN already uses.
+But flagged a real (non-leakage) concern: NLL conflates *reducible* uncertainty
+(retrieval can fix) with *irreducible* uncertainty (retrieval can't — genuinely
+ambiguous/rare tokens), so weighting up high-NLL positions might amplify noise
+instead of signal. Went in explicitly expecting "maybe helps, maybe hurts" rather
+than assuming improvement. Also used this pass to lock in the `controller_train`
+vs. `val` tuning rule above, before Phase D needs it.
+
+**Isolation test (done):** two positions in one cluster, same two distinct tokens,
+one with NLL=0.1 and one with NLL=5.0 — weighted distribution came out exactly
+`{10: 0.2, 20: 5.1}` (not the equal `{10:1, 20:1}` a flat count would give),
+confirming the high-NLL position dominates as designed.
+
+**Real-scale run (`run_dime_utility_baseline.py` + `submit_dime_utility_baseline.sh`,
+same split/seed/`n_clusters=500`):**
+
+```
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean utility_weighted DIME NLL: 2.805119776562979
+```
+
+**The concern from the critical-thinking pass was confirmed, not just theoretical:**
+utility_weighted (2.805) came out *worse* than plain `minibatch_kmeans` (2.792), and
+even slightly worse than doing nothing at all (GPT-only, 2.798). Full comparison
+table:
+
+| Method | Mean NLL |
+|---|---|
+| raw kNN (uncompressed, 49,657 entries) | 2.757 (best) |
+| minibatch_kmeans | 2.792 |
+| GPT-only (no retrieval) | 2.798 |
+| utility_weighted | 2.805 |
+| random_partition (dumb control) | 2.995 (worst) |
+
+Real, meaningful negative result: raw-NLL weighting injected more noise (amplifying
+genuinely-ambiguous positions) than useful signal (amplifying retrieval-fixable
+positions) here. Saved to `DIME/results/utility_weighted_baseline.json`.
+
+## Phase C step 10 — `query_kmeans` (DONE, verified at real scale)
+
+Added `query_kmeans_partition(ds_keys, ds_values, ct_keys, n_clusters, seed=42)` to
+`state_object.py`: fits `MiniBatchKMeans` on `controller_train`'s hidden states (not
+the datastore's), then `.predict()`s which centroid each *datastore* entry is nearest
+to — inverting which split drives the cluster geometry vs. step 8. First real use of
+`controller_train` in the project (`val` stays untouched — assigning datastore
+entries to CT-derived clusters and then evaluating on `val` isn't tuning against
+`val`, just changing what data shapes the clusters).
+
+**Critical question raised before running (and it was the right question to ask):**
+does this method really achieve the same "49,657 → 500" compression claim as the
+other three? Unlike `random_partition`/`minibatch_kmeans`/`utility_weighted` — whose
+clusters are fit directly on the datastore, guaranteeing every cluster gets members —
+`query_kmeans`'s centroids come from a *different* dataset slice (`controller_train`),
+so some CT-derived clusters could plausibly end up with zero datastore members
+assigned, making the real ("effective") compression lower than the nominal
+`n_clusters`. This mirrors why the reference repo's state files track an
+`assigned_count` field per cluster — the original authors clearly instrumented for
+exactly this. Added a non-empty-cluster count to the real-scale script as an honesty
+check before trusting the compression claim.
+
+**Isolation test (done):** CT blobs (3, well-separated) define the clusters; DS blobs
+are a *different* sample, slightly offset from CT's exact centers, tagged with
+distinct tokens. Got back three pure single-token clusters (`{20:5}`, `{30:5}`,
+`{10:5}`), confirming datastore entries get routed to the *right* externally-fit
+cluster, not just to clusters containing identical points.
+
+**Real-scale run (`run_dime_query_kmeans_baseline.py` +
+`submit_dime_query_kmeans_baseline.sh`, same split/seed/`n_clusters=500`):**
+
+```
+non-empty clusters: 496 / 500
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean query_kmeans DIME NLL: 2.7940686816820333
+```
+
+**The honesty check came back reassuring** — only 4/500 clusters empty (~0.8%), so
+the compression claim holds almost exactly as stated; the theoretical concern was
+worth checking but wasn't a real problem here (CT and datastore hidden-state
+distributions overlap well). Result (2.794) landed almost identical to
+`minibatch_kmeans` (2.792) — expected, since both cluster by genuine similarity, just
+on different (but overlapping) data. Full comparison table:
+
+| Method | Mean NLL |
+|---|---|
+| raw kNN (uncompressed, 49,657 entries) | 2.757 (best) |
+| minibatch_kmeans | 2.792 |
+| query_kmeans | 2.794 |
+| GPT-only (no retrieval) | 2.798 |
+| utility_weighted | 2.805 |
+| random_partition (dumb control) | 2.995 (worst) |
+
+Saved to `DIME/results/query_kmeans_baseline.json`. **This completes Phase C (steps
+7-10) — all four compression methods now have real, verified numbers.**
+
+## Phase D step 11 — fixed-hyperparameter grid search (DONE, verified)
+
+`DIME/grid_search.py` → `grid_search_hyperparams(distances, retrieved, true_targets,
+p_lm_true, mix_fn, k_values, tau_values, alpha_values)` — queries once at the largest
+`k` needed, slices smaller `k` from the same retrieved array (avoids re-running
+`query_knn` per combo), loops `tau`×`alpha` combos, sorts by mean NLL. Works for both
+raw kNN (`mix_knn_and_lm`) and compressed DIME (`mix_dime_and_lm`) since they share
+the same call signature. `DIME/run_grid_search.py` + `submit_grid_search.sh` run the
+search on `controller_train` for both raw kNN and `minibatch_kmeans`, then check the
+winning config on `val` exactly once, per the locked-in tuning rule.
+
+**Isolation test (done):** one query with a dominant, exactly-matching nearest
+neighbor — grid search correctly picked the highest tested `alpha` (0.9), confirming
+the loop/sort logic (not just that `mix_knn_and_lm` itself works, already known).
+
+**Round 1** (`k=[3,5,10,20]`, `tau=[0.5,1,2,5]`, `alpha=[0.1,.25,.5,.75]`): winning
+config `k=20, tau=2.0, alpha=0.1` for *both* systems — but `k=20` (max tested) and
+`alpha=0.1` (min tested) both sat at the edge of their lists, a classic "haven't found
+the true optimum, just the best of too narrow a range" warning sign (like testing
+oven temperatures 350-425°F and finding 425°F best — you don't know if 450°F would've
+won, because you never tried it). Checked the full top-5 lists to confirm this wasn't
+noise: *every* top-5 entry for both systems had `alpha=0.1`, unambiguous evidence to
+extend downward; DIME's `k` scores were flat across `3-20` (not trending, no real
+edge effect there) while raw kNN's showed a real if modest lean toward larger `k`.
+
+**Round 2** (`k=[10,20,30,50]`, `tau=[1,2,5,10]`, `alpha=[.01,.05,.1,.25]` — shifted
+based on round 1's actual evidence, not blind widening): first submission accidentally
+reran round 1's grid (cluster hadn't `git pull`ed the edit — caught by noticing the
+result was suspiciously bit-identical to round 1, then confirmed by rerunning after
+pulling). Real round 2 result:
+
+```
+raw kNN best on controller_train: {'k': 50, 'tau': 2.0, 'alpha': 0.1}  -> val mean NLL: 2.6940908318605463
+DIME (minibatch_kmeans) best on controller_train: {'k': 20, 'tau': 2.0, 'alpha': 0.05}  -> val mean NLL: 2.7451901708278066
+```
+
+`alpha` and `tau` resolved to genuine interior optima for both systems this round.
+`k=50` for raw kNN is *still* at the tested edge — but the gain from `k=20→50` was
+small (val NLL `2.699→2.694`, ~0.17% relative), a diminishing-returns pattern
+suggesting a plateau rather than still-climbing behavior. Called this the stopping
+point rather than opening a third round chasing a shrinking marginal gain.
+
+**Final tuned numbers vs. the fixed defaults used throughout Phases B/C:**
+
+| | Untuned (fixed defaults) | Tuned (grid search) |
+|---|---|---|
+| raw kNN | 2.757 | **2.694** (k=50, tau=2.0, alpha=0.1) |
+| minibatch_kmeans | 2.792 | **2.745** (k=20, tau=2.0, alpha=0.05) |
+
+Both systems improved meaningfully from tuning — DIME's margin over GPT-only (2.798)
+went from razor-thin (2.792, barely distinguishable) to solid (2.745). Saved to
+`DIME/results/grid_search_results.json`.
+
+## What's next: Phase D step 12 — Q-read controller (fitted-Q MLP)
+
+`reward = NLL_GPT − NLL_action` — replace the fixed hyperparameters with a learned
+policy (an MLP) that decides, per query, how to read from memory. Step 13 then
+applies the same Q-read code to both raw and DIME memory for a fair comparison.
+Training this controller is exactly the kind of thing that must use
+`controller_train`, not `val` — same rule as the grid search.
 
 ## Working conventions established in this project
 

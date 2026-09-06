@@ -1,6 +1,7 @@
 import torch
 from helpers import shift_for_next_token, true_token_stats
 import numpy as np
+from helpers import predictive_entropy
 
 def run_batch(gpt, chunks):
     batch_ids = torch.tensor(chunks, dtype=torch.long, device=gpt.device)
@@ -53,6 +54,15 @@ def build_datastore_with_nll_from_chunks(gpt, chunks, batch_size=256):
     return keys, values, nll_all
 
 
+def run_batch_with_entropy(gpt, chunks):
+    """Same as run_batch, plus GPT's own predictive entropy — kept as a separate
+    function so run_batch's existing callers are untouched."""
+    batch_ids = torch.tensor(chunks, dtype=torch.long, device=gpt.device)
+    hidden, logits = gpt.forward(batch_ids)
+    h_pred, lgts_pred, y_target = shift_for_next_token(hidden, logits, batch_ids)
+    p_true, nll = true_token_stats(lgts_pred, y_target)
+    entropy = predictive_entropy(lgts_pred)
+    return h_pred, y_target, p_true, nll, entropy
 
 
 

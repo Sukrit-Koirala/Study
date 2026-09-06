@@ -1,17 +1,17 @@
+import torch
 import numpy as np
-import sys,os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "GPT_Module"))
-from knn import mix_knn_and_lm
-from grid_search import grid_search_hyperparams
+from collections import Counter
+from helpers import predictive_entropy
+from q_read import retrieval_purity_entropy
 
-distances = np.array([[0.1, 10.0]])          # one query, k_max=2 — dominant near neighbor, far noisy one
-retrieved = np.array([[5, 99]])              # nearest neighbor's value EXACTLY matches true target (5)
-true_targets = np.array([5])
-p_lm_true = np.array([0.5])                  # GPT itself is mediocre here
+# GPT entropy: one very peaked distribution, one very flat one
+logits = torch.tensor([[[10.0, 0.0, 0.0], [1.0, 1.0, 1.0]]])  # [1, 2, 3] — 2 positions, 3-token vocab
+ent = predictive_entropy(logits)
+print("entropy (peaked, then flat):", ent)
+# peaked should be near 0; flat (uniform over 3) should be near log(3) ≈ 1.0986
 
-results, best = grid_search_hyperparams(
-    distances, retrieved, true_targets, p_lm_true, mix_knn_and_lm,
-    k_values=[2], tau_values=[0.5, 1.0, 2.0], alpha_values=[0.1, 0.5, 0.9]
-)
-
-print("best config:", best)
+# Retrieval purity/entropy: one dominated cluster, one perfectly even split
+retrieved_top1 = np.array([Counter({5: 9, 2: 1}), Counter({5: 5, 2: 5})], dtype=object)
+entropy, purity = retrieval_purity_entropy(retrieved_top1)
+print("retrieval entropy:", entropy, " purity:", purity)
+# first: purity should be 0.9 (9/10), low entropy. second: purity 0.5, entropy at its max for 2 outcomes (ln(2)≈0.693)
