@@ -235,17 +235,69 @@ needed before this can be meaningfully compared to the GPT-only baseline (2.798)
 before the real-scale SLURM run that produces the final comparable Phase B step 5+6
 result.
 
-## What's next: real-data small-scale test, then the SLURM run
+## Phase B steps 5+6 combined — real-scale raw kNN baseline (DONE, verified)
 
-1. Wire `mix_knn_and_lm` into the real retrieval pipeline (`test_knn.py`'s setup):
-   for each real `val` query, get `p_lm_true` (already available from
-   `true_token_stats`), query the datastore for `distances`/`retrieved_values`, run
-   `mix_knn_and_lm`, and compute a real mean `nll_mixed` over the toy-scale `val` set.
-   Sanity-check it's in a plausible range compared to 2.798 (not necessarily better —
-   toy-scale datastore is small — but not nonsensical either).
-2. Once that's confirmed, combine real-scale datastore construction (step 5, scaled
-   up like the GPT-only baseline was) with this mixing formula into one SLURM job,
-   producing the actual comparable "raw kNN baseline" mean NLL for `results/`.
+Combined real-scale datastore construction + the mixing formula into one script,
+`run_knn_baseline.py`, submitted via `submit_knn_baseline.sh` on an L40S SLURM job
+(same `seq_len=128`, `{"datastore": 350, "controller_train": 75, "val": 75}` split
+config as the Phase B4 baseline, same default `seed=42` in `collect_chunks_split` so
+the split is reproduced deterministically — confirmed by the pure-LM number matching
+Phase B4's almost exactly). Fixed hyperparameters: `k=5`, `tau=1.0`, `alpha=0.25`
+(untuned — grid search is Phase D step 11, not now). Real output:
+
+```
+datastore size: (49657, 768)
+mean pure GPT NLL (same val positions): 2.7984323501586914
+mean raw kNN-mixed NLL: 2.757404052302226
+```
+
+**Mixed NLL (2.757) is lower than pure GPT NLL (2.798)** — roughly a 1.5% relative
+reduction, even at a ~49.7K-entry datastore and arbitrary, untuned hyperparameters.
+This is real evidence the retrieval mechanism helps GPT prediction even in its
+crudest (uncompressed) form — a positive signal for the whole DIME premise before any
+compression is introduced. Saved to `GPT_Module/results/raw_knn_baseline.json`
+(includes per-position mixed NLL for future significance testing per Phase F).
+
+This raw-kNN number (2.757) is now the second reference line in `results/`, alongside
+GPT-only (2.798): Phase C's whole point is to see whether a *compressed* memory can
+match or beat 2.757 using far fewer stored entries than 49.7K, not just beat 2.798.
+
+## Design note: what a "state object" actually is
+
+Your own notes never defined this beyond Phase F's ablation list
+(`majority-token, top-k truncation, shuffled`). Read (not copied — code, not
+concept) the reference repo's `analyze_dime_efficiency.py` (a Phase-F-equivalent
+script, much later than where this project is) to check what fields the original's
+compressed state files actually store: `prototype_h` (one centroid hidden vector per
+cluster — the compressed key), `top_k_token_ids` + `top_k_token_counts` (a **sparse**
+distribution over next-tokens — only the top-K most frequent per cluster, not the
+full vocab), `total_counts` (cluster size, for normalizing counts to probabilities),
+and `state_entropy`/`state_purity` (metadata on how confident/dominated the cluster's
+vote distribution is — used for later analysis, not core mixing math).
+
+Decision: **build the full (non-truncated) observed token-count distribution per
+cluster for now** — at current scale no cluster will have anywhere near 50257
+distinct next-tokens, so "full" and "generously sparse" are practically identical.
+Defer deliberate top-K truncation to when it actually matters: Phase F's own
+"top-k truncation" ablation. Building it now would just be redone later.
+
+## Folder-level split (agreed, not yet done)
+
+Separate DIME-specific code (Phase C onward: `random_partition`, `minibatch_kmeans`,
+`utility_weighted`, `query_kmeans`, the generalized distribution-based mixing formula,
+DIME run/submit scripts) into a new sibling folder `Study/DIME/`, importing shared
+pieces from `GPT_Module` (`FrozenGPT2`, `build_datastore_from_chunks`, `results_io`,
+etc.) rather than duplicating them. `GPT_Module/` keeps model mechanics + the raw
+kNN-LM baseline (Phases A/B) unchanged.
+
+## What's next: Phase C — Compress the memory (the actual DIME idea)
+
+Step 7: `random_partition` (sanity control) — randomly group the datastore's ~49.7K
+entries into a small number of clusters (no smart clustering yet, that's step 8's
+`minibatch_kmeans`), collapse each cluster into one compressed "state object," and see
+how much NLL degrades vs. the uncompressed raw-kNN number (2.757) purely from
+compression itself, with no clever cluster-assignment logic. This is the control that
+later, smarter compression methods (steps 8–10) need to beat.
 
 ## Working conventions established in this project
 
