@@ -118,3 +118,17 @@ def build_obs_features(gpt_entropy, distances, cluster_idx, token_counts, total_
     ], axis=1)
     return obs  # [N, 11]
 
+
+# Since we will be using a MLPRegressor that uses (X,Y) we need to reshape X
+def build_qsa_dataset(obs, action_features, reward_matrix):
+    """obs: [N, 11]. action_features: [A, 4] (from build_action_features).
+    reward_matrix: [N, A] (from compute_reward_matrix_dense).
+    Returns X: [N*A, 15], y: [N*A] — one row per (query, action) pair."""
+    N, A = reward_matrix.shape
+    obs_tiled = np.repeat(obs, A, axis=0)                 # [N*A, 11]
+    action_tiled = np.tile(action_features, (N, 1))       # [N*A, 4]
+    X = np.concatenate([obs_tiled, action_tiled], axis=1)  # [N*A, 15]
+    y = reward_matrix.reshape(-1)                          # [N*A]
+    return X, y
+
+
