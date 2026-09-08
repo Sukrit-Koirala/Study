@@ -1,0 +1,41 @@
+{
+  "phase": "F16_efficiency_analysis",
+  "model": "gpt2",
+  "seq_len": 128,
+  "entry_count": {
+    "raw_kNN": 49657,
+    "dime_minibatch_kmeans": 500,
+    "compression_ratio": 99.314
+  },
+  "bytes_measured": {
+    "raw_kNN": {
+      "keys_bytes": 152546304,
+      "values_bytes": 397256,
+      "total_bytes": 152943560
+    },
+    "dime_full": {
+      "keys_bytes": 1536000,
+      "values_bytes": 114807,
+      "total_bytes": 1650807
+    },
+    "dime_top5_truncation": {
+      "keys_bytes": 1536000,
+      "values_bytes": 16791,
+      "total_bytes": 1552791
+    },
+    "dime_majority_token": {
+      "keys_bytes": 1536000,
+      "values_bytes": 6884,
+      "total_bytes": 1542884
+    }
+  },
+  "byte_compression_ratio_vs_raw": {
+    "dime_full": 92.6477534926857,
+    "dime_top5_truncation": 98.49590833537803,
+    "dime_majority_token": 99.12835961744369
+  },
+  "latency_ms_per_query": {
+    "raw_kNN_k50": 0.35159425277773876,
+    "dime_minibatch_kmeans_k20": 0.005954683606632489
+  }
+}

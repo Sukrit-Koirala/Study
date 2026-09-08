@@ -1,0 +1,22 @@
+WikiText-103 / gpt2-medium analysis job started: Tue Sep  8 03:23:16 PM CDT 2026
+Node: Slurm-6-7
+datastore: 381127  controller_train: 90170  val: 77089
+mean NLL, GPT-only: 4.0485444
+raw kNN best on controller_train: {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.646437230015699}
+raw kNN top5: [{'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.646437230015699}, {'k': 200, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.65045546257118}, {'k': 300, 'tau': 2.0, 'alpha': 0.25, 'mean_nll': 3.655004160266313}, {'k': 300, 'tau': 1.0, 'alpha': 0.1, 'mean_nll': 3.655265838726686}, {'k': 200, 'tau': 2.0, 'alpha': 0.25, 'mean_nll': 3.6569289383069465}]
+DIME (minibatch_kmeans) best on controller_train: {'k': 200, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.736298788628081}
+DIME top5: [{'k': 200, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.736298788628081}, {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7363010493112574}, {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7363715286734602}, {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.737628863600033}, {'k': 300, 'tau': 1.0, 'alpha': 0.1, 'mean_nll': 3.7409629927972907}]
+mean NLL, raw kNN (tuned): 3.659436421190596
+mean NLL, DIME minibatch_kmeans (tuned): 3.7537715289785263
+raw_kmeans_representative: n=3995  mean NLL = 3.95597346499083
+
+=== SUMMARY ===
+GPT-only:                  4.0485444
+raw kNN (tuned):           3.659436421190596
+DIME minibatch_kmeans:     3.7537715289785263
+raw_kmeans_representative: 3.95597346499083
+
+Test 1 (GPT-only vs DIME): {'comparison': 'GPT-only vs minibatch_kmeans (tuned)', 'mean_diff': 0.29477298561582194, 'paired_t_test': {'t_stat': 61.66286000717637, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 917433397.0, 'p_value': 0.0}}
+
+Test 2 (best raw equal-budget vs DIME): {'comparison': 'raw_kmeans_representative (equal budget) vs minibatch_kmeans (tuned)', 'mean_diff': 0.20220193601230343, 'paired_t_test': {'t_stat': 63.40216900779419, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 521809902.0, 'p_value': 0.0}}
+WikiText-103 / gpt2-medium analysis job done: Tue Sep  8 03:51:33 PM CDT 2026

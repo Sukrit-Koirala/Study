@@ -1,0 +1,7 @@
+WikiText-103 / gpt2-medium extraction job started: Sun Sep  6 05:48:27 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+cached datastore: 381127 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_datastore.npz
+cached controller_train: 90170 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_controller_train.npz
+cached val: 77089 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_val.npz
+WikiText-103 / gpt2-medium extraction job done: Sun Sep  6 05:50:47 AM CDT 2026

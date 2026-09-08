@@ -1,0 +1,37 @@
+{
+  "phase": "F17_significance_testing",
+  "model": "gpt2",
+  "seq_len": 128,
+  "n_val_positions": 14097,
+  "mean_nll": {
+    "gpt_only": 2.7984323501586914,
+    "minibatch_kmeans_tuned": 2.7451901708278066,
+    "raw_kmeans_representative": 2.781779688831718
+  },
+  "significance_tests": [
+    {
+      "comparison": "GPT-only vs minibatch_kmeans (tuned)",
+      "mean_diff": 0.05324198631052014,
+      "paired_t_test": {
+        "t_stat": 13.667014265721756,
+        "p_value": 2.970736514297892e-42
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 26824240.0,
+        "p_value": 0.0
+      }
+    },
+    {
+      "comparison": "raw_kmeans_representative (equal budget) vs minibatch_kmeans (tuned)",
+      "mean_diff": 0.03658951800391148,
+      "paired_t_test": {
+        "t_stat": 11.10534056449566,
+        "p_value": 1.5518571739994295e-28
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 19449721.0,
+        "p_value": 0.0
+      }
+    }
+  ]
+}

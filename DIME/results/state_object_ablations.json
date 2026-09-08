@@ -1,0 +1,16 @@
+{
+  "phase": "F15_state_object_ablations",
+  "model": "gpt2",
+  "seq_len": 128,
+  "n_clusters": 500,
+  "tuned_config": {
+    "k": 20,
+    "tau": 2.0,
+    "alpha": 0.05
+  },
+  "top_k_truncation": 5,
+  "mean_nll_full": 2.7451901708278066,
+  "mean_nll_majority_token": 2.764617674191417,
+  "mean_nll_topk_truncation": 2.7471423633757466,
+  "mean_nll_shuffled": 2.8349186427610755
+}

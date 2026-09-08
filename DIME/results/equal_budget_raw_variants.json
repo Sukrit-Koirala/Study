@@ -1,0 +1,37 @@
+{
+  "phase": "E14_equal_budget_raw_variants",
+  "model": "gpt2",
+  "seq_len": 128,
+  "budget": 500,
+  "tuned_config": {
+    "k": 50,
+    "tau": 2.0,
+    "alpha": 0.1
+  },
+  "variants": {
+    "raw_random": {
+      "n_selected": 500,
+      "mean_nll": 2.807511998132882
+    },
+    "raw_high_gpt_loss": {
+      "n_selected": 500,
+      "mean_nll": 2.860576046012889
+    },
+    "raw_low_gpt_loss": {
+      "n_selected": 500,
+      "mean_nll": 2.9016044865073978
+    },
+    "raw_high_entropy": {
+      "n_selected": 500,
+      "mean_nll": 2.8804920675784427
+    },
+    "raw_low_entropy": {
+      "n_selected": 500,
+      "mean_nll": 2.9016543077869303
+    },
+    "raw_kmeans_representative": {
+      "n_selected": 500,
+      "mean_nll": 2.781779688831718
+    }
+  }
+}

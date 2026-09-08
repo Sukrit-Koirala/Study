@@ -1,0 +1,7 @@
+Cache verification job started: Sun Sep  6 05:45:14 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+cached datastore: 6096 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_datastore.npz
+cached controller_train: 889 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_controller_train.npz
+cached val: 635 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext103_gpt2-medium_val.npz
+Cache verification job done: Sun Sep  6 05:46:14 AM CDT 2026

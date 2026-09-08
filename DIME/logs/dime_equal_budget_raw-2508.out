@@ -1,0 +1,16 @@
+Equal-budget raw variants job started: Sun Sep  6 05:07:28 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+equal-budget raw variants, budget=500
+  raw_random                   n= 500  mean NLL = 2.8075
+  raw_high_gpt_loss            n= 500  mean NLL = 2.8606
+  raw_low_gpt_loss             n= 500  mean NLL = 2.9016
+  raw_high_entropy             n= 500  mean NLL = 2.8805
+  raw_low_entropy              n= 500  mean NLL = 2.9017
+  raw_kmeans_representative    n= 500  mean NLL = 2.7818
+
+reference lines:
+  GPT-only:                     2.7984323501586914
+  minibatch_kmeans (500, tuned): 2.7451901708278066
+  raw kNN (49657, tuned):        2.6940908318605463
+Equal-budget raw variants job done: Sun Sep  6 05:08:33 AM CDT 2026

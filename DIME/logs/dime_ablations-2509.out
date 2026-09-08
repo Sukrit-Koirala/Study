@@ -1,0 +1,8 @@
+State-object ablations job started: Sun Sep  6 05:13:18 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+full (unablated):      2.7451901708278066
+majority-token:        2.764617674191417
+top-5 truncation:      2.7471423633757466
+shuffled (illusion check): 2.8349186427610755
+State-object ablations job done: Sun Sep  6 05:14:22 AM CDT 2026

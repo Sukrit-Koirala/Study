@@ -1,0 +1,14 @@
+Efficiency analysis job started: Sun Sep  6 05:17:39 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+=== Entry count ===
+raw kNN: 49657  DIME: 500  compression: 99.3x
+=== Real measured bytes ===
+raw kNN total:         152.94 MB
+DIME full:             1.65 MB  (92.6x smaller than raw)
+DIME top-5 truncation: 1.55 MB  (98.5x smaller than raw)
+DIME majority-token:   1.54 MB  (99.1x smaller than raw)
+=== Retrieval latency (ms per query) ===
+raw kNN (k=50):               0.3516 ms/query
+DIME minibatch_kmeans (k=20): 0.0060 ms/query
+Efficiency analysis job done: Sun Sep  6 05:20:26 AM CDT 2026

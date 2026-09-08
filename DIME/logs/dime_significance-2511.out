@@ -1,0 +1,11 @@
+Significance testing job started: Sun Sep  6 05:28:53 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+mean NLL — GPT-only: 2.7984324
+mean NLL — minibatch_kmeans (tuned): 2.7451901708278066
+mean NLL — raw_kmeans_representative: 2.781779688831718
+
+Test 1 (GPT-only vs DIME): {'comparison': 'GPT-only vs minibatch_kmeans (tuned)', 'mean_diff': 0.05324198631052014, 'paired_t_test': {'t_stat': 13.667014265721756, 'p_value': 2.970736514297892e-42}, 'wilcoxon_signed_rank': {'stat': 26824240.0, 'p_value': 0.0}}
+
+Test 2 (best raw equal-budget vs DIME): {'comparison': 'raw_kmeans_representative (equal budget) vs minibatch_kmeans (tuned)', 'mean_diff': 0.03658951800391148, 'paired_t_test': {'t_stat': 11.10534056449566, 'p_value': 1.5518571739994295e-28}, 'wilcoxon_signed_rank': {'stat': 19449721.0, 'p_value': 0.0}}
+Significance testing job done: Sun Sep  6 05:30:02 AM CDT 2026

@@ -1,0 +1,20 @@
+WikiText-103 / gpt2-medium analysis job started: Sun Sep  6 05:55:34 AM CDT 2026
+Node: Slurm-6-7
+datastore: 381127  controller_train: 90170  val: 77089
+mean NLL, GPT-only: 4.0485444
+raw kNN best on controller_train: {'k': 100, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.6603830114682205}
+DIME (minibatch_kmeans) best on controller_train: {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7363715286734602}
+mean NLL, raw kNN (tuned): 3.673675950682371
+mean NLL, DIME minibatch_kmeans (tuned): 3.7538178019011124
+raw_kmeans_representative: n=3995  mean NLL = 3.9560712235642606
+
+=== SUMMARY ===
+GPT-only:                  4.0485444
+raw kNN (tuned):           3.673675950682371
+DIME minibatch_kmeans:     3.7538178019011124
+raw_kmeans_representative: 3.9560712235642606
+
+Test 1 (GPT-only vs DIME): {'comparison': 'GPT-only vs minibatch_kmeans (tuned)', 'mean_diff': 0.2947267126932362, 'paired_t_test': {'t_stat': 61.64853171348261, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 917092568.0, 'p_value': 0.0}}
+
+Test 2 (best raw equal-budget vs DIME): {'comparison': 'raw_kmeans_representative (equal budget) vs minibatch_kmeans (tuned)', 'mean_diff': 0.20225342166314855, 'paired_t_test': {'t_stat': 63.368768887258916, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 521774033.0, 'p_value': 0.0}}
+WikiText-103 / gpt2-medium analysis job done: Sun Sep  6 06:16:02 AM CDT 2026

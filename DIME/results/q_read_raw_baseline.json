@@ -1,0 +1,18 @@
+{
+  "phase": "D13_q_read_raw_knn",
+  "model": "gpt2",
+  "seq_len": 128,
+  "memory": "raw_knn",
+  "n_raw_datastore_entries": 49657,
+  "tuned_config": {
+    "k": 50,
+    "tau": 2.0,
+    "alpha": 0.1
+  },
+  "n_controller_train": 9652,
+  "n_val": 14097,
+  "frac_val_retrieved": 0.7317869050152515,
+  "mean_nll_gpt_only": 2.7984323501586914,
+  "mean_nll_always_mixed": 2.6940908318605463,
+  "mean_nll_q_read": 2.6893500226508866
+}

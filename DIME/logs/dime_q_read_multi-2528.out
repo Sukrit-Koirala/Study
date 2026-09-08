@@ -1,0 +1,11 @@
+DIME multi-action Q-read controller job started: Tue Sep  8 03:12:35 PM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+controller_train: 9652 queries x 17 actions = 164084 (state,action) rows, mean reward = 0.0095
+val: 14097 queries (collect_chunks_split stops once ALL splits hit >= their target, so this can be well above the nominal 75-chunk count)
+mean NLL, GPT-only:                     2.7984323501586914
+mean NLL, best single fixed action:     2.7476833634088007 (k200_t2.0_a0.1_b0.0)
+mean NLL, Q-read (learned, per-query):  2.7383631418043177
+mean NLL, oracle (perfect per-query):   2.618565873235404
+action usage (top 10): [('k50_t1.0_a0.1_b0.0', 7021), ('gpt_only', 5223), ('k200_t2.0_a0.1_b0.0', 981), ('k200_t2.0_a0.1_b5.0', 553), ('k200_t2.0_a0.25_b5.0', 178), ('k200_t1.0_a0.25_b5.0', 90), ('k200_t1.0_a0.1_b5.0', 27), ('k50_t2.0_a0.1_b0.0', 11), ('k50_t1.0_a0.25_b0.0', 9), ('k200_t1.0_a0.1_b0.0', 2)]
+DIME multi-action Q-read controller job done: Tue Sep  8 03:14:12 PM CDT 2026
