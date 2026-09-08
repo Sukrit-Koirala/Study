@@ -857,6 +857,277 @@ one lucky split (Phase F step 15's shuffle ablation directly confirmed the retri
 content is doing real work). DIME also achieves this while using ~99x fewer entries,
 ~93x fewer measured bytes, and ~59x faster retrieval than raw kNN (Phase F step 16).
 
+# POST-ROADMAP: generalizing beyond TinyStories/GPT-2-small
+
+Professor (Austin) reviewed the project (2026-09-06 email): encouraging, worth
+pursuing further, with two concrete asks — (1) formalize the mathematics of storage
+savings/retrieval ratios/other metrics, (2) extend the datasets used for testing.
+Ask (2) matches this project's own "everything past Phase F is replication" framing
+exactly. Ask (1) (math formalization) is **not yet started** — deferred in favor of
+generating more empirical data points first (the compression sweep, below, is a step
+toward it). User also wants a bigger model, not just a bigger dataset.
+
+## Caching infrastructure (new, in `GPT_Module/`)
+
+Every prior script recomputed GPT forward passes from scratch — fine at TinyStories
+scale, wasteful once bigger models/datasets are involved. New shared infrastructure:
+- **`cache_io.py`** — `save_cache`/`load_cache`, `.npz` files holding `keys`, `values`,
+  `p_lm_true`, `entropy` per split.
+- **`extract_and_cache.py`** — parametrized by `--dataset`, `--model`, `--seq_len`,
+  chunk counts; runs extraction once, saves to cache. `DATASET_REGISTRY` currently has
+  `tinystories` and `wikitext103` (`wikitext`, config `wikitext-103-raw-v1` — the same
+  dataset the reference repo itself used, confirmed from an earlier file-structure
+  read, not a random pick).
+- Verified at tiny scale first (`gpt2-medium` + `wikitext103`, 40/5/5 chunks) before
+  committing to the real extraction — confirmed both the new model and the new
+  dataset's chunking (WikiText-103 has many near-empty header/separator rows mixed
+  with real content; harmless, just contributes a lone EOS token per empty row).
+- Real extraction: `gpt2-medium` + `wikitext103`, `seq_len=128`,
+  `n_datastore=3000, n_controller_train=500, n_val=500` chunks →
+  **381,127 / 90,170 / 77,089 positions** (only ~2.5 minutes on the L40S).
+
+## WikiText-103 / gpt2-medium replication (DONE — core finding holds, bigger margin)
+
+Downstream analysis scripts now read from the cache instead of recomputing —
+`run_wikitext_medium_analysis.py` combines GPT-only, raw kNN + DIME grid search,
+`raw_kmeans_representative` (Phase E's best equal-budget raw variant), and both
+significance tests in one script, `n_clusters=4000` (~95x compression, matching the
+ratio already validated on TinyStories).
+
+**Round 1** (`k∈[10,20,50,100], tau∈[.5,1,2,5], alpha∈[.01,.05,.1,.25]`): both raw kNN
+and DIME hit `k=100` (max tested) as their boundary; raw kNN also hit `alpha=0.25`
+(max). **Round 2** (`k∈[50,100,200,300], tau∈[.5,1,2,5], alpha∈[.05,.1,.25,.5]`,
+shifted based on round 1's evidence): raw kNN → `k=300` (still boundary, but
+`k=200→300` only gained `0.004` — diminishing returns, called this the stopping point,
+same judgment as TinyStories), `tau=1.0`, `alpha=0.25` (now interior). DIME → `k=200`
+(now interior, flanked both sides), `tau=2.0`, `alpha=0.1` (interior) — DIME's number
+barely moved between rounds, it was already well-tuned. One resubmission accidentally
+reran round 1's exact code (cluster hadn't `git pull`ed the edit) — caught via
+noticing bit-for-bit identical output, a useful diagnostic pattern now established.
+
+**Final numbers:**
+
+| Method | Mean NLL |
+|---|---|
+| GPT-only | 4.049 |
+| raw kNN (tuned: k=300,tau=1.0,alpha=0.25) | **3.659** |
+| DIME minibatch_kmeans (tuned: k=200,tau=2.0,alpha=0.1) | 3.754 |
+| raw_kmeans_representative (best equal-budget raw, n=3995) | 3.956 |
+
+**Significance (paired t-test + Wilcoxon, ~77,089 positions):** GPT-only vs DIME
+`p=2.97e-42`; best-raw-equal-budget vs DIME `p=1.55e-28`. Both p-values effectively
+zero. **DIME beats the best equal-budget raw variant by 0.202 NLL here — ~5.5x the
+margin seen on TinyStories (0.037)** — the core finding didn't just replicate, it got
+stronger on a bigger model and a more complex dataset. Saved to
+`DIME/results/wikitext103_gpt2_medium_replication.json`.
+
+## Compression sweep — does DIME ever beat raw kNN's own tuned ceiling?
+
+User's hypothesis: relaxing DIME's compression ratio (larger `n_clusters`, less
+aggressive) might let DIME's pooled/averaged cluster votes beat raw kNN's noisier
+per-query lookup — a real, testable bias-variance/shrinkage argument (distinct from
+"DIME beats equal-budget raw," which is already proven). **Hard constraint noted
+before running anything:** as `n_clusters → N` (the full 381,127), DIME's clusters
+each hold exactly one raw point — DIME literally *becomes* raw kNN at that limit, so
+it can only ever converge to *equality*, not exceed it, at the lossless end. The open
+question is whether it crosses *above* raw kNN's line somewhere in the *middle*.
+
+`run_compression_sweep.py`: computes raw kNN's own tuned ceiling once (shared
+reference line), then sweeps DIME across `n_clusters ∈ {4000, 15000, 40000, 100000}`
+(~95x down to ~3.8x compression), re-tuning `k/tau/alpha` at each point.
+
+**Results so far (3 of 4 points; 4th, `n_clusters=100000`, ran long — see below):**
+
+| n_clusters | Compression ratio | val NLL | Gap to raw ceiling (3.659) |
+|---|---|---|---|
+| 4,000 | 95.3x | 3.754 | 0.094 |
+| 15,000 | 25.4x | 3.738 | 0.079 |
+| 40,000 | 9.5x | 3.728 | 0.069 |
+| 100,000 | 3.8x | *(pending)* | — |
+
+Quality improves monotonically as compression eases, but at a **shrinking** rate
+(`0.015` gap-closing 95x→25x, only `0.010` closing 25x→9.5x) — a diminishing-returns
+curve. **User's conclusion (endorsed): aggressive compression (`n_clusters=4000`) is
+the best cost/benefit tradeoff** — it captures almost all the practical benefit for a
+bounded quality cost, while chasing milder compression buys shrinking quality gains
+for much greater storage cost. Whether `n_clusters=100000` ever actually crosses
+*below* raw kNN's `3.659` ceiling is still an open, unresolved question — the trend
+so far suggests probably not, but this wasn't confirmed either way before the job's
+status became uncertain (see below).
+
+**Operational notes from this run, worth remembering:**
+- Hit a **stdout buffering scare** — 20+ hours elapsed with nothing in the log beyond
+  the bash `echo` startup lines, looked like a hang. Root cause: Python's `print()`
+  fully block-buffers when stdout is redirected to a file (as under SLURM), unlike
+  bash's own unbuffered `echo`. Every prior job had only ever been checked *after*
+  finishing (buffers auto-flush at exit), so this was never visible before. **Fix
+  going forward: add `python -u` or `PYTHONUNBUFFERED=1` to submit scripts.** The
+  *reliable* way to check real progress mid-run is the incremental JSON checkpoint
+  (`save_results` after each sweep point), not the buffered print log.
+  `results/compression_sweep.json` confirmed genuine progress (3 points saved) while
+  the log looked empty.
+  `--time=24:00:00` was set; job was at ~21h elapsed with the largest, slowest point
+  (`100,000` clusters — `MiniBatchKMeans` cost scales with `n_clusters`) still running.
+  Last known status when last checked: still running, real progress via checkpoint,
+  final 4th point's outcome unconfirmed as of this note.
+
+## Reference-repo gap review (Austin's/reviewer's feedback) — 3 points to close
+
+Comparing this recreation against "Track A" (the original reference implementation)
+surfaced three gaps, tackled in reverse-priority order (user chose to start with the
+biggest lift first):
+
+- **Point 3 — Q-read is a simplified binary gate vs. Track A's genuine multi-action
+  policy.** IN PROGRESS, see below.
+- **Point 5 — no mechanism-diagnostics layer** (hit@k, `p_state(true)`, active-state
+  fraction, oracle gap, top helpful/harmful states). NOT STARTED. Oracle gap will fall
+  out of point 3's work "for free" once the reward matrix exists (it's just
+  `reward_matrix.max(axis=1)` per query).
+- **Point 6 — raw-baseline selection criteria only partially overlap** (missing
+  `raw_token_rarity` and `raw_coverage`/greedy-farthest-first). NOT STARTED.
+- Scale (this project's ~50k-equivalent vs. Track A's canonical 200k) — explicitly
+  **not** being addressed for now, by user's own call; not a gap, a deliberate choice.
+
+### Point 3 — genuine multi-action Q-read (Track A parity), IN PROGRESS
+
+Read Track A's actual `train_q_state_read.py` (`QStateReadMLP`) in full for concept
+understanding (not copying code). Real design, corrected from an earlier wrong guess:
+actions aren't "which retrieved candidate to trust" — they're a **discretized grid of
+entire read-policy configs** (`k × tau × alpha × beta`, 257 total with one `gpt_only`
+action), so the controller picks a different *complete* config per query, not just a
+binary gate on one fixed config. New mechanism, not in this project before: **`beta`**
+— a Laplace-style shrinkage term blending a retrieved cluster's empirical token counts
+with the **global corpus frequency** of the true token, `(count + beta*global_freq) /
+(total + beta)` — regularizes small/unreliable clusters toward a safer global prior.
+Directly relevant to the compression-sweep question above (shrinkage as a real
+noise-reduction mechanism).
+
+**Two deliberate deviations from Track A, on principled grounds, not oversights:**
+- Track A's `alpha` means the *opposite* of ours (theirs: weight on GPT; ours: weight
+  on retrieval). Kept **our** established convention — flipping now would silently
+  invalidate every tuned number from the whole project so far.
+- Track A's own observation features 0/1 (`nll_gpt`, `p_gpt_true`) require already
+  knowing the true next token — the same leakage category caught and avoided for
+  `utility_weighted` earlier, just closer to an actual bug this time (these would be
+  uncomputable in real online generation, not just methodologically borderline). Used
+  `predictive_entropy` (label-free) instead, consistent with this project's established
+  rigor standard. Track A's own features 2/16/17 are hardcoded to zero in their code
+  anyway ("unavailable") — dead placeholder slots, not replicated.
+
+**A real performance problem, solved via GPU vectorization (`Study/DIME/q_read_dense.py`,
+new file):** naively porting the existing `Counter`-based `mix_dime_and_lm` to loop
+over the full 257-action grid would mean billions of Python-level dict lookups
+(`256 actions × ~90,170 queries × up to 300 neighbors`) — plausibly days, not hours.
+Fix: convert each cluster's `Counter` into a **dense, padded `[B, top_k]` representation**
+(`counters_to_dense`) — this turns out to be exactly the representation Track A's own
+state files use (`top_k_token_ids`/`top_k_token_counts`/`total_counts`), and is
+independently justified by Phase F step 15's finding that top-K truncation loses
+almost no quality. Dense arrays enable genuine batched GPU tensor ops instead of
+per-query Python loops.
+
+**Pieces built and verified (isolation-tested, several cross-validated bit-for-bit
+against the already-trusted Counter-based path):**
+- `build_action_grid` / `build_action_features` (`DIME/action_grid.py`) — 257 actions
+  (`k∈{50,100,200,300}×tau∈{.5,1,2,5}×alpha∈{.05,.1,.25,.5}×beta∈{0,1,5,20}` + `gpt_only`),
+  `[257,4]` feature matrix (dropped Track A's redundant `is_gpt_only`/`uses_state_read`
+  flags — `k==0` already encodes that). Verified: 257 actions, shape `(257,4)`,
+  `gpt_only` row `[0,1,1,0]`.
+- `query_knn_indices` (`GPT_Module/knn.py`) — sibling to `query_knn`, returns raw
+  neighbor indices instead of gathered values (needed for dense/GPU gather). Didn't
+  modify `query_knn` itself — same "add a sibling, don't touch existing callers"
+  pattern as `run_batch`/`run_batch_with_entropy`.
+- `counters_to_dense` (`DIME/q_read_dense.py`) — verified via round-trip
+  (`{5:8,2:2}→[[5,2,0,0]]`, counts/totals all matched).
+- `mix_dime_and_lm` extended **in place** with optional `beta=0.0, global_freq=None`
+  (safe — `beta=0` mathematically reduces to the exact original formula, so every
+  existing caller is unaffected) + `build_global_freq` (both in `mixing.py`). Verified:
+  `beta=0` reproduces the historical no-match NLL (`1.4917`) exactly; `beta=5` with a
+  nonzero global frequency for the true token correctly *lowers* NLL (`1.4732`) by
+  rescuing probability mass from the global prior even when no retrieved cluster
+  empirically contained that token.
+- `dense_p_state` / `dense_mix_nll` (`q_read_dense.py`) — GPU/PyTorch batched version
+  of the same mixing math. Verified: **bit-for-bit match** against the Counter-based
+  path on the same toy setup (`0.8592`, `1.4917`).
+- `compute_reward_matrix_dense` (`q_read_dense.py`) — `[N,A]` reward matrix, looping
+  over actions but each iteration now a batched GPU op instead of `N×k` dict lookups.
+  Verified: `gpt_only` column exactly zero, other column matches
+  `nll_gpt - [0.8592,1.4917]` within float32/rounding precision.
+- `dense_state_entropy_purity` + `build_obs_features` (`q_read_dense.py`) — own leaner
+  **11-feature** observation vector (vs. Track A's 22): `gpt_entropy` (from
+  `predictive_entropy`, already sitting in the extraction cache — no new computation
+  needed), `dist_top1/top4_mean/top8_mean/gap_1_2`, `entropy_top1/top4_mean`,
+  `purity_top1/top4_mean`, `count_top1_log/top4_mean_log`. All verified exact-match
+  against hand-computed values on a toy 4-cluster/8-neighbor setup. **Nice side
+  effect of this design:** raw kNN can be represented in the exact same dense format
+  as DIME (each raw entry = a degenerate size-1 "cluster"), so this whole pipeline
+  works unchanged for raw kNN too — satisfies the original roadmap's step 13
+  ("apply same Q-read code to both raw memory and DIME memory") with one shared
+  implementation.
+
+**Specified, not yet verified (next up):**
+- `subsample_qa_pairs` — subsamples `(query,action)` pairs from the full `[N,A]`
+  reward matrix into training data (matches Track A's own `max_q_samples`
+  subsampling; `N×A` can be ~23M pairs at WikiText-103 scale, too many to train on
+  directly). Reuses the existing `train_q_read_controller` (sklearn `MLPRegressor`)
+  unchanged — it's already a generic `(X,y)→model` wrapper.
+- `apply_q_controller` — scores all `A` actions per query, argmax, batched (mirrors
+  Track A's own `batch_q` batching). Isolation test given (a `FakeModel` mechanics
+  check, `chosen` should be `[1,1,1]`) but not yet confirmed with real output.
+
+**First real end-to-end run (TinyStories/gpt2/minibatch_kmeans, `n_clusters=500`) —
+a genuine, important negative result, not yet a success:**
+
+```
+mean_nll_gpt_only:              2.7984323501586914
+mean_nll_q_read_multi_action:   2.795409126307937
+mean_nll_oracle_multi_action:   2.53417504059039
+best_fixed_action:              k50_t2.0_a0.05_b1.0  -> mean_nll 2.7469928663060403
+```
+
+| | Mean NLL |
+|---|---|
+| GPT-only | 2.798 |
+| **Q-read multi-action (learned)** | **2.795** — barely better than doing nothing |
+| best single fixed action, same 257-action grid | **2.747** — beats the learned policy |
+| oracle (best action per query, hindsight) | 2.534 — huge unclaimed headroom |
+
+**The learned multi-action policy currently underperforms a simple fixed baseline
+picked from the same action grid**, and only barely beats GPT-only. `chosen_action_counts`
+explains why: the policy collapsed to essentially two choices — `gpt_only` (2,941/14,097
+≈ 21%) and a single action, `k300_t5.0_a0.05_b20.0` (10,257/14,097 ≈ 73%) — with the
+other 255 actions getting single-digit-or-zero picks. Not genuine per-query
+differentiation; close to a near-constant policy, and a weak one (barely beats
+GPT-only despite "retrieving" 73% of the time). The oracle gap (`2.798 → 2.534`
+possible vs. `2.795` actually achieved) shows the action grid itself contains real,
+large headroom the current Q-MLP isn't capturing.
+
+**Diagnosis, not yet fixed:** the `sklearn.MLPRegressor` call in
+`train_q_read_controller` has no input/target normalization, no early stopping tuned
+against a held-out slice — exactly the things Track A's own `train_q_mlp` did
+carefully (z-scoring `X`/`y`, train/dev split with patience-based early stopping) that
+this project's version doesn't yet have. Given the earlier design note that sklearn
+was chosen deliberately over hand-rolled PyTorch (the MLP itself isn't the mechanism
+under study), the fix should stay within sklearn's own tools —
+`MLPRegressor(early_stopping=True, validation_fraction=..., n_iter_no_change=...)`
+plus manual feature/target normalization before fitting — rather than abandoning that
+earlier decision.
+
+**Not yet started:** fixing the Q-MLP training (normalization + early stopping) and
+re-evaluating before trusting this mechanism; wiring the (currently TinyStories-scale)
+multi-action pipeline against the cached WikiText-103/gpt2-medium data; points 5 and 6
+from the gap review.
+
+## Git/ops note: generated caches must never be committed
+
+Hit this for real: a `git add -A` on the cluster (after `extract_and_cache.py` had
+generated `GPT_Module/cache/*.npz`, one over 1.3GB) got committed and rejected by
+GitHub's 100MB file limit. Since the rejected push meant that commit never reached
+`origin`, it was safe to rewrite locally (`git reset --soft origin/main` +
+selectively un-stage just the cache directory + recommit) without any shared-history
+risk — but it's a real trap to avoid going forward. `.gitignore` now excludes
+`GPT_Module/cache/` and `*.npz` (logs/`results/*.json` stay tracked, by explicit
+choice — only the regeneratable multi-hundred-MB caches are excluded).
+
 ## Working conventions established in this project
 
 - **Never declare a step "done" from code review alone** — always run it and look at
@@ -875,3 +1146,33 @@ content is doing real work). DIME also achieves this while using ~99x fewer entr
   `dime_paper/DIME_CHECKLIST.md` plus a `study/` folder (`DIME_STUDY_GUIDE.md`,
   `DIME_PROFESSOR_QA.md`, cheatsheet) — useful background reading, but this recreation
   project is intentionally not copying its code.
+- **When a script/function name differs from what's expected but the tool shows the
+  file changed on disk, read the actual current file before assuming.** Twice now
+  (`state_object.py`'s `compressed_dists = [0]` bug, `q_read_dense.py` missing
+  `counters_to_dense` after a later piece was pasted in) the real bug was found only
+  by reading the file fresh, not by reasoning about what "should" be there.
+- **Checking a SLURM job's log file while it's still running is not the same as
+  checking it after it finishes.** Python's `print()` fully block-buffers when stdout
+  is redirected to a file (every SLURM job's case) — bash's own `echo` doesn't. Every
+  job checked *after* completion looks fine regardless (buffers flush at exit), so
+  this was invisible until the first time a still-running job's log was checked
+  mid-flight (the compression sweep). The reliable progress signal for a long-running
+  job is an incremental file checkpoint (`save_results` after each unit of work), not
+  the stdout log. Fix going forward: add `python -u` / `PYTHONUNBUFFERED=1` to submit
+  scripts that will be checked while still running.
+- **Adding new *optional keyword arguments with backward-compatible defaults* to an
+  existing function is safe and doesn't need a sibling function** — unlike changing a
+  function's *positional return shape* (which breaks every caller doing tuple
+  unpacking, hence `run_batch_with_entropy` being a separate function from
+  `run_batch`). `mix_dime_and_lm` grew `beta=0.0, global_freq=None` in place because
+  `beta=0` provably reduces to the original formula exactly.
+- **When porting an idea from the reference repo, check for sign/convention
+  mismatches before reusing any code, even when copying is otherwise off the table.**
+  Track A's `alpha` means the opposite of this project's own `alpha`. Always keep this
+  project's own established convention rather than the reference's, and flag the
+  mismatch explicitly so it doesn't cause confusion later.
+- **A Python `Counter`-based loop that's fine for one hyperparameter combo at a time
+  can become a billions-of-iterations problem once generalized to a large action
+  grid.** The fix was converting to a dense, padded array representation (which turned
+  out to already be what the reference repo's own state files use) enabling batched
+  GPU tensor ops — not just "add more compute."
