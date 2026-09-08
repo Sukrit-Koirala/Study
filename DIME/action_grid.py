@@ -20,11 +20,11 @@ def build_action_grid(fast = False):
     return actions
 
 
-def build_action_features(actions, k_max=300, beta_max=20.0):
+def build_action_features(actions, k_max=300, tau_max=5.0, beta_max=20.0):
     """[A, 4] — k, tau, alpha, beta, each roughly normalized to a similar scale. """
     import numpy as np
     rows = []
     for a in actions:
-        rows.append([a["k"] / k_max, a["tau"], a["alpha"], a["beta"] / beta_max])
+        rows.append([a["k"] / k_max, a["tau"] / tau_max, a["alpha"], a["beta"] / beta_max])
     return np.array(rows, dtype=np.float32)
 

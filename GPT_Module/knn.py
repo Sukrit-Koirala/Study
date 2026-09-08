@@ -12,12 +12,6 @@ def query_knn(index, values, query_keys, k):
     retrieved_values = values[neighbor_idx]
     return distances, retrieved_values
 
-def query_knn_indices(index, query_keys, k):
-    """Same search as query_knn, but returns raw neighbor indices instead of
-    gathering into a values array — needed for dense/GPU-vectorized lookups."""
-    distances, neighbor_idx = index.kneighbors(query_keys, n_neighbors=k)
-    return distances, neighbor_idx
-
 def softmax_np(x, axis=-1):
     x = x - x.max(axis=axis, keepdims=True)
     e = np.exp(x)

@@ -27,7 +27,8 @@ def retrieval_purity_entropy(retrieved_top1):
 def train_q_read_controller(X, y, seed=42):
     """X: [N, n_features] state features. y: [N] observed reward (NLL_GPT - NLL_action).
     Returns a fitted regressor predicting expected reward from state features."""
-    model = MLPRegressor(hidden_layer_sizes=(16,), random_state=seed, max_iter=2000)
+    model = MLPRegressor(hidden_layer_sizes=(128, 64), random_state=seed, max_iter=2000,
+                          early_stopping=True, validation_fraction=0.1, n_iter_no_change=15)
     model.fit(X, y)
     return model
 
