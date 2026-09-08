@@ -95,8 +95,9 @@ nll_matrix_val = nll_gpt_val[:, None] - reward_val  # [N_val, A] — reuses the 
 final_nll_q_read = nll_matrix_val[np.arange(N_val), best_action_idx]
 final_nll_oracle = nll_matrix_val[np.arange(N_val), oracle_action_idx]
 
-mean_nll_per_action = nll_matrix_val.mean(axis=0)
-best_fixed_idx = int(mean_nll_per_action.argmin())
+# Best single fixed action, selected on controller_train (never val) — same rule as
+# Phase D11's grid search, so this stays a fair baseline instead of a val-peeking one.
+best_fixed_idx = int(reward_ct.mean(axis=0).argmax())
 
 action_names = [a["name"] for a in actions]
 chosen_action_counts = {name: int((best_action_idx == i).sum()) for i, name in enumerate(action_names)}
@@ -115,11 +116,14 @@ results = {
     "mean_nll_q_read_multi_action": float(final_nll_q_read.mean()),
     "mean_nll_oracle_multi_action": float(final_nll_oracle.mean()),
     "best_fixed_action": action_names[best_fixed_idx],
-    "mean_nll_best_fixed_action": float(mean_nll_per_action[best_fixed_idx]),
+    "mean_nll_best_fixed_action": float(nll_matrix_val[:, best_fixed_idx].mean()),
     "chosen_action_counts": chosen_action_counts,
 }
 
 save_results("results/q_read_multi_action_baseline.json", results)
+print(f"val: {N_val} queries (collect_chunks_split stops once ALL splits hit >= their target, "
+      f"so this can be well above the nominal 75-chunk count)")
+assert sum(chosen_action_counts.values()) == N_val
 print("mean NLL, GPT-only:                    ", results["mean_nll_gpt_only"])
 print("mean NLL, best single fixed action:    ", results["mean_nll_best_fixed_action"], f"({results['best_fixed_action']})")
 print("mean NLL, Q-read (learned, per-query): ", results["mean_nll_q_read_multi_action"])
