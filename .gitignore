@@ -4,6 +4,3 @@ __pycache__/
 # Generated caches (extract_and_cache.py output) — large, regeneratable, never commit
 GPT_Module/cache/
 *.npz
-
-# SLURM job logs — local run artifacts, not source
-logs/
