@@ -1,14 +1,15 @@
 import numpy as np
-from q_read import train_q_read_controller
+from collections import Counter
+from q_read_dense import counters_to_dense, build_obs_features
 
-rng = np.random.default_rng(0)
-X = rng.normal(size=(500, 2)).astype(np.float32)
-true_reward = 2.0 * X[:, 0] - 1.0 * X[:, 1]   # known linear relationship
-y = true_reward + rng.normal(scale=0.1, size=500)  # small noise
+dists = [Counter({5: 8, 2: 2}), Counter({9: 5}), Counter({1: 3}), Counter({7: 1})]
+token_ids, token_counts, total_counts = counters_to_dense(dists, top_k=4)
 
-model = train_q_read_controller(X, y)
+cluster_idx = np.array([[0, 1, 2, 3, 0, 1, 2, 3]])  # 1 query, 8 "neighbors" (toy — reusing 4 clusters twice)
+distances = np.array([[0.1, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]])
+gpt_entropy = np.array([1.2])
 
-X_test = np.array([[1.0, 0.0], [0.0, 1.0], [-1.0, -1.0]], dtype=np.float32)
-preds = model.predict(X_test)
-print("predictions:", preds)
-print("true reward: ", 2.0 * X_test[:, 0] - 1.0 * X_test[:, 1])
+obs = build_obs_features(gpt_entropy, distances, cluster_idx, token_counts, total_counts, device="cpu")
+print("obs shape:", obs.shape)   # expect (1, 11)
+print("obs:", obs)
+print("purity_top1 (cluster 0, {5:8,2:2}) should be 0.8:", obs[0, 7])
