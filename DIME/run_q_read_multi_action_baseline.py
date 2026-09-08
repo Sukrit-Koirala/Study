@@ -54,8 +54,8 @@ index, _ = build_datastore(compressed_keys, compressed_dists)
 token_ids, token_counts, total_counts = counters_to_dense(compressed_dists, top_k=64)
 global_freq = build_global_freq(ds_values)
 
-# fast=True first (17 actions) to verify the pipeline end-to-end before the full ~257-action grid
-actions = build_action_grid(fast=True)
+# fast=True (17 actions) verified the pipeline end-to-end; now the full grid
+actions = build_action_grid(fast=False)
 action_features = build_action_features(actions, k_max=300, beta_max=20.0)
 k_max = max(a["k"] for a in actions)
 
