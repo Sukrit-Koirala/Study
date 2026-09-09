@@ -9,6 +9,7 @@ import numpy as np
 DATASET_REGISTRY = {
     "tinystories": lambda: load_dataset("roneneldan/TinyStories", split="train", streaming=True, trust_remote_code=True),
     "wikitext103": lambda: load_dataset("wikitext", "wikitext-103-raw-v1", split="train", streaming=True),
+    "wikitext2": lambda: load_dataset("wikitext", "wikitext-2-raw-v1", split="train", streaming=True),
 }
 
 

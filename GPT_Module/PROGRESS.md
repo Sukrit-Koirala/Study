@@ -1301,6 +1301,59 @@ is discarded overall (the bigger baseline gap to raw kNN already established). S
 underlying mechanism, both directions of its effect now documented. Saved to
 `DIME/results/tinystories_rich_ablations.json`.
 
+## `run_wikitext_extras.py` — WikiText-103/gpt2-medium gap-review completion (DONE, verified)
+
+The long-outstanding job (launched before the tier1/2/3 refactor, using the older
+one-off script naming) finally finished — ~2.5 hours, dominated by the greedy
+farthest-first `raw_coverage` selection (~48 min alone, `O(n_clusters × n_datastore)`
+distance updates over 381,127 datastore points). Real output:
+
+```
+datastore: 381127  controller_train: 90170  val: 77089
+
+binary Q-read:      raw kNN 3.657 (retrieved 81.2%)   DIME 3.751 (retrieved 82.5%)
+construction:        random_partition 3.933   utility_weighted 3.743   query_kmeans 3.761
+raw variants:        raw_random 3.960   raw_high_gpt_loss 4.238   raw_low_gpt_loss 4.332
+                     raw_high_entropy 4.256   raw_low_entropy 4.330   raw_token_rarity 4.333
+                     raw_coverage 4.158
+efficiency:          entries 95.3x   bytes 89.0x (1564.1MB -> 17.6MB)   latency 68.3x faster
+```
+
+Cross-referencing against this setting's earlier tuned numbers (GPT-only 4.049, raw
+kNN tuned 3.659, DIME tuned 3.754, `raw_kmeans_representative` 3.956):
+
+- **Binary Q-read barely moves either number** (raw 3.657 vs. 3.659 fixed, DIME 3.751
+  vs. 3.754 fixed) — unlike TinyStories, where Q-read gave a small but real edge over
+  the fixed tuned config for both memory types. At this scale/setting the fixed config
+  already seems close to what a per-query policy would choose most of the time
+  (retrieving ~81-82% either way).
+- **Two new results that *don't* match the TinyStories pattern, worth flagging for the
+  paper's discussion section, not silently smoothing over:**
+  - `utility_weighted` (3.743) is now the single best DIME construction method,
+    slightly *beating* `minibatch_kmeans` (3.754) — at TinyStories scale it was the
+    worst non-random method (2.805, worse than even GPT-only). Plausible explanation
+    consistent with the points-per-cluster framework already established: at ~95
+    points/cluster here (vs. TinyStories' similar ratio but far fewer *distinct*
+    tokens/contexts per story), NLL-weighting may be surfacing genuinely
+    under-represented-but-real patterns rather than just amplifying noise — this
+    needs to be stated as an open question, not resolved, since only one data point
+    exists so far.
+  - `raw_random` (3.960) actually *beats* GPT-only (4.049) here — at TinyStories scale
+    every single equal-budget raw variant lost to GPT-only. So "no individual raw
+    selection beats GPT-only" is **not** a universal finding, just a TinyStories-scale
+    one; what *does* still hold at both scales is that no raw variant (including
+    `raw_random`) beats DIME's compressed clusters at the same budget.
+  - The biased selection criteria (`high/low_gpt_loss`, `high/low_entropy`,
+    `token_rarity`, `coverage`) are all still worse than unbiased `raw_random` here,
+    same qualitative pattern as TinyStories (Phase C's `utility_weighted` lesson
+    resurfacing at the selection level) — this part *does* replicate.
+
+Saved to `DIME/results/wikitext_extras.json`. This closes out gap-review points 5/6
+for WikiText-103/gpt2-medium using the pre-refactor scripts — functionally equivalent
+coverage to what `run_tier3_extras.py` would produce for a new setting, just under the
+older file-naming convention (`results/wikitext_extras.json`, not
+`results/wikitext103_gpt2-medium_tier3.json`).
+
 ## Git/ops note: generated caches must never be committed
 
 Hit this for real: a `git add -A` on the cluster (after `extract_and_cache.py` had
@@ -1360,3 +1413,80 @@ choice — only the regeneratable multi-hundred-MB caches are excluded).
   grid.** The fix was converting to a dense, padded array representation (which turned
   out to already be what the reference repo's own state files use) enabling batched
   GPU tensor ops — not just "add more compute."
+
+## 3×2 grid expansion — parametrized script suite (scripts written, not yet run)
+
+Decided to expand from the single WikiText-103/gpt2-medium replication to a full
+**3×2 matrix**: {TinyStories, WikiText-103, WikiText-2} × {gpt2-small, gpt2-medium},
+6 settings total, before meeting Austin — chosen over a narrower subset specifically
+so the paper can show DIME's advantage holds across both dataset *scale* and model
+*size*, not just one bigger data point. Rather than writing ~15+ near-duplicate
+one-off scripts (one per setting per phase, the pattern every earlier phase used),
+built a small number of **parametrized, reusable scripts** (`--dataset`/`--model` CLI
+args, reading from the existing `{dataset}_{model}_{split}.npz` cache naming
+convention already established by `extract_and_cache.py`) — one script per tier,
+usable for any of the 5 remaining settings without editing code per setting.
+
+**Tier structure** (paper-necessity framing, decided before writing code):
+- **Tier 1 (paper-necessary — the core claim):** GPT-only, raw kNN tuned, DIME tuned,
+  best equal-budget raw variant (`raw_kmeans_representative`), significance tests.
+  This alone reproduces the roadmap's central finding per setting.
+- **Tier 2 (paper-necessary — basic rigor):** binary Q-read (both memory types),
+  real measured efficiency (bytes/latency/entry-count), the original 3-variant
+  illusion-check ablation (majority-token, shuffled, top-5).
+- **Tier 3 (enrichment, not required for the paper):** remaining 3 DIME construction
+  methods, remaining 6 raw-baseline variants + Point 6 (`raw_token_rarity`,
+  `raw_coverage`), the rich 10-variant ablation table, multi-action Q-read (dense/GPU,
+  257-action grid), Point 5 diagnostics (hit@k, p_state(true), active-state fraction,
+  helpful/harmful clusters).
+- Told the user explicitly: **Tier 1 + Tier 2 for every setting is what the paper
+  needs; Tier 3 is depth, run it only where time allows** (WikiText-103/gpt2-medium
+  already has Tier 3-equivalent coverage from the earlier gap-review work).
+
+**New files, all in `DIME/` unless noted:**
+- `run_tier1_core.py` — auto-scales `N_CLUSTERS = max(100, round(len(datastore)/100))`
+  (keeps every setting at ~100x compression rather than hardcoding a fixed cluster
+  count that would mean something different at WikiText-2's much smaller scale) and
+  grid-searches over a grid wide enough to span both TinyStories' and WikiText-103's
+  previously-found optimal ranges (`k≤300`, `tau∈[0.5,10]`, `alpha∈[0.01,0.5]`) rather
+  than assuming one setting's tuned config transfers to another.
+- `run_tier2_rigor.py` — reads Tier 1's saved tuned configs from
+  `results/{prefix}_tier1.json` rather than re-deriving them.
+- `run_tier3_extras.py` — same pattern; also home to the multi-action Q-read dense
+  pipeline and the greedy farthest-first `raw_coverage` selection (progress-printed
+  every 500 steps, since its cost scales with `n_clusters × n_datastore` and wasn't
+  timed in advance for the untested settings).
+- `run_generic_multiseed.py` — **scope-narrowed from the original TinyStories
+  100-seed design**, and said so explicitly rather than quietly downgrading it: the
+  TinyStories version re-extracted a fresh random *story split* from raw text per
+  seed (cheap there — streaming + gpt2-small forward passes). Re-extracting per seed
+  at WikiText-103/gpt2-medium scale would mean N_SEEDS full GPU forward passes over
+  the corpus, not worth the cost. The generic version instead reuses one fixed
+  extracted cache and varies only the DIME/`raw_kmeans_representative`
+  **construction seed** (k-means `random_state`) — answers "does DIME's advantage
+  survive many different clustering draws," a real but narrower question than the
+  original "does it survive many different data splits." Defaults to 30 seeds.
+- `GPT_Module/submit_extract.sh` — generic extraction submit script (was previously
+  one-off per setting, e.g. `submit_extract_wikitext_medium.sh`), `--export`-driven
+  (`DATASET`, `MODEL`, `N_DS`, `N_CT`, `N_VAL`, `SEQ_LEN`, `BATCH_SIZE`, all with
+  defaults matching the proven WikiText-103/gpt2-medium job:
+  `n_datastore=3000, n_controller_train=500, n_val=500, seq_len=128`). Flagged that
+  WikiText-2 (~2M tokens total, vs. WikiText-103's ~103M) will likely need `N_DS`
+  turned down and a small test extraction run first — not yet done.
+- `DIME/submit_tier1.sh`, `submit_tier2.sh`, `submit_tier3.sh`, `submit_multiseed.sh`
+  — same `--export=DATASET=...,MODEL=...` pattern, one generic submit script per
+  tier instead of per setting. All use `python -u` from the start (the stdout
+  buffering lesson above, applied proactively this time instead of after a scare).
+  Tier 2/3/multiseed all `set -e` and expect the matching `results/{prefix}_tier1.json`
+  to already exist (fail fast if run out of order).
+
+`extract_and_cache.py`'s `DATASET_REGISTRY` already had `wikitext2` added
+(`wikitext`, config `wikitext-2-raw-v1`) in an earlier step this session, so no
+extraction-side registry work remains before running.
+
+**Not yet done:** running any of this for the 5 remaining settings (TinyStories/
+gpt2-medium, WikiText-2/gpt2-small, WikiText-2/gpt2-medium, WikiText-103/gpt2-small,
+plus finishing WikiText-103/gpt2-medium's still-outstanding `run_wikitext_extras.py`
+job). Order of operations per new setting: extraction (`submit_extract.sh`) → Tier 1
+→ Tier 2 → (optionally) Tier 3 / multiseed, since Tier 2+ read Tier 1's saved
+config and would error if run first.
