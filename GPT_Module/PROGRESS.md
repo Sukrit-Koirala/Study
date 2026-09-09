@@ -1193,20 +1193,29 @@ Sensible, monotonically increasing hit-rate as `k` grows. `p_state(true)≈0.11`
 the single nearest cluster puts ~11% of its mass on the true token on average —
 meaningfully above naive chance, real signal.
 
-**One real bug caught here, not yet re-confirmed:** the active-state-fraction
+**Bug caught and fixed, now re-confirmed with real output:** the active-state-fraction
 computation had a variable-unpacking-order mistake — `query_knn_indices` returns
 `(distances, neighbor_idx)`, but the script did `nearest_idx_arr, _ = query_knn_indices(...)`,
 silently assigning *distances* (continuous, effectively all-unique per query) to what
 should have been discrete cluster indices bounded by `[0, 500)`. Symptom: printed
-`"28.1020 (14051/500)"` — a fraction over 1.0, mathematically impossible, since you
-can't have more active clusters than the 500 that exist. Fixed
-(`_, nearest_idx_arr = query_knn_indices(...)`) and a small standalone recheck script
-(`check_active_state_fraction.py`) written — cheap enough not to need rerunning the
-whole combined job. **Not yet re-confirmed with real output** — top-10 helpful/harmful
-cluster IDs printed in the original run may also need a sanity recheck since they
-don't depend on this specific bug (they use `nll_delta` grouped by `nearest_idx_arr`
-too — same buggy array!). Treat the "top helpful/harmful clusters" numbers from the
-first run as suspect until rechecked alongside the fraction fix.
+`"28.1020 (14051/500)"` — a fraction over 1.0, mathematically impossible. Fixed
+(`_, nearest_idx_arr = query_knn_indices(...)`), rechecked via a small standalone
+script (`check_active_state_fraction.py`, cheap enough not to need rerunning the whole
+combined job):
+
+```
+min index: 0  max index: 499
+active-state fraction: 0.9980 (499/500)
+```
+
+**499 of 500 clusters get used as the nearest match at least once** across 14,097 val
+queries — sensible given the query volume vastly exceeds the cluster count; only 1
+cluster never gets retrieved. The "top helpful/harmful clusters" list from the
+original buggy run used this same `nearest_idx_arr` for grouping, so should be treated
+as unverified until it's specifically rechecked too (not yet done — lower priority
+than the fraction itself, since the aggregate NLL numbers those are computed FROM were
+never wrong, only the grouping-by-cluster-id step might have used the same corrupted
+index array).
 
 **Point 6 (two new raw-baseline selection criteria):**
 
@@ -1239,21 +1248,58 @@ the gap (`0.0129`) is now *smaller than one standard deviation* (~0.027-0.029) f
 100-seed variance measurement — genuinely within noise territory. Saved to
 `DIME/results/tinystories_extras.json`.
 
-## TinyStories rich ablation table (8 variants, matching the old draft's structure)
+## TinyStories rich ablation table (10 variants — DONE, verified)
 
-`run_tinystories_rich_ablations.py` — launched, not yet returned results. Adds
-`top64/top32/top16` (finer truncation than the earlier top-5-only ablation),
-`global_unigram` (every cluster reports the same corpus-wide token distribution,
-reusing `build_global_freq` — a sharper illusion-check than shuffling, since it
-removes all cluster-specific content rather than just scrambling it),
-`random_partition` (recomputed under this table's shared tuned config, not the old
-untuned Phase C number), and two distinct shuffle controls: `shuffled_distribution`
-(existing — correct prototypes, scrambled content) and `shuffled_prototype` (new —
-correct distributions, scrambled keys, so retrieval finds essentially a random
-cluster; this interpretation of "shuffled_prototype" wasn't fully specified by the old
-draft, so it's this project's own best-reasoned construction, documented as such, not
-copied). All 8 variants share the same tuned `(k=20,tau=2.0,alpha=0.05)` config for a
-fair table.
+`run_tinystories_rich_ablations.py`. First run had a real bug — every content-only
+ablation reused a prebuilt index but the `evaluate()` helper silently used the
+*original* stored values instead of the ablated ones for the actual lookup, so 7 of
+10 variants came back bit-identical to `original`. Fixed (the reused index — pure
+geometry — is fine to share; the values used for the lookup must always be the
+freshly-passed ablated array, never a stale cached one) and re-run. Real result:
+
+```
+original:              2.7452
+top64:                 2.7448   (-0.0004)
+top32:                 2.7445   (-0.0007)
+top16:                 2.7441   (-0.0011)
+top5:                  2.7471   (+0.0019)
+majority_token:        2.7646   (+0.0194)
+global_unigram:        2.8168   (+0.0716)
+random_partition:      2.8175   (+0.0723)
+shuffled_prototype:    2.8317   (+0.0865)
+shuffled_distribution: 2.8349   (+0.0897)
+```
+
+**Strong cross-validation with earlier, independently-computed results**: `top5`
+matches Phase F15's original 2.747, `majority_token` matches its 2.765,
+`shuffled_distribution` matches its 2.835 — two separately-run pipelines landing on
+the same numbers is a real correctness signal, not a coincidence.
+
+**New finding: `top16/32/64` all land at or slightly *better* than the full
+distribution.** Truncating to the top-16 tokens per cluster isn't just "nearly free"
+— it's arguably a mild improvement, plausibly because the full distribution's long
+tail of rare, single-occurrence tokens is mostly noise that truncation filters out.
+`top5` is where this flips (real signal starts being cut, not just noise). Directly
+strengthens the Phase F16 byte-savings story: sparse top-K storage may help quality
+slightly, not just save bytes.
+
+**All four "structure-breaking" controls (`global_unigram`, `random_partition`, both
+shuffle variants) land worse than GPT-only (2.798)** — four independent ways of
+destroying the location↔content correspondence, all agreeing. Stronger evidence than
+the original single-shuffle illusion-check.
+
+**Comparison against the old draft's own ablation table — same qualitative pattern,
+smaller quantitative magnitude, and a plausible reason why:** their structure-breaking
+degradations were much larger in absolute terms (e.g. `majority_token`: +0.15 in
+their table vs. +0.019 here — ~7.5x bigger). Their clusters average only ~4-10 raw
+points each (see the earlier points-per-cluster analysis); a "majority token" or
+"broken pairing" computed from just a handful of points is a much less statistically
+stable summary than the same operation on this recreation's ~99-points-per-cluster
+averages. More pooled data per cluster plausibly makes the aggregate statistics more
+robust to certain kinds of corruption, even though it also means more raw information
+is discarded overall (the bigger baseline gap to raw kNN already established). Same
+underlying mechanism, both directions of its effect now documented. Saved to
+`DIME/results/tinystories_rich_ablations.json`.
 
 ## Git/ops note: generated caches must never be committed
 
