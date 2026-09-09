@@ -90,7 +90,7 @@ for i in range(N):
 mean_p_state_true = float(p_state_true.mean())
 print("mean p_state(true) at nearest state:", mean_p_state_true)
 
-nearest_idx_arr, _ = query_knn_indices(dime_index, val_keys, k=1)
+_, nearest_idx_arr = query_knn_indices(dime_index, val_keys, k=1)
 nearest_idx_arr = nearest_idx_arr[:, 0]
 active_fraction = len(set(nearest_idx_arr.tolist())) / N_CLUSTERS
 print(f"active-state fraction: {active_fraction:.4f} ({len(set(nearest_idx_arr.tolist()))}/{N_CLUSTERS})")

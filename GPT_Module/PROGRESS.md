@@ -1176,6 +1176,85 @@ bars are thin" as an explicit limitation) and this project's own gap-audit. Save
 **Still not done:** the equivalent multi-seed sweep for WikiText-103/gpt2-medium (this
 was TinyStories-only, chosen for speed — ~100 seeds completed in ~45 minutes).
 
+## TinyStories extras: Point 5, Point 6, and a TinyStories-scale compression sweep
+
+Ran as one combined, per-section-checkpointed script (`run_tinystories_extras.py`) —
+Point 5 diagnostics, Point 6's two new raw-baseline criteria, and a TinyStories
+compression sweep, all against the same seed=42, `n_clusters=500` tuned datastore.
+
+**Point 5 (mechanism diagnostics):**
+
+```
+hit@1: 0.6885   hit@4: 0.8166   hit@8: 0.8584
+mean p_state(true) at nearest state: 0.1085
+```
+
+Sensible, monotonically increasing hit-rate as `k` grows. `p_state(true)≈0.11` means
+the single nearest cluster puts ~11% of its mass on the true token on average —
+meaningfully above naive chance, real signal.
+
+**One real bug caught here, not yet re-confirmed:** the active-state-fraction
+computation had a variable-unpacking-order mistake — `query_knn_indices` returns
+`(distances, neighbor_idx)`, but the script did `nearest_idx_arr, _ = query_knn_indices(...)`,
+silently assigning *distances* (continuous, effectively all-unique per query) to what
+should have been discrete cluster indices bounded by `[0, 500)`. Symptom: printed
+`"28.1020 (14051/500)"` — a fraction over 1.0, mathematically impossible, since you
+can't have more active clusters than the 500 that exist. Fixed
+(`_, nearest_idx_arr = query_knn_indices(...)`) and a small standalone recheck script
+(`check_active_state_fraction.py`) written — cheap enough not to need rerunning the
+whole combined job. **Not yet re-confirmed with real output** — top-10 helpful/harmful
+cluster IDs printed in the original run may also need a sanity recheck since they
+don't depend on this specific bug (they use `nll_delta` grouped by `nearest_idx_arr`
+too — same buggy array!). Treat the "top helpful/harmful clusters" numbers from the
+first run as suspect until rechecked alongside the fraction fix.
+
+**Point 6 (two new raw-baseline selection criteria):**
+
+```
+raw_token_rarity:  n=500  mean NLL = 2.9020
+raw_coverage:      n=500  mean NLL = 2.8313
+```
+
+Both lose to DIME (2.745) and to the earlier best raw variant (`raw_kmeans_representative`,
+2.782) — reinforces that density-aware clustering selection beats either frequency-biased
+(`rarity`) or naive-max-spread (`coverage`, greedy farthest-first) selection alone.
+
+**Compression sweep (TinyStories scale, `n_clusters ∈ {500, 2000, 5000, 13000}`,
+matching WikiText-103's ~95x/25x/9.5x/3.8x ratios but relative to TinyStories' smaller
+~49,657-entry datastore):**
+
+```
+raw kNN tuned ceiling: 2.6941
+n_clusters=   500  ratio= 99.3x  val NLL=2.7452  gap=0.0511
+n_clusters=  2000  ratio= 24.8x  val NLL=2.7255  gap=0.0314
+n_clusters=  5000  ratio=  9.9x  val NLL=2.7158  gap=0.0217
+n_clusters= 13000  ratio=  3.8x  val NLL=2.7070  gap=0.0129
+```
+
+Same diminishing-returns shape as the WikiText-103 sweep. **Directly confirms the
+earlier hypothesis about why the original DIME draft's much milder compression (4x-10x,
+~4-10 raw points per cluster) came close to matching raw kNN**: at `13000` clusters here
+(~3.8 raw points per cluster — very close to the old draft's own compression regime),
+the gap (`0.0129`) is now *smaller than one standard deviation* (~0.027-0.029) from the
+100-seed variance measurement — genuinely within noise territory. Saved to
+`DIME/results/tinystories_extras.json`.
+
+## TinyStories rich ablation table (8 variants, matching the old draft's structure)
+
+`run_tinystories_rich_ablations.py` — launched, not yet returned results. Adds
+`top64/top32/top16` (finer truncation than the earlier top-5-only ablation),
+`global_unigram` (every cluster reports the same corpus-wide token distribution,
+reusing `build_global_freq` — a sharper illusion-check than shuffling, since it
+removes all cluster-specific content rather than just scrambling it),
+`random_partition` (recomputed under this table's shared tuned config, not the old
+untuned Phase C number), and two distinct shuffle controls: `shuffled_distribution`
+(existing — correct prototypes, scrambled content) and `shuffled_prototype` (new —
+correct distributions, scrambled keys, so retrieval finds essentially a random
+cluster; this interpretation of "shuffled_prototype" wasn't fully specified by the old
+draft, so it's this project's own best-reasoned construction, documented as such, not
+copied). All 8 variants share the same tuned `(k=20,tau=2.0,alpha=0.05)` config for a
+fair table.
+
 ## Git/ops note: generated caches must never be committed
 
 Hit this for real: a `git add -A` on the cluster (after `extract_and_cache.py` had
