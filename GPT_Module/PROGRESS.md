@@ -1112,10 +1112,69 @@ under study), the fix should stay within sklearn's own tools —
 plus manual feature/target normalization before fitting — rather than abandoning that
 earlier decision.
 
-**Not yet started:** fixing the Q-MLP training (normalization + early stopping) and
-re-evaluating before trusting this mechanism; wiring the (currently TinyStories-scale)
-multi-action pipeline against the cached WikiText-103/gpt2-medium data; points 5 and 6
-from the gap review.
+**Fix applied and confirmed working (2026-09-09):** added input/target normalization
+to `train_q_read_controller` (`DIME/q_read.py`) via a `NormalizedMLPWrapper` — z-scores
+`X`/`y` before fitting, transparently un-normalizes on `.predict()` so no caller needed
+to change. Verified locally against the synthetic isolation test first (predictions
+`[2.02,-1.07,-1.03]` vs. true `[2,-1,-1]` — actually tighter than the pre-fix version's
+`[2.19,-0.95,-1.12]`). Re-ran the real TinyStories multi-action job:
+
+```
+mean NLL, GPT-only:                     2.7984323501586914
+mean NLL, best single fixed action:     2.7469928663060403 (k50_t2.0_a0.05_b1.0)
+mean NLL, Q-read (learned, per-query):  2.7307902168953184
+mean NLL, oracle (perfect per-query):   2.53417504059039
+```
+
+**The learned multi-action policy now beats the fixed baseline** (2.731 vs. 2.747,
+inverted from the broken run's 2.795 vs. 2.747) and action usage is healthy —
+`gpt_only` still the single most common pick (~45%) but the rest spread across many
+genuinely different actions instead of collapsing to one dominant choice. Oracle gap
+narrowed from ~0.26 to ~0.20 (2.731 vs. 2.534) — real headroom still exists, but the
+mechanism is now doing genuine, positive work. Point 3 is functionally done for
+TinyStories; still needs re-running against WikiText-103/gpt2-medium for consistency
+with everything else in this project.
+
+**Not yet started:** wiring the (now-working) multi-action pipeline against the cached
+WikiText-103/gpt2-medium data; points 5 and 6 from the gap review.
+
+## Multi-seed variance (TinyStories) — DONE, the strongest rigor result in the project
+
+Ran overnight (2026-09-09): `run_tinystories_multiseed.py` reuses the already-tuned
+`seed=42` hyperparameters (no re-grid-search per seed — the point is testing
+robustness of an already-established result, not re-discovering it) across 100 seeds
+(`42`–`141`), rebuilding the full split/datastore/DIME-cluster/equal-budget-raw
+pipeline fresh each time. `python -u` used this time — no buffering repeat of the
+compression-sweep scare. Checkpointed after every seed.
+
+```
+gpt_only:                  mean=2.7946  std=0.0280  n=100
+raw_knn_tuned:              mean=2.6943  std=0.0269  n=100
+dime_tuned:                 mean=2.7449  std=0.0266  n=100
+raw_kmeans_representative:  mean=2.8000  std=0.0292  n=100
+```
+
+Ran proper **seed-level** paired significance tests (distinct from — and stronger
+than — the earlier position-level paired tests from Phase F17, which paired across
+`val` positions within *one* seed's split; this pairs across 100 *independent* random
+data splits, the classical, most convincing form of robustness evidence):
+
+```
+DIME beats GPT-only:                        100/100 seeds, mean diff=0.0497, paired-t p=5.23e-104
+DIME beats raw_kmeans_representative:       100/100 seeds, mean diff=0.0551, paired-t p=3.19e-79
+raw_knn_tuned beats DIME (expected, honest): 100/100 seeds, mean diff=0.0507, paired-t p=1.79e-101
+```
+
+**DIME won every single one of 100 independent random splits against both GPT-only
+and the best equal-budget raw variant — and lost every single one against
+uncompressed raw kNN, exactly as expected.** No inversions, no lucky/unlucky seeds in
+either direction. This directly closes the single biggest rigor gap identified by
+both the original DIME draft (which had "seed variation only for GPT-2 medium... error
+bars are thin" as an explicit limitation) and this project's own gap-audit. Saved to
+`DIME/results/tinystories_multiseed.json`.
+
+**Still not done:** the equivalent multi-seed sweep for WikiText-103/gpt2-medium (this
+was TinyStories-only, chosen for speed — ~100 seeds completed in ~45 minutes).
 
 ## Git/ops note: generated caches must never be committed
 
