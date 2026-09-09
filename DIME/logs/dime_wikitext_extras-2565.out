@@ -1,0 +1,5 @@
+WikiText-103 extras job started: Wed Sep  9 01:59:38 PM CDT 2026
+Node: Slurm-6-7
+datastore: 381127  controller_train: 90170  val: 77089
+
+=== Section A: binary Q-read (raw + DIME) ===

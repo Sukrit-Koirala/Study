@@ -1,0 +1,37 @@
+TinyStories extras (point5+point6+sweep) job started: Wed Sep  9 11:29:36 AM CDT 2026
+Node: Slurm-6-7
+datastore: 49657  val: 14097
+
+=== Section A: mechanism diagnostics ===
+hit@k: {1: 0.6885152869404838, 4: 0.8166276512733206, 8: 0.8584095906930552}
+mean p_state(true) at nearest state: 0.10852626057768032
+active-state fraction: 28.1020 (14051/500)
+top 10 most helpful clusters (id, mean NLL delta): [(1, 2.6221290834153987), (2, 1.094422657824637), (3, 0.8886164508090878), (4, 0.38548238816490604), (5, 0.32964433650174746), (7, 0.2733364403114169), (6, 0.24916923849641426), (10, 0.16968516330840497), (8, 0.15689714212089506), (9, 0.14994533501083676)]
+top 10 most harmful clusters (id, mean NLL delta): [(38, -0.05061966977928141), (43, -0.050095633063576214), (37, -0.04956940735398914), (44, -0.04920267056325019), (39, -0.0486159853422917), (40, -0.04532181516393059), (45, -0.042434747843607866), (33, -0.040748525499330814), (36, -0.040240097247359434), (35, -0.04006842579842459)]
+
+=== Section B: raw_token_rarity, raw_coverage ===
+raw_token_rarity: n=500  mean NLL = 2.9020
+raw_coverage: n=500  mean NLL = 2.8313
+
+=== Section C: compression sweep ===
+raw kNN tuned ceiling: {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.6594414062060365} -> val mean NLL: 2.6940908318605463
+
+--- n_clusters=500 (99.3x compression) ---
+n_clusters=500  best_config={'k': 20, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7038574683331595}  val NLL=2.7452  beats raw ceiling? False
+
+--- n_clusters=2000 (24.8x compression) ---
+n_clusters=2000  best_config={'k': 10, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.689023047373318}  val NLL=2.7255  beats raw ceiling? False
+
+--- n_clusters=5000 (9.9x compression) ---
+n_clusters=5000  best_config={'k': 20, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.6820297332250513}  val NLL=2.7158  beats raw ceiling? False
+
+--- n_clusters=13000 (3.8x compression) ---
+n_clusters=13000  best_config={'k': 20, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.6710750960017005}  val NLL=2.7070  beats raw ceiling? False
+
+=== ALL SECTIONS DONE ===
+raw kNN ceiling: 2.6941
+n_clusters=   500  ratio=  99.3x  val NLL=2.7452  beats raw? False
+n_clusters=  2000  ratio=  24.8x  val NLL=2.7255  beats raw? False
+n_clusters=  5000  ratio=   9.9x  val NLL=2.7158  beats raw? False
+n_clusters= 13000  ratio=   3.8x  val NLL=2.7070  beats raw? False
+TinyStories extras job done: Wed Sep  9 11:50:27 AM CDT 2026

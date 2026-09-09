@@ -1,0 +1,17 @@
+{
+  "phase": "tinystories_rich_ablations",
+  "k": 20,
+  "tau": 2.0,
+  "alpha": 0.05,
+  "n_clusters": 500,
+  "original": 2.7451901708278066,
+  "top64": 2.7447890502585026,
+  "top32": 2.7445331165647597,
+  "top16": 2.7441322120790654,
+  "top5": 2.7471423633757466,
+  "majority_token": 2.764617674191417,
+  "global_unigram": 2.816845683543386,
+  "random_partition": 2.81754713045494,
+  "shuffled_distribution": 2.8349186427610755,
+  "shuffled_prototype": 2.8316536444175835
+}

@@ -1,0 +1,178 @@
+{
+  "phase": "tinystories_extras",
+  "sections_completed": [
+    "point5_diagnostics",
+    "point6_raw_baselines",
+    "compression_sweep"
+  ],
+  "point5_diagnostics": {
+    "k_diag": 8,
+    "hit_at_k": {
+      "1": 0.6885152869404838,
+      "4": 0.8166276512733206,
+      "8": 0.8584095906930552
+    },
+    "mean_p_state_true": 0.10852626057768032,
+    "active_state_fraction": 28.102,
+    "n_active_states": 14051,
+    "n_total_states": 500,
+    "top_helpful_clusters": [
+      [
+        1,
+        2.6221290834153987
+      ],
+      [
+        2,
+        1.094422657824637
+      ],
+      [
+        3,
+        0.8886164508090878
+      ],
+      [
+        4,
+        0.38548238816490604
+      ],
+      [
+        5,
+        0.32964433650174746
+      ],
+      [
+        7,
+        0.2733364403114169
+      ],
+      [
+        6,
+        0.24916923849641426
+      ],
+      [
+        10,
+        0.16968516330840497
+      ],
+      [
+        8,
+        0.15689714212089506
+      ],
+      [
+        9,
+        0.14994533501083676
+      ]
+    ],
+    "top_harmful_clusters": [
+      [
+        38,
+        -0.05061966977928141
+      ],
+      [
+        43,
+        -0.050095633063576214
+      ],
+      [
+        37,
+        -0.04956940735398914
+      ],
+      [
+        44,
+        -0.04920267056325019
+      ],
+      [
+        39,
+        -0.0486159853422917
+      ],
+      [
+        40,
+        -0.04532181516393059
+      ],
+      [
+        45,
+        -0.042434747843607866
+      ],
+      [
+        33,
+        -0.040748525499330814
+      ],
+      [
+        36,
+        -0.040240097247359434
+      ],
+      [
+        35,
+        -0.04006842579842459
+      ]
+    ],
+    "note_oracle_gap": "see DIME/results/q_read_multi_action_baseline.json \u2014 oracle 2.5342 vs learned Q-read 2.7308 vs GPT-only 2.7984"
+  },
+  "point6_raw_baselines": {
+    "raw_token_rarity": {
+      "n_selected": 500,
+      "mean_nll": 2.9020253718848683
+    },
+    "raw_coverage": {
+      "n_selected": 500,
+      "mean_nll": 2.8312935867334974
+    },
+    "reference_gpt_only": 2.7984323501586914,
+    "reference_dime_tuned": 2.7451901708278066
+  },
+  "compression_sweep": {
+    "raw_knn_tuned_ceiling": {
+      "best_config": {
+        "k": 50,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 2.6594414062060365
+      },
+      "val_mean_nll": 2.6940908318605463
+    },
+    "sweep": [
+      {
+        "n_clusters": 500,
+        "compression_ratio": 99.314,
+        "best_config": {
+          "k": 20,
+          "tau": 2.0,
+          "alpha": 0.05,
+          "mean_nll": 2.7038574683331595
+        },
+        "val_mean_nll": 2.7451901708278066,
+        "beats_raw_ceiling": false
+      },
+      {
+        "n_clusters": 2000,
+        "compression_ratio": 24.8285,
+        "best_config": {
+          "k": 10,
+          "tau": 2.0,
+          "alpha": 0.1,
+          "mean_nll": 2.689023047373318
+        },
+        "val_mean_nll": 2.7254694011056477,
+        "beats_raw_ceiling": false
+      },
+      {
+        "n_clusters": 5000,
+        "compression_ratio": 9.9314,
+        "best_config": {
+          "k": 20,
+          "tau": 2.0,
+          "alpha": 0.1,
+          "mean_nll": 2.6820297332250513
+        },
+        "val_mean_nll": 2.715782524570821,
+        "beats_raw_ceiling": false
+      },
+      {
+        "n_clusters": 13000,
+        "compression_ratio": 3.819769230769231,
+        "best_config": {
+          "k": 20,
+          "tau": 2.0,
+          "alpha": 0.1,
+          "mean_nll": 2.6710750960017005
+        },
+        "val_mean_nll": 2.7069890973101494,
+        "beats_raw_ceiling": false
+      }
+    ]
+  }
+}

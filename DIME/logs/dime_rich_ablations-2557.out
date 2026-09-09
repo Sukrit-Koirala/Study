@@ -1,0 +1,25 @@
+TinyStories rich ablations job started: Wed Sep  9 11:52:13 AM CDT 2026
+Node: Slurm-6-7
+original: 2.7451901708278066
+top64: 2.7451901708278066
+top32: 2.7451901708278066
+top16: 2.7451901708278066
+top5: 2.7451901708278066
+majority_token: 2.7451901708278066
+global_unigram: 2.7451901708278066
+random_partition: 2.81754713045494
+shuffled_distribution: 2.7451901708278066
+shuffled_prototype: 2.8316536444175835
+
+=== SUMMARY ===
+original: 2.7452
+top64: 2.7452
+top32: 2.7452
+top16: 2.7452
+top5: 2.7452
+majority_token: 2.7452
+global_unigram: 2.7452
+random_partition: 2.8175
+shuffled_distribution: 2.7452
+shuffled_prototype: 2.8317
+TinyStories rich ablations job done: Wed Sep  9 11:53:18 AM CDT 2026
