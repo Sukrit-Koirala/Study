@@ -3,3 +3,35 @@ Node: Slurm-6-7
 datastore: 381127  controller_train: 90170  val: 77089
 
 === Section A: binary Q-read (raw + DIME) ===
+raw kNN Q-read: mean NLL = 3.6568683941769105  frac_retrieved = 0.811996523498813
+DIME Q-read: mean NLL = 3.7506803814440786  frac_retrieved = 0.8249555708337117
+
+=== Section B: remaining construction methods ===
+random_partition: 3.9332150380553093
+utility_weighted: 3.743237832368541
+query_kmeans: 3.760717541012627
+
+=== Section C: remaining equal-budget raw variants + Point 6 ===
+raw_random: 3.960318753301
+raw_high_gpt_loss: 4.237904603288735
+raw_low_gpt_loss: 4.332363974325072
+raw_high_entropy: 4.2557787812330385
+raw_low_entropy: 4.329607815083105
+raw_token_rarity: 4.333482476592614
+computing raw_coverage (greedy farthest-first, this is the slow one)...
+  coverage selection: 0/3999  elapsed=1.4s
+  coverage selection: 500/3999  elapsed=363.4s
+  coverage selection: 1000/3999  elapsed=724.7s
+  coverage selection: 1500/3999  elapsed=1086.0s
+  coverage selection: 2000/3999  elapsed=1447.7s
+  coverage selection: 2500/3999  elapsed=1812.0s
+  coverage selection: 3000/3999  elapsed=2175.8s
+  coverage selection: 3500/3999  elapsed=2539.5s
+coverage selection done in 2901.1s
+raw_coverage: 4.157551032034929
+
+=== Section D: efficiency analysis ===
+
+=== ALL SECTIONS DONE ===
+{'entry_count': {'raw': 381127, 'dime': 4000, 'ratio': 95.28175}, 'bytes': {'raw_total_mb': 1564.145208, 'dime_total_mb': 17.574716, 'ratio': 88.99974303994443}, 'latency_ms_per_query': {'raw': 3.0612052673294112, 'dime': 0.044789877294498404, 'ratio': 68.34591769925261}}
+WikiText-103 extras job done: Wed Sep  9 04:30:32 PM CDT 2026

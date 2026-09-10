@@ -1,0 +1,10 @@
+Tier 2 (wikitext2/gpt2) job started: Wed Sep  9 11:51:09 PM CDT 2026
+Node: Slurm-6-7
+[wikitext2_gpt2] using tuned configs: raw k=300,tau=2.0,alpha=0.25  dime k=300,tau=2.0,alpha=0.1
+[wikitext2_gpt2] raw Q-read: 3.9207  frac_retrieved=0.988
+[wikitext2_gpt2] DIME Q-read: 4.0832  frac_retrieved=0.890
+[wikitext2_gpt2] efficiency: {'entry_count': {'raw': 37973, 'dime': 380, 'ratio': 99.92894736842105}, 'bytes': {'raw_total_mb': 116.95684, 'dime_total_mb': 1.29147, 'ratio': 90.56101961330887}, 'latency_ms_per_query': {'raw': 0.3193093693694173, 'dime': 0.012659581984928626, 'ratio': 25.222741931728763}}
+[wikitext2_gpt2] ablations: majority_token=4.1711  top5=4.0885  shuffled=4.4124
+
+[wikitext2_gpt2] === TIER 2 DONE ===
+Tier 2 (wikitext2/gpt2) job done: Wed Sep  9 11:52:41 PM CDT 2026

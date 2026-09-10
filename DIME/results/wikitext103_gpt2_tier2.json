@@ -1,0 +1,42 @@
+{
+  "phase": "tier2_rigor",
+  "dataset": "wikitext103",
+  "model": "gpt2",
+  "binary_q_read": {
+    "raw_knn": {
+      "mean_nll": 3.881948470790295,
+      "frac_retrieved": 0.99774286863236
+    },
+    "dime": {
+      "mean_nll": 4.012830989038966,
+      "frac_retrieved": 0.7486152369339335
+    }
+  },
+  "sections_completed": [
+    "binary_q_read",
+    "efficiency",
+    "ablation_3variant"
+  ],
+  "efficiency": {
+    "entry_count": {
+      "raw": 381127,
+      "dime": 3811,
+      "ratio": 100.00708475465757
+    },
+    "bytes": {
+      "raw_total_mb": 1173.87116,
+      "dime_total_mb": 12.89349,
+      "ratio": 91.04370965502746
+    },
+    "latency_ms_per_query": {
+      "raw": 2.340065453618519,
+      "dime": 0.029540117417588142,
+      "ratio": 79.21652512542984
+    }
+  },
+  "ablation_3variant": {
+    "majority_token": 4.048655385424022,
+    "top5": 4.009263815759555,
+    "shuffled": 4.2717338333996695
+  }
+}

@@ -1,0 +1,7 @@
+Extraction (wikitext2/gpt2) job started: Wed Sep  9 04:48:16 PM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+cached datastore: 37973 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext2_gpt2_datastore.npz
+cached controller_train: 7493 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext2_gpt2_controller_train.npz
+cached val: 6350 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/wikitext2_gpt2_val.npz
+Extraction (wikitext2/gpt2) job done: Wed Sep  9 04:49:10 PM CDT 2026

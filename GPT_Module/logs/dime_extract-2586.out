@@ -1,0 +1,7 @@
+Extraction (tinystories/gpt2-medium) job started: Thu Sep 10 02:05:37 AM CDT 2026
+Node: Slurm-6-7
+GPU: NVIDIA L40S
+cached datastore: 381000 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/tinystories_gpt2-medium_datastore.npz
+cached controller_train: 81026 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/tinystories_gpt2-medium_controller_train.npz
+cached val: 83566 positions -> /home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache/tinystories_gpt2-medium_val.npz
+Extraction (tinystories/gpt2-medium) job done: Thu Sep 10 02:07:57 AM CDT 2026

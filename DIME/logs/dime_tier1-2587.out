@@ -1,0 +1,17 @@
+Tier 1 (tinystories/gpt2-medium) job started: Thu Sep 10 02:07:58 AM CDT 2026
+Node: Slurm-6-7
+[tinystories_gpt2-medium] datastore: 381000  controller_train: 81026  val: 83566
+[tinystories_gpt2-medium] n_clusters = 3810 (ratio 100.0x)
+[tinystories_gpt2-medium] GPT-only: 2.5011
+[tinystories_gpt2-medium] raw kNN tuned: {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 2.4107038345904304} -> 2.4041
+[tinystories_gpt2-medium] DIME tuned: {'k': 20, 'tau': 1.0, 'alpha': 0.1, 'mean_nll': 2.4690819364598307} -> 2.4629
+[tinystories_gpt2-medium] raw_kmeans_representative: n=3808 -> 2.5905
+
+[tinystories_gpt2-medium] === TIER 1 SUMMARY ===
+GPT-only: 2.5011
+raw kNN tuned: 2.4041
+DIME tuned: 2.4629
+raw_kmeans_representative: 2.5905
+DIME vs GPT-only: {'comparison': 'GPT-only vs DIME (tuned)', 'mean_diff': 0.038150094404727504, 'paired_t_test': {'t_stat': 23.93306500116565, 'p_value': 3.6973750703685684e-126}, 'wilcoxon_signed_rank': {'stat': 952164188.0, 'p_value': 0.0}}
+DIME vs raw_kmeans_representative: {'comparison': 'raw_kmeans_representative vs DIME (tuned)', 'mean_diff': 0.12755609008737787, 'paired_t_test': {'t_stat': 73.1974965621181, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 704114103.0, 'p_value': 0.0}}
+Tier 1 (tinystories/gpt2-medium) job done: Thu Sep 10 02:38:35 AM CDT 2026

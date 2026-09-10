@@ -1,0 +1,17 @@
+Tier 1 (wikitext103/gpt2) job started: Thu Sep 10 04:19:48 AM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2] datastore: 381127  controller_train: 90170  val: 77089
+[wikitext103_gpt2] n_clusters = 3811 (ratio 100.0x)
+[wikitext103_gpt2] GPT-only: 4.3610
+[wikitext103_gpt2] raw kNN tuned: {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873} -> 3.8825
+[wikitext103_gpt2] DIME tuned: {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259} -> 4.0110
+[wikitext103_gpt2] raw_kmeans_representative: n=3811 -> 4.1901
+
+[wikitext103_gpt2] === TIER 1 SUMMARY ===
+GPT-only: 4.3610
+raw kNN tuned: 3.8825
+DIME tuned: 4.0110
+raw_kmeans_representative: 4.1901
+DIME vs GPT-only: {'comparison': 'GPT-only vs DIME (tuned)', 'mean_diff': 0.3499411277902418, 'paired_t_test': {'t_stat': 64.72591113643806, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 1013151000.0, 'p_value': 0.0}}
+DIME vs raw_kmeans_representative: {'comparison': 'raw_kmeans_representative vs DIME (tuned)', 'mean_diff': 0.17907862579669656, 'paired_t_test': {'t_stat': 57.39256998315744, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 574869422.0, 'p_value': 0.0}}
+Tier 1 (wikitext103/gpt2) job done: Thu Sep 10 04:51:58 AM CDT 2026
