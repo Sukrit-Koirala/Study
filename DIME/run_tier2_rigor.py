@@ -86,13 +86,17 @@ raw_total_bytes = ds_keys.nbytes + ds_values.nbytes
 dime_total_bytes = compressed_keys.nbytes + len(pickle.dumps(compressed_dists))
 
 
-def time_retrieval(index, values, query_keys, k, n_warmup=5, n_timed=20):
+def time_retrieval(index, values, query_keys, k, n_warmup=5, n_timed=20, max_queries=500):
+    # Latency-per-query only needs a representative sample, not the full val set —
+    # timing 20 full passes over hundreds of thousands of queries (WikiText-2's true
+    # scale) is what blew through the 4-hour SLURM limit here.
+    sample = query_keys[:min(max_queries, len(query_keys))]
     for _ in range(n_warmup):
-        query_knn(index, values, query_keys[:min(100, len(query_keys))], k=k)
+        query_knn(index, values, sample[:min(100, len(sample))], k=k)
     t0 = time.perf_counter()
     for _ in range(n_timed):
-        query_knn(index, values, query_keys, k=k)
-    return ((time.perf_counter() - t0) / n_timed) / len(query_keys) * 1000
+        query_knn(index, values, sample, k=k)
+    return ((time.perf_counter() - t0) / n_timed) / len(sample) * 1000
 
 
 raw_latency_ms = time_retrieval(raw_index, raw_stored_values, val_keys, k=RAW_K)
