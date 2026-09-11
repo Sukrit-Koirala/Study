@@ -4,39 +4,15 @@
   "model": "gpt2",
   "binary_q_read": {
     "raw_knn": {
-      "mean_nll": 3.92072889801374,
-      "frac_retrieved": 0.9881889763779528
+      "mean_nll": 3.841828656027704,
+      "frac_retrieved": 0.986820423781297
     },
     "dime": {
-      "mean_nll": 4.083195710538243,
-      "frac_retrieved": 0.889763779527559
+      "mean_nll": 3.950958203789837,
+      "frac_retrieved": 0.698780191099708
     }
   },
   "sections_completed": [
-    "binary_q_read",
-    "efficiency",
-    "ablation_3variant"
-  ],
-  "efficiency": {
-    "entry_count": {
-      "raw": 37973,
-      "dime": 380,
-      "ratio": 99.92894736842105
-    },
-    "bytes": {
-      "raw_total_mb": 116.95684,
-      "dime_total_mb": 1.29147,
-      "ratio": 90.56101961330887
-    },
-    "latency_ms_per_query": {
-      "raw": 0.3193093693694173,
-      "dime": 0.012659581984928626,
-      "ratio": 25.222741931728763
-    }
-  },
-  "ablation_3variant": {
-    "majority_token": 4.171066081682814,
-    "top5": 4.088533867681936,
-    "shuffled": 4.41241439459494
-  }
+    "binary_q_read"
+  ]
 }

@@ -2,52 +2,52 @@
   "phase": "tier1_core",
   "dataset": "wikitext2",
   "model": "gpt2",
-  "n_clusters": 380,
-  "gpt_only_mean_nll": 4.432877540588379,
+  "n_clusters": 16770,
+  "gpt_only_mean_nll": 4.343142032623291,
   "raw_knn": {
     "best_config": {
       "k": 300,
-      "tau": 2.0,
+      "tau": 1.0,
       "alpha": 0.25,
-      "mean_nll": 3.7945166647646382
+      "mean_nll": 3.8512094533606276
     },
-    "val_mean_nll": 3.922884858978922
+    "val_mean_nll": 3.843748986770851
   },
   "dime_minibatch_kmeans": {
     "best_config": {
       "k": 300,
-      "tau": 2.0,
-      "alpha": 0.1,
-      "mean_nll": 3.946329319813469
+      "tau": 1.0,
+      "alpha": 0.25,
+      "mean_nll": 3.978734400883346
     },
-    "val_mean_nll": 4.07574476700618
+    "val_mean_nll": 3.974319757087174
   },
   "raw_kmeans_representative": {
-    "n_selected": 380,
-    "val_mean_nll": 4.412760169045269
+    "n_selected": 16717,
+    "val_mean_nll": 4.1178495593633
   },
   "significance_tests": [
     {
       "comparison": "GPT-only vs DIME (tuned)",
-      "mean_diff": 0.35713297974631986,
+      "mean_diff": 0.3688224252686677,
       "paired_t_test": {
-        "t_stat": 18.094482319352704,
-        "p_value": 2.1390956905518088e-71
+        "t_stat": 127.2116479918814,
+        "p_value": 0.0
       },
       "wilcoxon_signed_rank": {
-        "stat": 6574154.0,
-        "p_value": 2.0365137409145787e-127
+        "stat": 23159216679.0,
+        "p_value": 0.0
       }
     },
     {
       "comparison": "raw_kmeans_representative vs DIME (tuned)",
-      "mean_diff": 0.3370154020390893,
+      "mean_diff": 0.14352980227612647,
       "paired_t_test": {
-        "t_stat": 19.527379832067957,
-        "p_value": 1.628526934571967e-82
+        "t_stat": 104.5404522051037,
+        "p_value": 0.0
       },
       "wilcoxon_signed_rank": {
-        "stat": 3143718.0,
+        "stat": 14810376700.0,
         "p_value": 0.0
       }
     }

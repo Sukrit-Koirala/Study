@@ -2,52 +2,52 @@
   "phase": "tier1_core",
   "dataset": "wikitext2",
   "model": "gpt2-medium",
-  "n_clusters": 3811,
-  "gpt_only_mean_nll": 4.048544406890869,
+  "n_clusters": 16770,
+  "gpt_only_mean_nll": 4.022102355957031,
   "raw_knn": {
     "best_config": {
       "k": 300,
       "tau": 1.0,
       "alpha": 0.25,
-      "mean_nll": 3.646437230015699
+      "mean_nll": 3.618295688373334
     },
-    "val_mean_nll": 3.659436421190596
+    "val_mean_nll": 3.6136018567650705
   },
   "dime_minibatch_kmeans": {
     "best_config": {
       "k": 300,
-      "tau": 2.0,
+      "tau": 1.0,
       "alpha": 0.1,
-      "mean_nll": 3.736836068722496
+      "mean_nll": 3.724940730432158
     },
-    "val_mean_nll": 3.754108340534947
+    "val_mean_nll": 3.7220979183257086
   },
   "raw_kmeans_representative": {
-    "n_selected": 3810,
-    "val_mean_nll": 3.956139375386162
+    "n_selected": 16644,
+    "val_mean_nll": 3.8648273465677754
   },
   "significance_tests": [
     {
       "comparison": "GPT-only vs DIME (tuned)",
-      "mean_diff": 0.2944361740594009,
+      "mean_diff": 0.3000044765256127,
       "paired_t_test": {
-        "t_stat": 61.60997887292219,
+        "t_stat": 136.39789683369605,
         "p_value": 0.0
       },
       "wilcoxon_signed_rank": {
-        "stat": 913545201.0,
+        "stat": 21333772882.0,
         "p_value": 0.0
       }
     },
     {
       "comparison": "raw_kmeans_representative vs DIME (tuned)",
-      "mean_diff": 0.2020310348512143,
+      "mean_diff": 0.14272942824206705,
       "paired_t_test": {
-        "t_stat": 63.18790625159395,
+        "t_stat": 122.24570542726073,
         "p_value": 0.0
       },
       "wilcoxon_signed_rank": {
-        "stat": 513622263.0,
+        "stat": 13353089440.0,
         "p_value": 0.0
       }
     }

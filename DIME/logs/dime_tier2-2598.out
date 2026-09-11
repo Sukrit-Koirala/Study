@@ -1,0 +1,5 @@
+Tier 2 (wikitext2/gpt2) job started: Thu Sep 10 05:22:14 PM CDT 2026
+Node: Slurm-6-7
+[wikitext2_gpt2] using tuned configs: raw k=300,tau=1.0,alpha=0.25  dime k=300,tau=1.0,alpha=0.25
+[wikitext2_gpt2] raw Q-read: 3.8418  frac_retrieved=0.987
+[wikitext2_gpt2] DIME Q-read: 3.9510  frac_retrieved=0.699
