@@ -10,6 +10,8 @@ from q_read import retrieval_purity_entropy, train_q_read_controller
 import numpy as np
 from collections import Counter
 
+#Safer
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataset", required=True)
 parser.add_argument("--model", required=True)
