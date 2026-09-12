@@ -13,6 +13,30 @@
     }
   },
   "sections_completed": [
-    "binary_q_read"
-  ]
+    "binary_q_read",
+    "efficiency",
+    "ablation_3variant"
+  ],
+  "efficiency": {
+    "entry_count": {
+      "raw": 1677035,
+      "dime": 16770,
+      "ratio": 100.0020870602266
+    },
+    "bytes": {
+      "raw_total_mb": 6882.55164,
+      "dime_total_mb": 73.536479,
+      "ratio": 93.59370660104626
+    },
+    "latency_ms_per_query": {
+      "raw": 13.444826620002278,
+      "dime": 0.23913559289649128,
+      "ratio": 56.22260767271816
+    }
+  },
+  "ablation_3variant": {
+    "majority_token": 3.747287883073558,
+    "top5": 3.7078465455283083,
+    "shuffled": 3.9923110328333062
+  }
 }
