@@ -1,0 +1,59 @@
+Tier 3 (wikitext2/gpt2) job started: Mon Sep 14 07:43:30 PM CDT 2026
+Node: Slurm-6-7
+[wikitext2_gpt2] n_clusters=16770  raw tuned k=300,tau=1.0,alpha=0.25  dime tuned k=300,tau=1.0,alpha=0.25
+[wikitext2_gpt2] construction=minibatch_kmeans: 3.9743
+[wikitext2_gpt2] construction=random_partition: 4.2885
+[wikitext2_gpt2] construction=utility_weighted: 3.9812
+[wikitext2_gpt2] construction=query_kmeans: 3.9918
+[wikitext2_gpt2] raw variant=raw_random: n=16770 -> 4.1312
+[wikitext2_gpt2] raw variant=raw_high_gpt_loss: n=16770 -> 4.5175
+[wikitext2_gpt2] raw variant=raw_low_gpt_loss: n=16770 -> 4.6213
+[wikitext2_gpt2] raw variant=raw_high_entropy: n=16770 -> 4.5123
+[wikitext2_gpt2] raw variant=raw_low_entropy: n=16770 -> 4.5996
+[wikitext2_gpt2] raw variant=raw_token_rarity: n=16770 -> 4.6258
+[wikitext2_gpt2] starting greedy farthest-first coverage selection (n=16770)...
+[wikitext2_gpt2] coverage selection: 500/16770
+[wikitext2_gpt2] coverage selection: 1000/16770
+[wikitext2_gpt2] coverage selection: 1500/16770
+[wikitext2_gpt2] coverage selection: 2000/16770
+[wikitext2_gpt2] coverage selection: 2500/16770
+[wikitext2_gpt2] coverage selection: 3000/16770
+[wikitext2_gpt2] coverage selection: 3500/16770
+[wikitext2_gpt2] coverage selection: 4000/16770
+[wikitext2_gpt2] coverage selection: 4500/16770
+[wikitext2_gpt2] coverage selection: 5000/16770
+[wikitext2_gpt2] coverage selection: 5500/16770
+[wikitext2_gpt2] coverage selection: 6000/16770
+[wikitext2_gpt2] coverage selection: 6500/16770
+[wikitext2_gpt2] coverage selection: 7000/16770
+[wikitext2_gpt2] coverage selection: 7500/16770
+[wikitext2_gpt2] coverage selection: 8000/16770
+[wikitext2_gpt2] coverage selection: 8500/16770
+[wikitext2_gpt2] coverage selection: 9000/16770
+[wikitext2_gpt2] coverage selection: 9500/16770
+[wikitext2_gpt2] coverage selection: 10000/16770
+[wikitext2_gpt2] coverage selection: 10500/16770
+[wikitext2_gpt2] coverage selection: 11000/16770
+[wikitext2_gpt2] coverage selection: 11500/16770
+[wikitext2_gpt2] coverage selection: 12000/16770
+[wikitext2_gpt2] coverage selection: 12500/16770
+[wikitext2_gpt2] coverage selection: 13000/16770
+[wikitext2_gpt2] coverage selection: 13500/16770
+[wikitext2_gpt2] coverage selection: 14000/16770
+[wikitext2_gpt2] coverage selection: 14500/16770
+[wikitext2_gpt2] coverage selection: 15000/16770
+[wikitext2_gpt2] coverage selection: 15500/16770
+[wikitext2_gpt2] coverage selection: 16000/16770
+[wikitext2_gpt2] coverage selection: 16500/16770
+[wikitext2_gpt2] raw variant=raw_coverage: n=16770 -> 4.3639
+[wikitext2_gpt2] ablation=original: 3.9743
+[wikitext2_gpt2] ablation=top64: 3.9718
+[wikitext2_gpt2] ablation=top32: 3.9660
+[wikitext2_gpt2] ablation=top16: 3.9644
+[wikitext2_gpt2] ablation=top5: 3.9787
+[wikitext2_gpt2] ablation=majority_token: 4.0524
+[wikitext2_gpt2] ablation=global_unigram: 4.2682
+[wikitext2_gpt2] ablation=random_partition: 4.2881
+[wikitext2_gpt2] ablation=shuffled_distribution: 4.3839
+[wikitext2_gpt2] ablation=shuffled_prototype: 4.3795
+[wikitext2_gpt2] multi-action Q-read: 257 actions, k_max=300, device=cuda

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/run_tier3_extras.py", line 188, in <module>
+    reward_ct = compute_reward_matrix_dense(idx_ct_max, dist_ct_max, ct_values, ct_p_lm_true, token_ids, token_counts, total_counts, actions, global_freq=global_freq_full, device=device)
+  File "/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/q_read_dense.py", line 73, in compute_reward_matrix_dense
+    p_state = dense_p_state(idx_k, true_targets, token_ids, token_counts, total_counts,
+                              beta=action["beta"], global_freq=global_freq, device=device)
+  File "/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/q_read_dense.py", line 32, in dense_p_state
+    retrieved_cnts = tok_cnts_t[idx_t]      # [N, k, top_k]
+                     ~~~~~~~~~~^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 17.68 GiB. GPU 0 has a total capacity of 44.42 GiB of which 7.44 GiB is free. Including non-PyTorch memory, this process has 36.97 GiB memory in use. Of the allocated memory 36.06 GiB is allocated by PyTorch, and 431.89 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

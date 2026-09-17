@@ -1,0 +1,37 @@
+{
+  "phase": "tier3_extras",
+  "dataset": "wikitext2",
+  "model": "gpt2",
+  "sections_completed": [
+    "construction_methods",
+    "raw_baseline_variants",
+    "rich_ablations"
+  ],
+  "construction_methods": {
+    "minibatch_kmeans": 3.974319757087174,
+    "random_partition": 4.288472752981053,
+    "utility_weighted": 3.9812125500634887,
+    "query_kmeans": 3.9917802545065437
+  },
+  "raw_baseline_variants": {
+    "raw_random": 4.131174937015752,
+    "raw_high_gpt_loss": 4.517487163571291,
+    "raw_low_gpt_loss": 4.621313334525301,
+    "raw_high_entropy": 4.512298599029401,
+    "raw_low_entropy": 4.599572133455433,
+    "raw_token_rarity": 4.625778072864138,
+    "raw_coverage": 4.363880037849012
+  },
+  "rich_ablations": {
+    "original": 3.974319757087174,
+    "top64": 3.971788423518363,
+    "top32": 3.9660481619060377,
+    "top16": 3.964397388583541,
+    "top5": 3.978675403795615,
+    "majority_token": 4.052351614892494,
+    "global_unigram": 4.268160136113849,
+    "random_partition": 4.288077768058394,
+    "shuffled_distribution": 4.3838593470656795,
+    "shuffled_prototype": 4.379491956812219
+  }
+}

@@ -1,0 +1,38 @@
+Tier 3 (wikitext103/gpt2) job started: Mon Sep 14 11:19:21 AM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2] n_clusters=3811  raw tuned k=300,tau=1.0,alpha=0.25  dime tuned k=100,tau=2.0,alpha=0.1
+[wikitext103_gpt2] construction=minibatch_kmeans: 4.0110
+[wikitext103_gpt2] construction=random_partition: 4.2186
+[wikitext103_gpt2] construction=utility_weighted: 4.0008
+[wikitext103_gpt2] construction=query_kmeans: 4.0150
+[wikitext103_gpt2] raw variant=raw_random: n=3811 -> 4.2103
+[wikitext103_gpt2] raw variant=raw_high_gpt_loss: n=3811 -> 4.5261
+[wikitext103_gpt2] raw variant=raw_low_gpt_loss: n=3811 -> 4.6413
+[wikitext103_gpt2] raw variant=raw_high_entropy: n=3811 -> 4.5474
+[wikitext103_gpt2] raw variant=raw_low_entropy: n=3811 -> 4.6217
+[wikitext103_gpt2] raw variant=raw_token_rarity: n=3811 -> 4.6445
+[wikitext103_gpt2] starting greedy farthest-first coverage selection (n=3811)...
+[wikitext103_gpt2] coverage selection: 500/3811
+[wikitext103_gpt2] coverage selection: 1000/3811
+[wikitext103_gpt2] coverage selection: 1500/3811
+[wikitext103_gpt2] coverage selection: 2000/3811
+[wikitext103_gpt2] coverage selection: 2500/3811
+[wikitext103_gpt2] coverage selection: 3000/3811
+[wikitext103_gpt2] coverage selection: 3500/3811
+[wikitext103_gpt2] raw variant=raw_coverage: n=3811 -> 4.3868
+[wikitext103_gpt2] ablation=original: 4.0110
+[wikitext103_gpt2] ablation=top64: 4.0093
+[wikitext103_gpt2] ablation=top32: 4.0043
+[wikitext103_gpt2] ablation=top16: 4.0042
+[wikitext103_gpt2] ablation=top5: 4.0093
+[wikitext103_gpt2] ablation=majority_token: 4.0487
+[wikitext103_gpt2] ablation=global_unigram: 4.2046
+[wikitext103_gpt2] ablation=random_partition: 4.2147
+[wikitext103_gpt2] ablation=shuffled_distribution: 4.2681
+[wikitext103_gpt2] ablation=shuffled_prototype: 4.2646
+[wikitext103_gpt2] multi-action Q-read: 257 actions, k_max=300, device=cuda
+[wikitext103_gpt2] multi-action Q-read: 3.9989  frac_gpt_only=0.398
+[wikitext103_gpt2] hit@100=0.8683  p_state(true)=0.0759  active=3765/3811
+
+[wikitext103_gpt2] === TIER 3 DONE ===
+Tier 3 (wikitext103/gpt2) job done: Mon Sep 14 07:43:29 PM CDT 2026
