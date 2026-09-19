@@ -64,10 +64,14 @@ print(f"[{PREFIX}] N={N_total}  B={B}  ct={len(ct_values)}  val={len(val_values)
 K_GRID = [10, 20, 50, 100, 200, 300]
 TAU_GRID = [0.5, 1.0, 2.0, 5.0, 10.0]
 ALPHA_GRID = [0.01, 0.05, 0.1, 0.25, 0.5]
+# A raw baseline can always switch retrieval off (alpha=0 == GPT-only). Without it, a selection that
+# carries no signal lands on the alpha=0.01 grid floor and scores ~GPT-only + 0.01 (-log 0.99), which
+# understates that baseline. DIME's tuned alpha is interior, so adding 0 does not change DIME's result.
+RAW_ALPHA_GRID = [0.0] + ALPHA_GRID
 
 out_path = f"results/{PREFIX}_raw_retune.json"
 results = {"phase": "raw_retune", "dataset": args.dataset, "model": args.model, "n_clusters": B,
-           "grid": {"k": K_GRID, "tau": TAU_GRID, "alpha": ALPHA_GRID},
+           "grid": {"k": K_GRID, "tau": TAU_GRID, "alpha": RAW_ALPHA_GRID},
            "gpt_only_mean_nll": float((-np.log(val_p_lm_true + 1e-12)).mean()),
            "strategies": {}}
 
@@ -159,7 +163,7 @@ for name, select in selectors.items():
 
     d_ct, r_ct = query_knn(index, stored, ct_keys, k=max(k_grid))
     _, best = grid_search_hyperparams(d_ct, r_ct, ct_values, ct_p_lm_true, mix_knn_and_lm,
-                                      k_grid, TAU_GRID, ALPHA_GRID)
+                                      k_grid, TAU_GRID, RAW_ALPHA_GRID)
     d_val, r_val = query_knn(index, stored, val_keys, k=best["k"])
     _, nll_val = mix_knn_and_lm(d_val, r_val, val_values, val_p_lm_true, tau=best["tau"], alpha=best["alpha"])
     val_nll_arrays[name] = nll_val
