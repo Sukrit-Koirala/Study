@@ -1,0 +1,16 @@
+{
+  "phase": "tier1_core",
+  "dataset": "tinystories",
+  "model": "gpt2",
+  "n_clusters": 500,
+  "gpt_only_mean_nll": 2.7984323501586914,
+  "raw_knn": {
+    "best_config": {
+      "k": 100,
+      "tau": 2.0,
+      "alpha": 0.1,
+      "mean_nll": 2.658197441933184
+    },
+    "val_mean_nll": 2.692845172428664
+  }
+}

@@ -1,0 +1,6 @@
+Tier 1 (tinystories/gpt2) job started: Sat Sep 19 11:53:29 AM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] datastore: 49657  controller_train: 9652  val: 14097
+[tinystories_gpt2] n_clusters = 500 (ratio 99.3x)
+[tinystories_gpt2] GPT-only: 2.7984
+[tinystories_gpt2] raw kNN tuned: {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.658197441933184} -> 2.6928
