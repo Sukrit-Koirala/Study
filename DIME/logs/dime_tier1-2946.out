@@ -4,3 +4,14 @@ Node: Slurm-2-7
 [tinystories_gpt2] n_clusters = 500 (ratio 99.3x)
 [tinystories_gpt2] GPT-only: 2.7984
 [tinystories_gpt2] raw kNN tuned: {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.658197441933184} -> 2.6928
+[tinystories_gpt2] DIME tuned: {'k': 20, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7038574683331595} -> 2.7452
+[tinystories_gpt2] raw_kmeans_representative: n=500 -> 2.7811
+
+[tinystories_gpt2] === TIER 1 SUMMARY ===
+GPT-only: 2.7984
+raw kNN tuned: 2.6928
+DIME tuned: 2.7452
+raw_kmeans_representative: 2.7811
+DIME vs GPT-only: {'comparison': 'GPT-only vs DIME (tuned)', 'mean_diff': 0.05324198631052014, 'paired_t_test': {'t_stat': 13.667014265721756, 'p_value': 2.970736514297892e-42}, 'wilcoxon_signed_rank': {'stat': 26824240.0, 'p_value': 0.0}}
+DIME vs raw_kmeans_representative: {'comparison': 'raw_kmeans_representative vs DIME (tuned)', 'mean_diff': 0.03594338333966755, 'paired_t_test': {'t_stat': 11.180947976495084, 'p_value': 6.687694513998932e-29}, 'wilcoxon_signed_rank': {'stat': 19444223.0, 'p_value': 0.0}}
+Tier 1 (tinystories/gpt2) job done: Sat Sep 19 11:55:54 AM CDT 2026

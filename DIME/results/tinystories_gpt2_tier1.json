@@ -12,5 +12,44 @@
       "mean_nll": 2.658197441933184
     },
     "val_mean_nll": 2.692845172428664
-  }
+  },
+  "dime_minibatch_kmeans": {
+    "best_config": {
+      "k": 20,
+      "tau": 2.0,
+      "alpha": 0.05,
+      "mean_nll": 2.7038574683331595
+    },
+    "val_mean_nll": 2.7451901708278066
+  },
+  "raw_kmeans_representative": {
+    "n_selected": 500,
+    "val_mean_nll": 2.7811335541674738
+  },
+  "significance_tests": [
+    {
+      "comparison": "GPT-only vs DIME (tuned)",
+      "mean_diff": 0.05324198631052014,
+      "paired_t_test": {
+        "t_stat": 13.667014265721756,
+        "p_value": 2.970736514297892e-42
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 26824240.0,
+        "p_value": 0.0
+      }
+    },
+    {
+      "comparison": "raw_kmeans_representative vs DIME (tuned)",
+      "mean_diff": 0.03594338333966755,
+      "paired_t_test": {
+        "t_stat": 11.180947976495084,
+        "p_value": 6.687694513998932e-29
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 19444223.0,
+        "p_value": 0.0
+      }
+    }
+  ]
 }

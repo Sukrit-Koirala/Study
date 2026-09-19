@@ -1,0 +1,42 @@
+{
+  "phase": "tier2_rigor",
+  "dataset": "tinystories",
+  "model": "gpt2",
+  "binary_q_read": {
+    "raw_knn": {
+      "mean_nll": 2.694497497686411,
+      "frac_retrieved": 0.5023763921401717
+    },
+    "dime": {
+      "mean_nll": 2.7414270088841945,
+      "frac_retrieved": 0.43214868411718804
+    }
+  },
+  "sections_completed": [
+    "binary_q_read",
+    "efficiency",
+    "ablation_3variant"
+  ],
+  "efficiency": {
+    "entry_count": {
+      "raw": 49657,
+      "dime": 500,
+      "ratio": 99.314
+    },
+    "bytes": {
+      "raw_total_mb": 152.94356,
+      "dime_total_mb": 1.650807,
+      "ratio": 92.6477534926857
+    },
+    "latency_ms_per_query": {
+      "raw": 0.41277167590451425,
+      "dime": 0.1718566458032001,
+      "ratio": 2.4018371473233313
+    }
+  },
+  "ablation_3variant": {
+    "majority_token": 2.764617674191417,
+    "top5": 2.7471423633757466,
+    "shuffled": 2.8349186427610755
+  }
+}

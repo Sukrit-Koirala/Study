@@ -1,0 +1,10 @@
+Tier 2 (tinystories/gpt2) job started: Sat Sep 19 11:55:55 AM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] using tuned configs: raw k=100,tau=2.0,alpha=0.1  dime k=20,tau=2.0,alpha=0.05
+[tinystories_gpt2] raw Q-read: 2.6945  frac_retrieved=0.502
+[tinystories_gpt2] DIME Q-read: 2.7414  frac_retrieved=0.432
+[tinystories_gpt2] efficiency: {'entry_count': {'raw': 49657, 'dime': 500, 'ratio': 99.314}, 'bytes': {'raw_total_mb': 152.94356, 'dime_total_mb': 1.650807, 'ratio': 92.6477534926857}, 'latency_ms_per_query': {'raw': 0.41277167590451425, 'dime': 0.1718566458032001, 'ratio': 2.4018371473233313}}
+[tinystories_gpt2] ablations: majority_token=2.7646  top5=2.7471  shuffled=2.8349
+
+[tinystories_gpt2] === TIER 2 DONE ===
+Tier 2 (tinystories/gpt2) job done: Sat Sep 19 11:56:56 AM CDT 2026
