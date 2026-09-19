@@ -1,0 +1,26 @@
+Raw re-tune (tinystories/gpt2) job started: Sat Sep 19 01:24:19 PM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] N=49657  B=500  ct=9652  val=14097
+[tinystories_gpt2] DIME (tier1 config) val NLL recomputed: 2.7452  (tier1 stored: 2.7452)
+[tinystories_gpt2] raw_kmeans_representative: n=500  best={'k': 20, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 2.717064363603797}  val retuned=2.7639  original=2.7811335541674738
+[tinystories_gpt2] raw_random: n=500  best={'k': 10, 'tau': 2.0, 'alpha': 0.01, 'mean_nll': 2.729764616303828}  val retuned=2.7814  original=2.807488917578328
+[tinystories_gpt2] raw_high_gpt_loss: n=500  best={'k': 20, 'tau': 10.0, 'alpha': 0.01, 'mean_nll': 2.733995594832534}  val retuned=2.7812  original=2.8604570439189088
+[tinystories_gpt2] raw_low_gpt_loss: n=500  best={'k': 300, 'tau': 10.0, 'alpha': 0.01, 'mean_nll': 2.7577275678476747}  val retuned=2.8083  original=2.901617148329394
+[tinystories_gpt2] raw_high_entropy: n=500  best={'k': 10, 'tau': 1.0, 'alpha': 0.01, 'mean_nll': 2.7530697635635417}  val retuned=2.8015  original=2.880333666775883
+[tinystories_gpt2] raw_low_entropy: n=500  best={'k': 200, 'tau': 10.0, 'alpha': 0.01, 'mean_nll': 2.756290493734289}  val retuned=2.8079  original=2.9010982979337303
+[tinystories_gpt2] raw_token_rarity: n=500  best={'k': 50, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.757045346014426}  val retuned=2.8079  original=2.9019056002569696
+[tinystories_gpt2] raw_coverage: n=500  best={'k': 20, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.740952377403991}  val retuned=2.7873  original=2.8374723358020515
+
+[tinystories_gpt2] === RAW RETUNE SUMMARY ===
+GPT-only 2.7984 | DIME 2.7452
+  raw_kmeans_representative    retuned 2.7639   original 2.7811335541674738
+  raw_random                   retuned 2.7814   original 2.807488917578328
+  raw_high_gpt_loss            retuned 2.7812   original 2.8604570439189088
+  raw_low_gpt_loss             retuned 2.8083   original 2.901617148329394
+  raw_high_entropy             retuned 2.8015   original 2.880333666775883
+  raw_low_entropy              retuned 2.8079   original 2.9010982979337303
+  raw_token_rarity             retuned 2.8079   original 2.9019056002569696
+  raw_coverage                 retuned 2.7873   original 2.8374723358020515
+best on controller_train: raw_kmeans_representative
+{'comparison': 'raw_kmeans_representative (retuned) vs DIME (tuned)', 'mean_diff': 0.018716179428838492, 'paired_t_test': {'t_stat': 7.181957378030274, 'p_value': 7.216301937102867e-13}, 'wilcoxon_signed_rank': {'stat': 25157648.0, 'p_value': 3.6263907477290615e-280}}
+Raw re-tune (tinystories/gpt2) job done: Sat Sep 19 01:25:14 PM CDT 2026

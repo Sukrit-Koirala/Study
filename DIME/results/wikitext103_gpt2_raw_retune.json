@@ -1,0 +1,158 @@
+{
+  "phase": "raw_retune",
+  "dataset": "wikitext103",
+  "model": "gpt2",
+  "n_clusters": 3811,
+  "grid": {
+    "k": [
+      10,
+      20,
+      50,
+      100,
+      200,
+      300
+    ],
+    "tau": [
+      0.5,
+      1.0,
+      2.0,
+      5.0,
+      10.0
+    ],
+    "alpha": [
+      0.01,
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ]
+  },
+  "gpt_only_mean_nll": 4.360981464385986,
+  "strategies": {
+    "raw_kmeans_representative": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 4.08408135156619
+      },
+      "val_mean_nll_retuned": 4.092340037998987,
+      "val_mean_nll_original": 4.1901188230245205
+    },
+    "raw_random": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 4.100348490463469
+      },
+      "val_mean_nll_retuned": 4.10976735472874,
+      "val_mean_nll_original": 4.210341017360434
+    },
+    "raw_high_gpt_loss": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 10.0,
+        "alpha": 0.01,
+        "mean_nll": 4.254222922424269
+      },
+      "val_mean_nll_retuned": 4.283773647179336,
+      "val_mean_nll_original": 4.526054390273021
+    },
+    "raw_low_gpt_loss": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 5.0,
+        "alpha": 0.01,
+        "mean_nll": 4.339986353046195
+      },
+      "val_mean_nll_retuned": 4.370052678635463,
+      "val_mean_nll_original": 4.641340506445807
+    },
+    "raw_high_entropy": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 5.0,
+        "alpha": 0.01,
+        "mean_nll": 4.299754219757862
+      },
+      "val_mean_nll_retuned": 4.327186486656066,
+      "val_mean_nll_original": 4.54742631967766
+    },
+    "raw_low_entropy": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 10.0,
+        "alpha": 0.01,
+        "mean_nll": 4.323870211443998
+      },
+      "val_mean_nll_retuned": 4.353971286860115,
+      "val_mean_nll_original": 4.6217113090511805
+    },
+    "raw_token_rarity": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.01,
+        "mean_nll": 4.33980466410427
+      },
+      "val_mean_nll_retuned": 4.369190402490195,
+      "val_mean_nll_original": 4.644489605568399
+    },
+    "raw_coverage": {
+      "n_selected": 3811,
+      "best_config": {
+        "k": 100,
+        "tau": 5.0,
+        "alpha": 0.05,
+        "mean_nll": 4.192059748673662
+      },
+      "val_mean_nll_retuned": 4.209608330823945,
+      "val_mean_nll_original": 4.386758081228381
+    }
+  },
+  "dime": {
+    "config": {
+      "k": 100,
+      "tau": 2.0,
+      "alpha": 0.1,
+      "mean_nll": 4.003112141600259
+    },
+    "val_mean_nll_recomputed": 4.011040197227825,
+    "val_mean_nll_tier1": 4.011040197227825
+  },
+  "best_strategy_by_controller_train": "raw_kmeans_representative",
+  "significance_tests": [
+    {
+      "comparison": "raw_kmeans_representative (retuned) vs DIME (tuned)",
+      "mean_diff": 0.08129984077116299,
+      "paired_t_test": {
+        "t_stat": 32.786900376912946,
+        "p_value": 3.735191241405221e-234
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 641003191.0,
+        "p_value": 0.0
+      }
+    },
+    {
+      "comparison": "GPT-only vs raw_kmeans_representative (retuned)",
+      "mean_diff": 0.2686412870190788,
+      "paired_t_test": {
+        "t_stat": 53.58068372740062,
+        "p_value": 0.0
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 760674950.0,
+        "p_value": 0.0
+      }
+    }
+  ]
+}
