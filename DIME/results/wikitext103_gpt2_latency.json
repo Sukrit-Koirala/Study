@@ -15,41 +15,41 @@
       "k": 300,
       "n_entries": 381127,
       "single": {
-        "mean_ms": 105.46166982210707,
-        "median_ms": 105.38944299332798
+        "mean_ms": 125.67605682474095,
+        "median_ms": 121.47155500133522
       },
       "batch": {
-        "per_query_ms": 2.6130258437660814
+        "per_query_ms": 0.9182665648495458
       }
     },
     "raw_B": {
       "k": 300,
       "n_entries": 3811,
       "single": {
-        "mean_ms": 4.940900904475711,
-        "median_ms": 4.915312514640391
+        "mean_ms": 64.70947417110438,
+        "median_ms": 58.908239006996155
       },
       "batch": {
-        "per_query_ms": 0.11187244372194982
+        "per_query_ms": 0.41751139924599556
       }
     },
     "dime": {
       "k": 100,
       "n_entries": 3811,
       "single": {
-        "mean_ms": 4.874172011623159,
-        "median_ms": 4.8684675130061805
+        "mean_ms": 63.19177874858724,
+        "median_ms": 57.82343551982194
       },
       "batch": {
-        "per_query_ms": 0.09920387033162115
+        "per_query_ms": 0.3364871578014572
       }
     }
   },
   "ratios": {
-    "single_median_raw_full_over_dime": 21.647354678197722,
-    "batch_raw_full_over_dime": 26.339958663217413,
-    "single_median_raw_B_over_dime": 1.009622124725915,
-    "batch_raw_B_over_dime": 1.1277024106819609
+    "single_median_raw_full_over_dime": 2.1007322361483456,
+    "batch_raw_full_over_dime": 2.7289795273297326,
+    "single_median_raw_B_over_dime": 1.0187606197629393,
+    "batch_raw_B_over_dime": 1.2407944540110691
   },
   "bytes": {
     "raw_full": 1173871160,
