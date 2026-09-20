@@ -1,0 +1,34 @@
+Job run_raw_retune.py (wikitext2/gpt2) started: Sat Sep 19 03:32:28 PM CDT 2026
+Node: Slurm-2-7
+[wikitext2_gpt2] N=1677035  B=16770  ct=370713  val=361696
+[wikitext2_gpt2] DIME (tier1 config) val NLL recomputed: 3.9743  (tier1 stored: 3.9743)
+[wikitext2_gpt2] raw_kmeans_representative: n=16717  best={'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.057562353000228}  val retuned=4.0534  original=4.1178495593633
+[wikitext2_gpt2] raw_random: n=16770  best={'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.069551213873842}  val retuned=4.0663  original=4.131174937015752
+[wikitext2_gpt2] raw_high_gpt_loss: n=16770  best={'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 4.278415686067289}  val retuned=4.2758  original=4.517487163571291
+[wikitext2_gpt2] raw_low_gpt_loss: n=16770  best={'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 4.345229648777299}  val retuned=4.3431  original=4.621313334525301
+[wikitext2_gpt2] raw_high_entropy: n=16770  best={'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 4.313081517102607}  val retuned=4.3088  original=4.512298599029401
+[wikitext2_gpt2] raw_low_entropy: n=16770  best={'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 4.337621311879583}  val retuned=4.3356  original=4.599572133455433
+[wikitext2_gpt2] raw_token_rarity: n=16770  best={'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 4.345229648777299}  val retuned=4.3431  original=4.625778072864138
+[wikitext2_gpt2] coverage selection: 2000/16770
+[wikitext2_gpt2] coverage selection: 4000/16770
+[wikitext2_gpt2] coverage selection: 6000/16770
+[wikitext2_gpt2] coverage selection: 8000/16770
+[wikitext2_gpt2] coverage selection: 10000/16770
+[wikitext2_gpt2] coverage selection: 12000/16770
+[wikitext2_gpt2] coverage selection: 14000/16770
+[wikitext2_gpt2] coverage selection: 16000/16770
+[wikitext2_gpt2] raw_coverage: n=16770  best={'k': 100, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 4.204287134107496}  val retuned=4.2008  original=4.363880037849012
+
+[wikitext2_gpt2] === RAW RETUNE SUMMARY ===
+GPT-only 4.3431 | DIME 3.9743
+  raw_kmeans_representative    retuned 4.0534   original 4.1178495593633
+  raw_random                   retuned 4.0663   original 4.131174937015752
+  raw_high_gpt_loss            retuned 4.2758   original 4.517487163571291
+  raw_low_gpt_loss             retuned 4.3431   original 4.621313334525301
+  raw_high_entropy             retuned 4.3088   original 4.512298599029401
+  raw_low_entropy              retuned 4.3356   original 4.599572133455433
+  raw_token_rarity             retuned 4.3431   original 4.625778072864138
+  raw_coverage                 retuned 4.2008   original 4.363880037849012
+best on controller_train: raw_kmeans_representative
+{'comparison': 'raw_kmeans_representative (retuned) vs DIME (tuned)', 'mean_diff': 0.07910558001058411, 'paired_t_test': {'t_stat': 63.15687410633846, 'p_value': 0.0}, 'wilcoxon_signed_rank': {'stat': 23453904809.0, 'p_value': 0.0}}
+Job run_raw_retune.py (wikitext2/gpt2) done: Sat Sep 19 04:44:44 PM CDT 2026

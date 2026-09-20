@@ -1,0 +1,10 @@
+Job run_he_baseline.py (wikitext103/gpt2-medium) started: Sat Sep 19 05:29:24 PM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2-medium] He et al. same_clusters_as_DIME: C=3811 T=230326 -> 3.7664  {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7480134645943846}
+[wikitext103_gpt2-medium] entry-matched He store infeasible: floor T=23356 (distinct tokens) > B=3811 (6.1x)
+[wikitext103_gpt2-medium] He et al. their_regime_T~N/5: C=19 T=78153 -> 4.0087  {'k': 300, 'tau': 10.0, 'alpha': 0.05, 'mean_nll': 3.9707451485614214}
+
+[wikitext103_gpt2-medium] === HE BASELINE SUMMARY ===  DIME 3.7541  GPT-only 4.0485
+  same_clusters_as_DIME        C=  3811 T= 230326  val 3.7664
+  their_regime_T~N/5           C=    19 T=  78153  val 4.0087
+Job run_he_baseline.py (wikitext103/gpt2-medium) done: Sat Sep 19 05:42:26 PM CDT 2026

@@ -1,0 +1,65 @@
+{
+  "phase": "latency_bytes_single_protocol",
+  "dataset": "wikitext103",
+  "model": "gpt2-medium",
+  "N": 381127,
+  "B": 3811,
+  "D": 1024,
+  "protocol": {
+    "single": "200 queries, one per call, median/mean per-query ms",
+    "batch": "256 queries per call x 5 repeats, per-query ms",
+    "search": "sklearn NearestNeighbors brute force, CPU"
+  },
+  "latency": {
+    "raw_full": {
+      "k": 300,
+      "n_entries": 381127,
+      "single": {
+        "mean_ms": 131.78195798536763,
+        "median_ms": 130.10590546764433
+      },
+      "batch": {
+        "per_query_ms": 3.1532754677755293
+      }
+    },
+    "raw_B": {
+      "k": 300,
+      "n_entries": 3811,
+      "single": {
+        "mean_ms": 5.059924386441708,
+        "median_ms": 5.063859047368169
+      },
+      "batch": {
+        "per_query_ms": 0.09322820078523364
+      }
+    },
+    "dime": {
+      "k": 300,
+      "n_entries": 3811,
+      "single": {
+        "mean_ms": 5.0568687915802,
+        "median_ms": 5.0644646398723125
+      },
+      "batch": {
+        "per_query_ms": 0.09401279203302693
+      }
+    }
+  },
+  "ratios": {
+    "single_median_raw_full_over_dime": 25.689962260438374,
+    "batch_raw_full_over_dime": 33.54091926838824,
+    "single_median_raw_B_over_dime": 0.9998804231943144,
+    "batch_raw_B_over_dime": 0.991654420309976
+  },
+  "bytes": {
+    "raw_full": 1564145208,
+    "raw_B": 15640344,
+    "dime_pickle": 16793808,
+    "dime_sparse": 17467712,
+    "dime_nonzeros": 230326,
+    "ratio_raw_full_over_dime_pickle": 93.13820951150566,
+    "ratio_raw_full_over_dime_sparse": 89.54493914257345,
+    "dime_sparse_over_raw_B": 1.1168368163769289,
+    "dime_pickle_over_raw_B": 1.0737492730338924
+  }
+}

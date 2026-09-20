@@ -1,0 +1,25 @@
+Job run_sweep_B.py (tinystories/gpt2) started: Sat Sep 19 04:28:10 PM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] === ratio 1000x  B=50 ===
+[tinystories_gpt2] B=50 DIME {'k': 10, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7294114781999093} -> 2.7735
+[tinystories_gpt2] B=50 raw_kmeans_representative n=50 {'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 2.7481421009857376} -> 2.7984
+[tinystories_gpt2] B=50 raw_random {'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 2.7481421009857376} -> 2.7984
+[tinystories_gpt2] === ratio 300x  B=166 ===
+[tinystories_gpt2] B=166 DIME {'k': 100, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.717084461990055} -> 2.7577
+[tinystories_gpt2] B=166 raw_kmeans_representative n=166 {'k': 10, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.7459653376627227} -> 2.7943
+[tinystories_gpt2] B=166 raw_random {'k': 100, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.7348940528870442} -> 2.7867
+[tinystories_gpt2] === ratio 30x  B=1655 ===
+[tinystories_gpt2] B=1655 DIME {'k': 10, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.692515314361706} -> 2.7276
+[tinystories_gpt2] B=1655 raw_kmeans_representative n=1655 {'k': 100, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.713036924522994} -> 2.7583
+[tinystories_gpt2] B=1655 raw_random {'k': 20, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 2.720117566384752} -> 2.7682
+[tinystories_gpt2] === ratio 10x  B=4966 ===
+[tinystories_gpt2] B=4966 DIME {'k': 10, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.679681749279632} -> 2.7163
+[tinystories_gpt2] B=4966 raw_kmeans_representative n=4961 {'k': 50, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.703846255044994} -> 2.7427
+[tinystories_gpt2] B=4966 raw_random {'k': 300, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7029066516295677} -> 2.7461
+
+[tinystories_gpt2] === SWEEP SUMMARY ===  GPT-only 2.7984  raw kNN 2.6928
+    1000x B=    50  DIME 2.7735  kmeans_rep 2.7984  random 2.7984
+     300x B=   166  DIME 2.7577  kmeans_rep 2.7943  random 2.7867
+      30x B=  1655  DIME 2.7276  kmeans_rep 2.7583  random 2.7682
+      10x B=  4966  DIME 2.7163  kmeans_rep 2.7427  random 2.7461
+Job run_sweep_B.py (tinystories/gpt2) done: Sat Sep 19 04:34:50 PM CDT 2026

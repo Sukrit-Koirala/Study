@@ -20,6 +20,7 @@
       10.0
     ],
     "alpha": [
+      0.0,
       0.01,
       0.05,
       0.1,
@@ -65,12 +66,12 @@
     "raw_low_gpt_loss": {
       "n_selected": 16770,
       "best_config": {
-        "k": 300,
-        "tau": 5.0,
-        "alpha": 0.01,
-        "mean_nll": 4.353929333930595
+        "k": 10,
+        "tau": 0.5,
+        "alpha": 0.0,
+        "mean_nll": 4.345229648777299
       },
-      "val_mean_nll_retuned": 4.351833440086446,
+      "val_mean_nll_retuned": 4.343142168917436,
       "val_mean_nll_original": 4.621313334525301
     },
     "raw_high_entropy": {
@@ -98,12 +99,12 @@
     "raw_token_rarity": {
       "n_selected": 16770,
       "best_config": {
-        "k": 300,
-        "tau": 2.0,
-        "alpha": 0.01,
-        "mean_nll": 4.353078698692029
+        "k": 10,
+        "tau": 0.5,
+        "alpha": 0.0,
+        "mean_nll": 4.345229648777299
       },
-      "val_mean_nll_retuned": 4.351116709005668,
+      "val_mean_nll_retuned": 4.343142168917436,
       "val_mean_nll_original": 4.625778072864138
     },
     "raw_coverage": {

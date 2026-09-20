@@ -1,0 +1,65 @@
+{
+  "phase": "latency_bytes_single_protocol",
+  "dataset": "tinystories",
+  "model": "gpt2-medium",
+  "N": 381000,
+  "B": 3810,
+  "D": 1024,
+  "protocol": {
+    "single": "200 queries, one per call, median/mean per-query ms",
+    "batch": "256 queries per call x 5 repeats, per-query ms",
+    "search": "sklearn NearestNeighbors brute force, CPU"
+  },
+  "latency": {
+    "raw_full": {
+      "k": 300,
+      "n_entries": 381000,
+      "single": {
+        "mean_ms": 141.50269595906138,
+        "median_ms": 142.0662235468626
+      },
+      "batch": {
+        "per_query_ms": 3.3774234281736426
+      }
+    },
+    "raw_B": {
+      "k": 300,
+      "n_entries": 3810,
+      "single": {
+        "mean_ms": 6.232862763572484,
+        "median_ms": 6.210617953911424
+      },
+      "batch": {
+        "per_query_ms": 0.13222628840594552
+      }
+    },
+    "dime": {
+      "k": 20,
+      "n_entries": 3810,
+      "single": {
+        "mean_ms": 6.158211554866284,
+        "median_ms": 6.173982052132487
+      },
+      "batch": {
+        "per_query_ms": 0.06901104788994417
+      }
+    }
+  },
+  "ratios": {
+    "single_median_raw_full_over_dime": 23.01046915058541,
+    "batch_raw_full_over_dime": 48.94032957679199,
+    "single_median_raw_B_over_dime": 1.0059339177648374,
+    "batch_raw_B_over_dime": 1.916016238687091
+  },
+  "bytes": {
+    "raw_full": 1563624000,
+    "raw_B": 15636240,
+    "dime_pickle": 16390638,
+    "dime_sparse": 16824860,
+    "dime_nonzeros": 150482,
+    "ratio_raw_full_over_dime_pickle": 95.39738477538214,
+    "ratio_raw_full_over_dime_sparse": 92.9353349745555,
+    "dime_sparse_over_raw_B": 1.07601699641346,
+    "dime_pickle_over_raw_B": 1.0482467652069807
+  }
+}

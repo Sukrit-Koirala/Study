@@ -1,0 +1,50 @@
+{
+  "phase": "he_baseline",
+  "dataset": "wikitext103",
+  "model": "gpt2-medium",
+  "N": 381127,
+  "B": 3811,
+  "gpt_only_mean_nll": 4.048544406890869,
+  "dime_val_nll": 3.754108340534947,
+  "points": [
+    {
+      "label": "same_clusters_as_DIME",
+      "n_clusters": 3811,
+      "n_entries": 230326,
+      "entry_ratio_N_over_T": 1.6547285152349278,
+      "bytes": 946179208,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 3.7480134645943846
+      },
+      "val_mean_nll": 3.766390151805558
+    },
+    {
+      "label": "their_regime_T~N/5",
+      "n_clusters": 19,
+      "n_entries": 78153,
+      "entry_ratio_N_over_T": 4.876677798676954,
+      "bytes": 321052524,
+      "best_config": {
+        "k": 300,
+        "tau": 10.0,
+        "alpha": 0.05,
+        "mean_nll": 3.9707451485614214
+      },
+      "val_mean_nll": 4.008691474371345
+    }
+  ],
+  "best_retuned_raw": {
+    "name": "raw_kmeans_representative",
+    "val_mean_nll": 3.8399357835482615
+  },
+  "min_entries_any_C": 23356,
+  "entry_matched": {
+    "feasible": false,
+    "min_entries": 23356,
+    "B": 3811,
+    "floor_over_B": 6.128575177118867
+  }
+}

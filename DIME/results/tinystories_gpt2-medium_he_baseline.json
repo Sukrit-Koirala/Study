@@ -1,0 +1,50 @@
+{
+  "phase": "he_baseline",
+  "dataset": "tinystories",
+  "model": "gpt2-medium",
+  "N": 381000,
+  "B": 3810,
+  "gpt_only_mean_nll": 2.5010836124420166,
+  "dime_val_nll": 2.462933496121989,
+  "points": [
+    {
+      "label": "same_clusters_as_DIME",
+      "n_clusters": 3810,
+      "n_entries": 150482,
+      "entry_ratio_N_over_T": 2.5318642761260484,
+      "bytes": 618180056,
+      "best_config": {
+        "k": 300,
+        "tau": 1.0,
+        "alpha": 0.1,
+        "mean_nll": 2.4707820311165523
+      },
+      "val_mean_nll": 2.464226649062168
+    },
+    {
+      "label": "their_regime_T~N/5",
+      "n_clusters": 279,
+      "n_entries": 75989,
+      "entry_ratio_N_over_T": 5.013883588414113,
+      "bytes": 312162812,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.01,
+        "mean_nll": 2.500081319379371
+      },
+      "val_mean_nll": 2.4913851198570476
+    }
+  ],
+  "best_retuned_raw": {
+    "name": "raw_kmeans_representative",
+    "val_mean_nll": 2.4818553745465834
+  },
+  "min_entries_any_C": 6341,
+  "entry_matched": {
+    "feasible": false,
+    "min_entries": 6341,
+    "B": 3810,
+    "floor_over_B": 1.6643044619422571
+  }
+}
