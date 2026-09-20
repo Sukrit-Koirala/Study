@@ -1,55 +1,101 @@
 {
-  "phase": "latency_bytes_single_protocol",
+  "phase": "latency_bytes_v2_torch_flat",
   "dataset": "tinystories",
   "model": "gpt2-medium",
   "N": 381000,
   "B": 3810,
   "D": 1024,
   "protocol": {
+    "search": "exact flat search, torch CPU (squared distance via ||x||^2 - 2q.x, topk), value fetch included",
     "single": "200 queries, one per call, median/mean per-query ms",
     "batch": "256 queries per call x 5 repeats, per-query ms",
-    "search": "sklearn NearestNeighbors brute force, CPU"
+    "threads": "1,8"
   },
   "latency": {
-    "raw_full": {
-      "k": 300,
-      "n_entries": 381000,
-      "single": {
-        "mean_ms": 160.8863958204165,
-        "median_ms": 158.60591060481966
+    "threads_1": {
+      "raw_full": {
+        "k": 300,
+        "n_entries": 381000,
+        "single": {
+          "mean_ms": 89.7841031383723,
+          "median_ms": 81.17069449508563
+        },
+        "batch": {
+          "per_query_ms": 5.906277161739126
+        }
       },
-      "batch": {
-        "per_query_ms": 1.7379672866809415
+      "raw_B": {
+        "k": 300,
+        "n_entries": 3810,
+        "single": {
+          "mean_ms": 0.5909905186854303,
+          "median_ms": 0.5856935167685151
+        },
+        "batch": {
+          "per_query_ms": 0.07847607735129714
+        }
+      },
+      "dime": {
+        "k": 20,
+        "n_entries": 3810,
+        "single": {
+          "mean_ms": 0.5734340444905683,
+          "median_ms": 0.5668335070367903
+        },
+        "batch": {
+          "per_query_ms": 0.05796082346023468
+        }
       }
     },
-    "raw_B": {
-      "k": 300,
-      "n_entries": 3810,
-      "single": {
-        "mean_ms": 91.5388582739979,
-        "median_ms": 83.82502663880587
+    "threads_8": {
+      "raw_full": {
+        "k": 300,
+        "n_entries": 381000,
+        "single": {
+          "mean_ms": 29.75218576611951,
+          "median_ms": 29.518899478716776
+        },
+        "batch": {
+          "per_query_ms": 1.7527525429613888
+        }
       },
-      "batch": {
-        "per_query_ms": 0.4760350602737162
-      }
-    },
-    "dime": {
-      "k": 20,
-      "n_entries": 3810,
-      "single": {
-        "mean_ms": 91.82884740643203,
-        "median_ms": 83.99894158355892
+      "raw_B": {
+        "k": 300,
+        "n_entries": 3810,
+        "single": {
+          "mean_ms": 0.223832989577204,
+          "median_ms": 0.22138052736409009
+        },
+        "batch": {
+          "per_query_ms": 0.021106385975144804
+        }
       },
-      "batch": {
-        "per_query_ms": 0.4164465117355576
+      "dime": {
+        "k": 20,
+        "n_entries": 3810,
+        "single": {
+          "mean_ms": 0.2117967908270657,
+          "median_ms": 0.19592349417507648
+        },
+        "batch": {
+          "per_query_ms": 0.015467508592337254
+        }
       }
     }
   },
   "ratios": {
-    "single_median_raw_full_over_dime": 1.8881893939942636,
-    "batch_raw_full_over_dime": 4.173326556243425,
-    "single_median_raw_B_over_dime": 0.9979295579030595,
-    "batch_raw_B_over_dime": 1.1430881202241818
+    "threads_1": {
+      "single_median_raw_full_over_dime": 143.20024043641664,
+      "batch_raw_full_over_dime": 101.90119479222479,
+      "single_median_raw_B_over_dime": 1.0332725738644466,
+      "batch_raw_B_over_dime": 1.353950352433095
+    },
+    "threads_8": {
+      "single_median_raw_full_over_dime": 150.66544011479706,
+      "batch_raw_full_over_dime": 113.31834939660021,
+      "single_median_raw_B_over_dime": 1.1299335401106378,
+      "batch_raw_B_over_dime": 1.3645627444875708
+    }
   },
   "bytes": {
     "raw_full": 1563624000,

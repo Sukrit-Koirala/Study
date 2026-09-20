@@ -1,55 +1,101 @@
 {
-  "phase": "latency_bytes_single_protocol",
+  "phase": "latency_bytes_v2_torch_flat",
   "dataset": "wikitext103",
   "model": "gpt2-medium",
   "N": 381127,
   "B": 3811,
   "D": 1024,
   "protocol": {
+    "search": "exact flat search, torch CPU (squared distance via ||x||^2 - 2q.x, topk), value fetch included",
     "single": "200 queries, one per call, median/mean per-query ms",
     "batch": "256 queries per call x 5 repeats, per-query ms",
-    "search": "sklearn NearestNeighbors brute force, CPU"
+    "threads": "1,8"
   },
   "latency": {
-    "raw_full": {
-      "k": 300,
-      "n_entries": 381127,
-      "single": {
-        "mean_ms": 155.10699501261115,
-        "median_ms": 151.22025948949158
+    "threads_1": {
+      "raw_full": {
+        "k": 300,
+        "n_entries": 381127,
+        "single": {
+          "mean_ms": 78.67103178519756,
+          "median_ms": 77.51660933718085
+        },
+        "batch": {
+          "per_query_ms": 5.543546775879804
+        }
       },
-      "batch": {
-        "per_query_ms": 1.464320295053767
+      "raw_B": {
+        "k": 300,
+        "n_entries": 3811,
+        "single": {
+          "mean_ms": 0.5853476701304317,
+          "median_ms": 0.5852156318724155
+        },
+        "batch": {
+          "per_query_ms": 0.07387282093986869
+        }
+      },
+      "dime": {
+        "k": 300,
+        "n_entries": 3811,
+        "single": {
+          "mean_ms": 0.5943384766578674,
+          "median_ms": 0.5937754176557064
+        },
+        "batch": {
+          "per_query_ms": 0.07786998903611675
+        }
       }
     },
-    "raw_B": {
-      "k": 300,
-      "n_entries": 3811,
-      "single": {
-        "mean_ms": 84.74272126099095,
-        "median_ms": 77.54673156887293
+    "threads_8": {
+      "raw_full": {
+        "k": 300,
+        "n_entries": 381127,
+        "single": {
+          "mean_ms": 29.830420333892107,
+          "median_ms": 29.473124537616968
+        },
+        "batch": {
+          "per_query_ms": 1.7712106429826235
+        }
       },
-      "batch": {
-        "per_query_ms": 0.4119025281397626
-      }
-    },
-    "dime": {
-      "k": 300,
-      "n_entries": 3811,
-      "single": {
-        "mean_ms": 82.59186445502564,
-        "median_ms": 77.321772929281
+      "raw_B": {
+        "k": 300,
+        "n_entries": 3811,
+        "single": {
+          "mean_ms": 0.22682861890643835,
+          "median_ms": 0.22546038962900639
+        },
+        "batch": {
+          "per_query_ms": 0.02299175139341969
+        }
       },
-      "batch": {
-        "per_query_ms": 0.44913924211869016
+      "dime": {
+        "k": 300,
+        "n_entries": 3811,
+        "single": {
+          "mean_ms": 0.2452798536978662,
+          "median_ms": 0.23665348999202251
+        },
+        "batch": {
+          "per_query_ms": 0.023275990679394454
+        }
       }
     }
   },
   "ratios": {
-    "single_median_raw_full_over_dime": 1.9557267475979712,
-    "batch_raw_full_over_dime": 3.2602813509374977,
-    "single_median_raw_B_over_dime": 1.002909382843532,
-    "batch_raw_B_over_dime": 0.9170931629058425
+    "threads_1": {
+      "single_median_raw_full_over_dime": 130.54870079200202,
+      "batch_raw_full_over_dime": 71.18977213812963,
+      "single_median_raw_B_over_dime": 0.9855841358049381,
+      "batch_raw_B_over_dime": 0.9486686957873574
+    },
+    "threads_8": {
+      "single_median_raw_full_over_dime": 124.54126300275772,
+      "batch_raw_full_over_dime": 76.09603678655121,
+      "single_median_raw_B_over_dime": 0.9527025763981193,
+      "batch_raw_B_over_dime": 0.9877883055595829
+    }
   },
   "bytes": {
     "raw_full": 1564145208,

@@ -1,0 +1,12 @@
+Job run_latency.py (tinystories/gpt2) started: Sun Sep 20 08:22:43 AM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] N=49657 B=500 D=768 raw_k=100 dime_k=20 cores_visible=8
+[tinystories_gpt2] threads=1 raw_full: {'k': 100, 'n_entries': 49657, 'single': {'mean_ms': 8.735337205580436, 'median_ms': 6.77780550904572}, 'batch': {'per_query_ms': 0.6082582609451492}}
+[tinystories_gpt2] threads=1 raw_B: {'k': 100, 'n_entries': 500, 'single': {'mean_ms': 0.06901571585331112, 'median_ms': 0.06797400419600308}, 'batch': {'per_query_ms': 0.01082119611055532}}
+[tinystories_gpt2] threads=1 dime: {'k': 20, 'n_entries': 500, 'single': {'mean_ms': 0.06777667353162542, 'median_ms': 0.06362749263644218}, 'batch': {'per_query_ms': 0.008945898434831179}}
+[tinystories_gpt2] threads=8 raw_full: {'k': 100, 'n_entries': 49657, 'single': {'mean_ms': 13.403648854000494, 'median_ms': 2.6270810049027205}, 'batch': {'per_query_ms': 0.18768389923025097}}
+[tinystories_gpt2] threads=8 raw_B: {'k': 100, 'n_entries': 500, 'single': {'mean_ms': 0.04382115032058209, 'median_ms': 0.04334599361754954}, 'batch': {'per_query_ms': 0.006090563283578376}}
+[tinystories_gpt2] threads=8 dime: {'k': 20, 'n_entries': 500, 'single': {'mean_ms': 0.04056589939864352, 'median_ms': 0.039673992432653904}, 'batch': {'per_query_ms': 0.005180889047551318}}
+[tinystories_gpt2] bytes: {'raw_full': 152943560, 'raw_B': 1540000, 'dime_pickle': 1650807, 'dime_sparse': 1715396, 'dime_nonzeros': 22174, 'ratio_raw_full_over_dime_pickle': 92.6477534926857, 'ratio_raw_full_over_dime_sparse': 89.15933113986507, 'dime_sparse_over_raw_B': 1.1138935064935065, 'dime_pickle_over_raw_B': 1.0719525974025974}
+[tinystories_gpt2] done
+Job run_latency.py (tinystories/gpt2) done: Sun Sep 20 08:23:27 AM CDT 2026
