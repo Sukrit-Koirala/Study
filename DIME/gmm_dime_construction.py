@@ -399,4 +399,3 @@ def conditional_entropy_report(compressed_dists, global_token_counts=None):
         "cluster_n_distinct_tokens": {"mean": float(cluster_n_distinct.mean()), "std": float(cluster_n_distinct.std())},
         "cluster_size": {"mean": float(cluster_size.mean()), "std": float(cluster_size.std())},
     }
-    }
