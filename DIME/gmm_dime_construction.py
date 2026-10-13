@@ -15,8 +15,9 @@ from sklearn.neighbors import NearestNeighbors
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
 from scipy.spatial.distance import cdist
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
 
-from gmm import init_gmm_from_kmeans, fit_gmm
+from gmm import init_gmm_from_kmeans, fit_gmm, _log_gaussian
 
 VOCAB_SIZE = 50257
 
@@ -236,4 +237,166 @@ def cluster_level_report(centroids_hard, compressed_dists_hard, N_c_hard,
             "mean": float(alpha_c_soft.mean()), "std": float(alpha_c_soft.std()),
             "min": float(alpha_c_soft.min()), "max": float(alpha_c_soft.max()),
         },
+    }
+
+
+def build_hard_dime_from_assignment(ds_values, hard_assignment, n_clusters):
+    """Generic hard-DIME-store builder from any precomputed hard assignment array —
+    used to turn a GMM checkpoint's (or a counterfactual model's) hard assignment
+    into a DIME store without re-deriving the k-means/GMM-specific construction
+    logic each time."""
+    compressed_dists = []
+    for c in range(n_clusters):
+        member_values = ds_values[hard_assignment == c]
+        compressed_dists.append(Counter(member_values.tolist()) if len(member_values) > 0 else Counter())
+    return np.array(compressed_dists, dtype=object)
+
+
+# ============================================================
+# Assignment-similarity diagnostics (k-means vs GMM-hard, global)
+# ============================================================
+
+def assignment_similarity_report(assignment_a, assignment_b, centroids_a, centroids_b):
+    """Global similarity between two hard clusterings of the SAME N points. Cluster
+    labels are arbitrary, so 'fraction agreeing' is computed only AFTER Hungarian
+    matching on prototype distance; ARI/NMI are label-invariant by construction and
+    need no matching step."""
+    match_idx, n_identity, B = match_components(centroids_a, centroids_b)
+    inverse_match = np.empty(B, dtype=np.int64)
+    inverse_match[match_idx] = np.arange(B)
+    remapped_b = inverse_match[assignment_b]  # relabel b's clusters into a's index space
+
+    frac_agree = float((assignment_a == remapped_b).mean())
+    ari = float(adjusted_rand_score(assignment_a, assignment_b))
+    nmi = float(normalized_mutual_info_score(assignment_a, assignment_b))
+
+    sizes_a = np.bincount(assignment_a, minlength=B)
+    sizes_b_remapped = np.bincount(remapped_b, minlength=B)
+    return {
+        "n_components_matched_to_same_index": n_identity,
+        "fraction_points_agreeing_after_matching": frac_agree,
+        "adjusted_rand_index": ari,
+        "normalized_mutual_info": nmi,
+        "cluster_size_correlation": float(np.corrcoef(sizes_a, sizes_b_remapped)[0, 1]),
+    }
+
+
+def margin_percentile_curve(margin, assignment_a, assignment_b, bin_edges=(0, 1, 5, 10, 25, 50, 100)):
+    """Fine-grained version of boundary_point_report's bottom-X% check — the FULL
+    curve across bin_edges percentile bands (not just three single-point summaries),
+    answering 'does disagreement actually concentrate near the k-means boundary, or
+    is it spread out?'."""
+    order = np.argsort(margin)
+    N = len(margin)
+    curve = []
+    for lo, hi in zip(bin_edges[:-1], bin_edges[1:]):
+        i_lo = int(N * lo / 100)
+        i_hi = max(i_lo + 1, int(N * hi / 100))
+        idx = order[i_lo:i_hi]
+        disagreement = float((assignment_a[idx] != assignment_b[idx]).mean())
+        curve.append({
+            "percentile_band": f"{lo}-{hi}%", "n_points": int(len(idx)),
+            "mean_margin": float(margin[idx].mean()),
+            "fraction_disagreeing": disagreement,
+        })
+    return curve
+
+
+# ============================================================
+# Counterfactual decomposition — which GMM degree of freedom drives disagreement?
+# ============================================================
+
+def counterfactual_assignments(X, means, alpha, variances_diag, global_spherical_var=None):
+    """Given ONE fitted diagonal GMM (means, alpha, variances_diag [B,D]), derive
+    four counterfactual hard-assignment rules that progressively add back one
+    geometric degree of freedom at a time — isolating which term actually moves
+    assignments, using a single underlying fit rather than four separate EM runs:
+
+    MODEL 0 — means only:            argmin_c ||x - mu_c||^2  (= k-means' own rule)
+    MODEL 1 — + learned alpha,
+              forced EQUAL spherical covariance (one global scalar variance,
+              the mean of the fitted per-component spherical variances):
+                  score_c = log(alpha_c) - ||x-mu_c||^2 / (2 * var_global)
+    MODEL 2 — + component-specific SPHERICAL variance (derived from the fitted
+              diagonal covariance by averaging each component's own per-dimension
+              variances into one scalar per component):
+                  score_c = log(alpha_c) - D/2 log(2*pi*var_c) - ||x-mu_c||^2/(2*var_c)
+    MODEL 3 — full fitted diagonal covariance (the actual GMM score):
+                  score_c = log(alpha_c) - 1/2 log|Sigma_c| - 1/2 (x-mu_c)^T Sigma_c^-1 (x-mu_c)
+
+    Returns a dict of 4 assignment arrays [N], keyed "model0".."model3"."""
+    B, D = means.shape
+    log_alpha = np.log(np.clip(alpha, 1e-300, None))
+
+    # Model 0: pure nearest-centroid, no alpha, no covariance at all
+    sqnorm = (X ** 2).sum(axis=1, keepdims=True) - 2.0 * X @ means.T + (means ** 2).sum(axis=1)[None, :]
+    model0 = sqnorm.argmin(axis=1)
+
+    # Model 1: + alpha, forced equal spherical variance
+    per_component_spherical = variances_diag.mean(axis=1)  # [B] — average each component's own diag into a scalar
+    if global_spherical_var is None:
+        global_spherical_var = float(per_component_spherical.mean())
+    score1 = log_alpha[None, :] - sqnorm / (2.0 * global_spherical_var)
+    model1 = score1.argmax(axis=1)
+
+    # Model 2: + alpha, + component-specific spherical variance (still isotropic, just not shared)
+    var_c = per_component_spherical[None, :]
+    score2 = (log_alpha[None, :] - 0.5 * D * np.log(2 * np.pi * var_c) - sqnorm / (2.0 * var_c))
+    model2 = score2.argmax(axis=1)
+
+    # Model 3: full diagonal — the actual fitted GMM
+    log_gauss_full = _log_gaussian(X, means, variances_diag, "diag")
+    score3 = log_alpha[None, :] + log_gauss_full
+    model3 = score3.argmax(axis=1)
+
+    return {"model0_means_only": model0, "model1_alpha_equal_spherical": model1,
+            "model2_alpha_component_spherical": model2, "model3_full_diagonal": model3}
+
+
+# ============================================================
+# DIME-specific token-information diagnostics
+# ============================================================
+
+def conditional_entropy_report(compressed_dists, global_token_counts=None):
+    """H(Y|C=c) per cluster, size-weighted H(Y|C), and I(C;Y) = H(Y) - H(Y|C).
+    global_token_counts: Counter or dict of the FULL datastore's token frequency —
+    if not given, it's reconstructed by summing every cluster's own Counter (exact
+    either way, just saves a pass over the raw data when the caller already has it)."""
+    if global_token_counts is None:
+        global_token_counts = Counter()
+        for c in compressed_dists:
+            global_token_counts.update(c)
+
+    total = sum(global_token_counts.values())
+    p_y = np.array(list(global_token_counts.values()), dtype=np.float64) / total
+    H_Y = float(-(p_y * np.log(p_y)).sum())
+
+    cluster_entropy = np.zeros(len(compressed_dists), dtype=np.float64)
+    cluster_purity = np.zeros(len(compressed_dists), dtype=np.float64)
+    cluster_n_distinct = np.zeros(len(compressed_dists), dtype=np.int64)
+    cluster_size = np.zeros(len(compressed_dists), dtype=np.float64)
+
+    for i, c in enumerate(compressed_dists):
+        n = sum(c.values())
+        cluster_size[i] = n
+        cluster_n_distinct[i] = len(c)
+        if n > 0:
+            probs = np.array(list(c.values()), dtype=np.float64) / n
+            cluster_entropy[i] = -(probs * np.log(probs)).sum()
+            cluster_purity[i] = probs.max()
+
+    N_total = cluster_size.sum()
+    p_c = cluster_size / N_total
+    H_Y_given_C = float((p_c * cluster_entropy).sum())
+    I_C_Y = H_Y - H_Y_given_C
+
+    return {
+        "H_Y": H_Y, "H_Y_given_C": H_Y_given_C, "I_C_Y": I_C_Y,
+        "cluster_entropy": {"mean": float(cluster_entropy.mean()), "std": float(cluster_entropy.std()),
+                             "min": float(cluster_entropy.min()), "max": float(cluster_entropy.max())},
+        "cluster_purity": {"mean": float(cluster_purity.mean()), "std": float(cluster_purity.std()),
+                            "min": float(cluster_purity.min()), "max": float(cluster_purity.max())},
+        "cluster_n_distinct_tokens": {"mean": float(cluster_n_distinct.mean()), "std": float(cluster_n_distinct.std())},
+        "cluster_size": {"mean": float(cluster_size.mean()), "std": float(cluster_size.std())},
+    }
     }
