@@ -1,0 +1,28 @@
+Job run_raw_retune.py (wikitext103art/gpt2) started: Sat Sep 19 06:40:57 PM CDT 2026
+Node: Slurm-6-7
+[wikitext103art_gpt2] N=402082  B=4021  ct=63500  val=104648
+[wikitext103art_gpt2] DIME (tier1 config) val NLL recomputed: 4.0461  (tier1 stored: 4.0461)
+[wikitext103art_gpt2] raw_kmeans_representative: n=4020  best={'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.050911413757602}  val retuned=4.0976  original=4.1965703180262235
+[wikitext103art_gpt2] raw_random: n=4021  best={'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.065265335430943}  val retuned=4.1113  original=None
+[wikitext103art_gpt2] raw_high_gpt_loss: n=4021  best={'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 4.249099907796776}  val retuned=4.2824  original=None
+[wikitext103art_gpt2] raw_low_gpt_loss: n=4021  best={'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 4.322076149909861}  val retuned=4.3450  original=None
+[wikitext103art_gpt2] raw_high_entropy: n=4021  best={'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 4.291845986509487}  val retuned=4.3162  original=None
+[wikitext103art_gpt2] raw_low_entropy: n=4021  best={'k': 300, 'tau': 10.0, 'alpha': 0.01, 'mean_nll': 4.306990055526009}  val retuned=4.3327  original=None
+[wikitext103art_gpt2] raw_token_rarity: n=4021  best={'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 4.322076149909861}  val retuned=4.3450  original=None
+[wikitext103art_gpt2] coverage selection: 2000/4021
+[wikitext103art_gpt2] coverage selection: 4000/4021
+[wikitext103art_gpt2] raw_coverage: n=4021  best={'k': 300, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 4.182127759096225}  val retuned=4.2245  original=None
+
+[wikitext103art_gpt2] === RAW RETUNE SUMMARY ===
+GPT-only 4.3450 | DIME 4.0461
+  raw_kmeans_representative    retuned 4.0976   original 4.1965703180262235
+  raw_random                   retuned 4.1113   original None
+  raw_high_gpt_loss            retuned 4.2824   original None
+  raw_low_gpt_loss             retuned 4.3450   original None
+  raw_high_entropy             retuned 4.3162   original None
+  raw_low_entropy              retuned 4.3327   original None
+  raw_token_rarity             retuned 4.3450   original None
+  raw_coverage                 retuned 4.2245   original None
+best on controller_train: raw_kmeans_representative
+{'comparison': 'raw_kmeans_representative (retuned) vs DIME (tuned)', 'mean_diff': 0.05145788447277446, 'paired_t_test': {'t_stat': 32.2364324234747, 'p_value': 7.106816299519135e-227}, 'wilcoxon_signed_rank': {'stat': 1129422667.0, 'p_value': 0.0}}
+Job run_raw_retune.py (wikitext103art/gpt2) done: Sat Sep 19 06:48:25 PM CDT 2026

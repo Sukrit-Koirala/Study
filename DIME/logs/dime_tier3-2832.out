@@ -1,0 +1,38 @@
+Tier 3 (tinystories/gpt2-medium) job started: Mon Sep 14 07:16:49 PM CDT 2026
+Node: Slurm-6-7
+[tinystories_gpt2-medium] n_clusters=3810  raw tuned k=300,tau=1.0,alpha=0.25  dime tuned k=20,tau=1.0,alpha=0.1
+[tinystories_gpt2-medium] construction=minibatch_kmeans: 2.4629
+[tinystories_gpt2-medium] construction=random_partition: 2.5750
+[tinystories_gpt2-medium] construction=utility_weighted: 2.4645
+[tinystories_gpt2-medium] construction=query_kmeans: 2.4671
+[tinystories_gpt2-medium] raw variant=raw_random: n=3810 -> 2.6022
+[tinystories_gpt2-medium] raw variant=raw_high_gpt_loss: n=3810 -> 2.7601
+[tinystories_gpt2-medium] raw variant=raw_low_gpt_loss: n=3810 -> 2.7845
+[tinystories_gpt2-medium] raw variant=raw_high_entropy: n=3810 -> 2.7497
+[tinystories_gpt2-medium] raw variant=raw_low_entropy: n=3810 -> 2.7838
+[tinystories_gpt2-medium] raw variant=raw_token_rarity: n=3810 -> 2.7864
+[tinystories_gpt2-medium] starting greedy farthest-first coverage selection (n=3810)...
+[tinystories_gpt2-medium] coverage selection: 500/3810
+[tinystories_gpt2-medium] coverage selection: 1000/3810
+[tinystories_gpt2-medium] coverage selection: 1500/3810
+[tinystories_gpt2-medium] coverage selection: 2000/3810
+[tinystories_gpt2-medium] coverage selection: 2500/3810
+[tinystories_gpt2-medium] coverage selection: 3000/3810
+[tinystories_gpt2-medium] coverage selection: 3500/3810
+[tinystories_gpt2-medium] raw variant=raw_coverage: n=3810 -> 2.6808
+[tinystories_gpt2-medium] ablation=original: 2.4629
+[tinystories_gpt2-medium] ablation=top64: 2.4625
+[tinystories_gpt2-medium] ablation=top32: 2.4597
+[tinystories_gpt2-medium] ablation=top16: 2.4563
+[tinystories_gpt2-medium] ablation=top5: 2.4563
+[tinystories_gpt2-medium] ablation=majority_token: 2.4724
+[tinystories_gpt2-medium] ablation=global_unigram: 2.5715
+[tinystories_gpt2-medium] ablation=random_partition: 2.5745
+[tinystories_gpt2-medium] ablation=shuffled_distribution: 2.5893
+[tinystories_gpt2-medium] ablation=shuffled_prototype: 2.5884
+[tinystories_gpt2-medium] multi-action Q-read: 257 actions, k_max=300, device=cuda
+[tinystories_gpt2-medium] multi-action Q-read: 2.4249  frac_gpt_only=0.327
+[tinystories_gpt2-medium] hit@20=0.9206  p_state(true)=0.1370  active=3792/3810
+
+[tinystories_gpt2-medium] === TIER 3 DONE ===
+Tier 3 (tinystories/gpt2-medium) job done: Tue Sep 15 02:48:38 AM CDT 2026

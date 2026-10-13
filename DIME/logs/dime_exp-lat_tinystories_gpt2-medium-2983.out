@@ -1,0 +1,9 @@
+Job run_latency.py (tinystories/gpt2-medium) started: Sun Sep 20 07:10:00 AM CDT 2026
+Node: Slurm-6-7
+[tinystories_gpt2-medium] N=381000 B=3810 D=1024 raw_k=300 dime_k=20
+[tinystories_gpt2-medium] raw_full: {'k': 300, 'n_entries': 381000, 'single': {'mean_ms': 160.8863958204165, 'median_ms': 158.60591060481966}, 'batch': {'per_query_ms': 1.7379672866809415}}
+[tinystories_gpt2-medium] raw_B: {'k': 300, 'n_entries': 3810, 'single': {'mean_ms': 91.5388582739979, 'median_ms': 83.82502663880587}, 'batch': {'per_query_ms': 0.4760350602737162}}
+[tinystories_gpt2-medium] dime: {'k': 20, 'n_entries': 3810, 'single': {'mean_ms': 91.82884740643203, 'median_ms': 83.99894158355892}, 'batch': {'per_query_ms': 0.4164465117355576}}
+[tinystories_gpt2-medium] bytes: {'raw_full': 1563624000, 'raw_B': 15636240, 'dime_pickle': 16390638, 'dime_sparse': 16824860, 'dime_nonzeros': 150482, 'ratio_raw_full_over_dime_pickle': 95.39738477538214, 'ratio_raw_full_over_dime_sparse': 92.9353349745555, 'dime_sparse_over_raw_B': 1.07601699641346, 'dime_pickle_over_raw_B': 1.0482467652069807}
+[tinystories_gpt2-medium] done
+Job run_latency.py (tinystories/gpt2-medium) done: Sun Sep 20 07:14:31 AM CDT 2026

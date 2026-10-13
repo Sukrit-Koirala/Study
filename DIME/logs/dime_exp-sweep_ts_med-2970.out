@@ -1,0 +1,25 @@
+Job run_sweep_B.py (tinystories/gpt2-medium) started: Sat Sep 19 04:34:51 PM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2-medium] === ratio 1000x  B=381 ===
+[tinystories_gpt2-medium] B=381 DIME {'k': 10, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.4943435097169906} -> 2.4867
+[tinystories_gpt2-medium] B=381 raw_kmeans_representative n=381 {'k': 300, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.508915118643017} -> 2.4992
+[tinystories_gpt2-medium] B=381 raw_random {'k': 10, 'tau': 0.5, 'alpha': 0.0, 'mean_nll': 2.511296491035435} -> 2.5011
+[tinystories_gpt2-medium] === ratio 300x  B=1270 ===
+[tinystories_gpt2-medium] B=1270 DIME {'k': 20, 'tau': 1.0, 'alpha': 0.05, 'mean_nll': 2.481597423615499} -> 2.4739
+[tinystories_gpt2-medium] B=1270 raw_kmeans_representative n=1270 {'k': 100, 'tau': 2.0, 'alpha': 0.01, 'mean_nll': 2.4986268879589817} -> 2.4906
+[tinystories_gpt2-medium] B=1270 raw_random {'k': 20, 'tau': 5.0, 'alpha': 0.01, 'mean_nll': 2.5041248824224756} -> 2.4953
+[tinystories_gpt2-medium] === ratio 30x  B=12700 ===
+[tinystories_gpt2-medium] B=12700 DIME {'k': 10, 'tau': 1.0, 'alpha': 0.1, 'mean_nll': 2.4647114120546147} -> 2.4569
+[tinystories_gpt2-medium] B=12700 raw_kmeans_representative n=11803 {'k': 50, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.4827607493142136} -> 2.4757
+[tinystories_gpt2-medium] B=12700 raw_random {'k': 50, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.480521987023223} -> 2.4739
+[tinystories_gpt2-medium] === ratio 10x  B=38100 ===
+[tinystories_gpt2-medium] B=38100 DIME {'k': 50, 'tau': 1.0, 'alpha': 0.1, 'mean_nll': 2.4473987219155773} -> 2.4395
+[tinystories_gpt2-medium] B=38100 raw_kmeans_representative n=37174 {'k': 50, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.472253353145145} -> 2.4633
+[tinystories_gpt2-medium] B=38100 raw_random {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.46492669363348} -> 2.4586
+
+[tinystories_gpt2-medium] === SWEEP SUMMARY ===  GPT-only 2.5011  raw kNN 2.4041
+    1000x B=   381  DIME 2.4867  kmeans_rep 2.4992  random 2.5011
+     300x B=  1270  DIME 2.4739  kmeans_rep 2.4906  random 2.4953
+      30x B= 12700  DIME 2.4569  kmeans_rep 2.4757  random 2.4739
+      10x B= 38100  DIME 2.4395  kmeans_rep 2.4633  random 2.4586
+Job run_sweep_B.py (tinystories/gpt2-medium) done: Sat Sep 19 09:05:45 PM CDT 2026

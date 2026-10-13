@@ -11,6 +11,7 @@
 #SBATCH --error=/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/logs/dime_tier1-%j.err
 
 # Usage: sbatch --export=DATASET=wikitext2,MODEL=gpt2 submit_tier1.sh
+# Optional: add N_CLUSTERS=500 to the --export list to override the ~N/100 default.
 set -e
 echo "Tier 1 (${DATASET}/${MODEL}) job started: $(date)"
 echo "Node: $(hostname)"
@@ -33,6 +34,6 @@ python -c "import torch, transformers, datasets, numpy, pandas, tqdm, sklearn, s
 
 export CUDA_VISIBLE_DEVICES=0
 
-python -u $BASE/DIME/run_tier1_core.py --dataset "$DATASET" --model "$MODEL"
+python -u $BASE/DIME/run_tier1_core.py --dataset "$DATASET" --model "$MODEL" ${N_CLUSTERS:+--n_clusters $N_CLUSTERS}
 
 echo "Tier 1 (${DATASET}/${MODEL}) job done: $(date)"

@@ -1,0 +1,38 @@
+Tier 3 (wikitext103/gpt2-medium) job started: Mon Sep 14 11:19:21 AM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2-medium] n_clusters=3811  raw tuned k=300,tau=1.0,alpha=0.25  dime tuned k=300,tau=2.0,alpha=0.1
+[wikitext103_gpt2-medium] construction=minibatch_kmeans: 3.7541
+[wikitext103_gpt2-medium] construction=random_partition: 3.9374
+[wikitext103_gpt2-medium] construction=utility_weighted: 3.7441
+[wikitext103_gpt2-medium] construction=query_kmeans: 3.7578
+[wikitext103_gpt2-medium] raw variant=raw_random: n=3811 -> 3.9625
+[wikitext103_gpt2-medium] raw variant=raw_high_gpt_loss: n=3811 -> 4.2384
+[wikitext103_gpt2-medium] raw variant=raw_low_gpt_loss: n=3811 -> 4.3325
+[wikitext103_gpt2-medium] raw variant=raw_high_entropy: n=3811 -> 4.2571
+[wikitext103_gpt2-medium] raw variant=raw_low_entropy: n=3811 -> 4.3302
+[wikitext103_gpt2-medium] raw variant=raw_token_rarity: n=3811 -> 4.3336
+[wikitext103_gpt2-medium] starting greedy farthest-first coverage selection (n=3811)...
+[wikitext103_gpt2-medium] coverage selection: 500/3811
+[wikitext103_gpt2-medium] coverage selection: 1000/3811
+[wikitext103_gpt2-medium] coverage selection: 1500/3811
+[wikitext103_gpt2-medium] coverage selection: 2000/3811
+[wikitext103_gpt2-medium] coverage selection: 2500/3811
+[wikitext103_gpt2-medium] coverage selection: 3000/3811
+[wikitext103_gpt2-medium] coverage selection: 3500/3811
+[wikitext103_gpt2-medium] raw variant=raw_coverage: n=3811 -> 4.1573
+[wikitext103_gpt2-medium] ablation=original: 3.7541
+[wikitext103_gpt2-medium] ablation=top64: 3.7490
+[wikitext103_gpt2-medium] ablation=top32: 3.7420
+[wikitext103_gpt2-medium] ablation=top16: 3.7385
+[wikitext103_gpt2-medium] ablation=top5: 3.7393
+[wikitext103_gpt2-medium] ablation=majority_token: 3.7703
+[wikitext103_gpt2-medium] ablation=global_unigram: 3.9282
+[wikitext103_gpt2-medium] ablation=random_partition: 3.9362
+[wikitext103_gpt2-medium] ablation=shuffled_distribution: 3.9775
+[wikitext103_gpt2-medium] ablation=shuffled_prototype: 3.9791
+[wikitext103_gpt2-medium] multi-action Q-read: 257 actions, k_max=300, device=cuda
+[wikitext103_gpt2-medium] multi-action Q-read: 3.7316  frac_gpt_only=0.329
+[wikitext103_gpt2-medium] hit@300=0.9133  p_state(true)=0.0749  active=3618/3811
+
+[wikitext103_gpt2-medium] === TIER 3 DONE ===
+Tier 3 (wikitext103/gpt2-medium) job done: Mon Sep 14 07:16:48 PM CDT 2026

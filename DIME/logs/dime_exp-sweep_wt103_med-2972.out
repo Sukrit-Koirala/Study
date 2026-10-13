@@ -1,0 +1,25 @@
+Job run_sweep_B.py (wikitext103/gpt2-medium) started: Sat Sep 19 04:44:45 PM CDT 2026
+Node: Slurm-2-7
+[wikitext103_gpt2-medium] === ratio 1000x  B=381 ===
+[wikitext103_gpt2-medium] B=381 DIME {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7751468530267465} -> 3.7954
+[wikitext103_gpt2-medium] B=381 raw_kmeans_representative n=381 {'k': 300, 'tau': 10.0, 'alpha': 0.05, 'mean_nll': 3.907628233717634} -> 3.9357
+[wikitext103_gpt2-medium] B=381 raw_random {'k': 300, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 3.909568376810658} -> 3.9392
+[wikitext103_gpt2-medium] === ratio 300x  B=1270 ===
+[wikitext103_gpt2-medium] B=1270 DIME {'k': 50, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7518753125471758} -> 3.7695
+[wikitext103_gpt2-medium] B=1270 raw_kmeans_representative n=1269 {'k': 300, 'tau': 5.0, 'alpha': 0.1, 'mean_nll': 3.8691648752466716} -> 3.8894
+[wikitext103_gpt2-medium] B=1270 raw_random {'k': 300, 'tau': 5.0, 'alpha': 0.1, 'mean_nll': 3.8636704705307428} -> 3.8861
+[wikitext103_gpt2-medium] === ratio 30x  B=12704 ===
+[wikitext103_gpt2-medium] B=12704 DIME {'k': 200, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7222337541914476} -> 3.7396
+[wikitext103_gpt2-medium] B=12704 raw_kmeans_representative n=12653 {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7745637583920755} -> 3.7928
+[wikitext103_gpt2-medium] B=12704 raw_random {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7784908721723336} -> 3.7972
+[wikitext103_gpt2-medium] === ratio 10x  B=38113 ===
+[wikitext103_gpt2-medium] B=38113 DIME {'k': 200, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.708133571550928} -> 3.7235
+[wikitext103_gpt2-medium] B=38113 raw_kmeans_representative n=37744 {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.7443824092097353} -> 3.7605
+[wikitext103_gpt2-medium] B=38113 raw_random {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 3.74186783476913} -> 3.7598
+
+[wikitext103_gpt2-medium] === SWEEP SUMMARY ===  GPT-only 4.0485  raw kNN 3.6594
+    1000x B=   381  DIME 3.7954  kmeans_rep 3.9357  random 3.9392
+     300x B=  1270  DIME 3.7695  kmeans_rep 3.8894  random 3.8861
+      30x B= 12704  DIME 3.7396  kmeans_rep 3.7928  random 3.7972
+      10x B= 38113  DIME 3.7235  kmeans_rep 3.7605  random 3.7598
+Job run_sweep_B.py (wikitext103/gpt2-medium) done: Sat Sep 19 10:14:43 PM CDT 2026

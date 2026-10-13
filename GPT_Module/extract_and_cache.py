@@ -10,6 +10,9 @@ DATASET_REGISTRY = {
     "tinystories": lambda: load_dataset("roneneldan/TinyStories", split="train", streaming=True, trust_remote_code=True),
     "wikitext103": lambda: load_dataset("wikitext", "wikitext-103-raw-v1", split="train", streaming=True),
     "wikitext2": lambda: load_dataset("wikitext", "wikitext-2-raw-v1", split="train", streaming=True),
+    # Same stream as wikitext103, but split at ARTICLE level (all paragraphs of an article share a split).
+    # Cache files are named wikitext103art_{model}_*.npz, so the Tier scripts work with --dataset wikitext103art.
+    "wikitext103art": lambda: load_dataset("wikitext", "wikitext-103-raw-v1", split="train", streaming=True),
 }
 
 
@@ -50,7 +53,8 @@ def main():
             "datastore": args.n_datastore,
             "controller_train": args.n_controller_train,
             "val": args.n_val,
-        }
+        },
+        article_split=args.dataset.endswith("art"),
     )
 
     for split_name in ["datastore", "controller_train", "val"]:

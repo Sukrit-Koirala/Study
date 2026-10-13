@@ -1,0 +1,25 @@
+Job run_sweep_B.py (wikitext103/gpt2) started: Sat Sep 19 04:44:06 PM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2] === ratio 1000x  B=381 ===
+[wikitext103_gpt2] B=381 DIME {'k': 10, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.0427589605067125} -> 4.0518
+[wikitext103_gpt2] B=381 raw_kmeans_representative n=381 {'k': 300, 'tau': 10.0, 'alpha': 0.05, 'mean_nll': 4.213352495034649} -> 4.2307
+[wikitext103_gpt2] B=381 raw_random {'k': 300, 'tau': 5.0, 'alpha': 0.05, 'mean_nll': 4.196058745882054} -> 4.2122
+[wikitext103_gpt2] === ratio 300x  B=1270 ===
+[wikitext103_gpt2] B=1270 DIME {'k': 20, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.021747625517745} -> 4.0286
+[wikitext103_gpt2] B=1270 raw_kmeans_representative n=1270 {'k': 300, 'tau': 5.0, 'alpha': 0.1, 'mean_nll': 4.134066270083242} -> 4.1399
+[wikitext103_gpt2] B=1270 raw_random {'k': 300, 'tau': 5.0, 'alpha': 0.1, 'mean_nll': 4.164091261273039} -> 4.1818
+[wikitext103_gpt2] === ratio 30x  B=12704 ===
+[wikitext103_gpt2] B=12704 DIME {'k': 200, 'tau': 2.0, 'alpha': 0.25, 'mean_nll': 3.9809594480793766} -> 3.9859
+[wikitext103_gpt2] B=12704 raw_kmeans_representative n=12675 {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.042504795672411} -> 4.0544
+[wikitext103_gpt2] B=12704 raw_random {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.054609782294168} -> 4.0626
+[wikitext103_gpt2] === ratio 10x  B=38113 ===
+[wikitext103_gpt2] B=38113 DIME {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.9624753324933786} -> 3.9677
+[wikitext103_gpt2] B=38113 raw_kmeans_representative n=36437 {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.029495936168001} -> 4.0369
+[wikitext103_gpt2] B=38113 raw_random {'k': 300, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.015610452247795} -> 4.0264
+
+[wikitext103_gpt2] === SWEEP SUMMARY ===  GPT-only 4.3610  raw kNN 3.8825
+    1000x B=   381  DIME 4.0518  kmeans_rep 4.2307  random 4.2122
+     300x B=  1270  DIME 4.0286  kmeans_rep 4.1399  random 4.1818
+      30x B= 12704  DIME 3.9859  kmeans_rep 4.0544  random 4.0626
+      10x B= 38113  DIME 3.9677  kmeans_rep 4.0369  random 4.0264
+Job run_sweep_B.py (wikitext103/gpt2) done: Sat Sep 19 09:08:22 PM CDT 2026

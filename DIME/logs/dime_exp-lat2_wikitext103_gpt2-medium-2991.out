@@ -1,0 +1,12 @@
+Job run_latency.py (wikitext103/gpt2-medium) started: Sun Sep 20 08:17:16 AM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2-medium] N=381127 B=3811 D=1024 raw_k=300 dime_k=300 cores_visible=8
+[wikitext103_gpt2-medium] threads=1 raw_full: {'k': 300, 'n_entries': 381127, 'single': {'mean_ms': 92.72726147901267, 'median_ms': 89.75404198281467}, 'batch': {'per_query_ms': 5.757769124102197}}
+[wikitext103_gpt2-medium] threads=1 raw_B: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 0.5800518440082669, 'median_ms': 0.5803247913718224}, 'batch': {'per_query_ms': 0.07875789378886111}}
+[wikitext103_gpt2-medium] threads=1 dime: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 0.5893206060864031, 'median_ms': 0.5879749078303576}, 'batch': {'per_query_ms': 0.08197640454454813}}
+[wikitext103_gpt2-medium] threads=8 raw_full: {'k': 300, 'n_entries': 381127, 'single': {'mean_ms': 29.77417689980939, 'median_ms': 29.76071648299694}, 'batch': {'per_query_ms': 1.6866035759449005}}
+[wikitext103_gpt2-medium] threads=8 raw_B: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 0.2192989829927683, 'median_ms': 0.21980446763336658}, 'batch': {'per_query_ms': 0.019601565873017535}}
+[wikitext103_gpt2-medium] threads=8 dime: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 0.24449555436149237, 'median_ms': 0.2321640495210886}, 'batch': {'per_query_ms': 0.02063967003778089}}
+[wikitext103_gpt2-medium] bytes: {'raw_full': 1564145208, 'raw_B': 15640344, 'dime_pickle': 16793808, 'dime_sparse': 17467712, 'dime_nonzeros': 230326, 'ratio_raw_full_over_dime_pickle': 93.13820951150566, 'ratio_raw_full_over_dime_sparse': 89.54493914257345, 'dime_sparse_over_raw_B': 1.1168368163769289, 'dime_pickle_over_raw_B': 1.0737492730338924}
+[wikitext103_gpt2-medium] done
+Job run_latency.py (wikitext103/gpt2-medium) done: Sun Sep 20 08:22:04 AM CDT 2026

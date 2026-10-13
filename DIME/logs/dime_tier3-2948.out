@@ -1,0 +1,31 @@
+Tier 3 (tinystories/gpt2) job started: Sat Sep 19 11:55:55 AM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] n_clusters=500  raw tuned k=100,tau=2.0,alpha=0.1  dime tuned k=20,tau=2.0,alpha=0.05
+[tinystories_gpt2] construction=minibatch_kmeans: 2.7452
+[tinystories_gpt2] construction=random_partition: 2.8175
+[tinystories_gpt2] construction=utility_weighted: 2.7394
+[tinystories_gpt2] construction=query_kmeans: 2.7471
+[tinystories_gpt2] raw variant=raw_random: n=500 -> 2.8075
+[tinystories_gpt2] raw variant=raw_high_gpt_loss: n=500 -> 2.8605
+[tinystories_gpt2] raw variant=raw_low_gpt_loss: n=500 -> 2.9016
+[tinystories_gpt2] raw variant=raw_high_entropy: n=500 -> 2.8803
+[tinystories_gpt2] raw variant=raw_low_entropy: n=500 -> 2.9011
+[tinystories_gpt2] raw variant=raw_token_rarity: n=500 -> 2.9019
+[tinystories_gpt2] starting greedy farthest-first coverage selection (n=500)...
+[tinystories_gpt2] raw variant=raw_coverage: n=500 -> 2.8375
+[tinystories_gpt2] ablation=original: 2.7452
+[tinystories_gpt2] ablation=top64: 2.7448
+[tinystories_gpt2] ablation=top32: 2.7445
+[tinystories_gpt2] ablation=top16: 2.7441
+[tinystories_gpt2] ablation=top5: 2.7471
+[tinystories_gpt2] ablation=majority_token: 2.7646
+[tinystories_gpt2] ablation=global_unigram: 2.8168
+[tinystories_gpt2] ablation=random_partition: 2.8153
+[tinystories_gpt2] ablation=shuffled_distribution: 2.8279
+[tinystories_gpt2] ablation=shuffled_prototype: 2.8325
+[tinystories_gpt2] multi-action Q-read: 257 actions, k_max=300, device=cuda
+[tinystories_gpt2] multi-action Q-read: 2.7308  frac_gpt_only=0.448
+[tinystories_gpt2] hit@20=0.8954  p_state(true)=0.1085  active=499/500
+
+[tinystories_gpt2] === TIER 3 DONE ===
+Tier 3 (tinystories/gpt2) job done: Sat Sep 19 12:18:34 PM CDT 2026

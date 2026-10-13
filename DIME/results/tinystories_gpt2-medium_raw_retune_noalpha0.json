@@ -1,0 +1,158 @@
+{
+  "phase": "raw_retune",
+  "dataset": "tinystories",
+  "model": "gpt2-medium",
+  "n_clusters": 3810,
+  "grid": {
+    "k": [
+      10,
+      20,
+      50,
+      100,
+      200,
+      300
+    ],
+    "tau": [
+      0.5,
+      1.0,
+      2.0,
+      5.0,
+      10.0
+    ],
+    "alpha": [
+      0.01,
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ]
+  },
+  "gpt_only_mean_nll": 2.5010836124420166,
+  "strategies": {
+    "raw_kmeans_representative": {
+      "n_selected": 3808,
+      "best_config": {
+        "k": 100,
+        "tau": 2.0,
+        "alpha": 0.05,
+        "mean_nll": 2.48894710893635
+      },
+      "val_mean_nll_retuned": 2.4818553745465834,
+      "val_mean_nll_original": 2.5904895862093666
+    },
+    "raw_random": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 100,
+        "tau": 2.0,
+        "alpha": 0.05,
+        "mean_nll": 2.494093290620727
+      },
+      "val_mean_nll_retuned": 2.4859985169958883,
+      "val_mean_nll_original": 2.6021684385314066
+    },
+    "raw_high_gpt_loss": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 200,
+        "tau": 10.0,
+        "alpha": 0.01,
+        "mean_nll": 2.504188147104054
+      },
+      "val_mean_nll_retuned": 2.493925706805163,
+      "val_mean_nll_original": 2.760068711378026
+    },
+    "raw_low_gpt_loss": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 10,
+        "tau": 2.0,
+        "alpha": 0.01,
+        "mean_nll": 2.5212058077782906
+      },
+      "val_mean_nll_retuned": 2.510980012254699,
+      "val_mean_nll_original": 2.7845471638052066
+    },
+    "raw_high_entropy": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 300,
+        "tau": 5.0,
+        "alpha": 0.01,
+        "mean_nll": 2.5141322768452135
+      },
+      "val_mean_nll_retuned": 2.504019324516337,
+      "val_mean_nll_original": 2.7497333711908736
+    },
+    "raw_low_entropy": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 300,
+        "tau": 10.0,
+        "alpha": 0.01,
+        "mean_nll": 2.520346824605432
+      },
+      "val_mean_nll_retuned": 2.5102340881800806,
+      "val_mean_nll_original": 2.783818708283576
+    },
+    "raw_token_rarity": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 300,
+        "tau": 10.0,
+        "alpha": 0.01,
+        "mean_nll": 2.5208354114035925
+      },
+      "val_mean_nll_retuned": 2.5105854176004394,
+      "val_mean_nll_original": 2.7864314731271276
+    },
+    "raw_coverage": {
+      "n_selected": 3810,
+      "best_config": {
+        "k": 300,
+        "tau": 2.0,
+        "alpha": 0.01,
+        "mean_nll": 2.504265158696703
+      },
+      "val_mean_nll_retuned": 2.4957443422705166,
+      "val_mean_nll_original": 2.680809833608198
+    }
+  },
+  "dime": {
+    "config": {
+      "k": 20,
+      "tau": 1.0,
+      "alpha": 0.1,
+      "mean_nll": 2.4690819364598307
+    },
+    "val_mean_nll_recomputed": 2.462933496121989,
+    "val_mean_nll_tier1": 2.462933496121989
+  },
+  "best_strategy_by_controller_train": "raw_kmeans_representative",
+  "significance_tests": [
+    {
+      "comparison": "raw_kmeans_representative (retuned) vs DIME (tuned)",
+      "mean_diff": 0.018921878424594623,
+      "paired_t_test": {
+        "t_stat": 16.47446117913145,
+        "p_value": 6.986765165807552e-61
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 1050111565.0,
+        "p_value": 0.0
+      }
+    },
+    {
+      "comparison": "GPT-only vs raw_kmeans_representative (retuned)",
+      "mean_diff": 0.019228215980132878,
+      "paired_t_test": {
+        "t_stat": 16.888562174317638,
+        "p_value": 6.974810891135685e-64
+      },
+      "wilcoxon_signed_rank": {
+        "stat": 751242287.0,
+        "p_value": 0.0
+      }
+    }
+  ]
+}

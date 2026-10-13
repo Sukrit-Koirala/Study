@@ -1,0 +1,10 @@
+Job run_he_baseline.py (tinystories/gpt2) started: Sat Sep 19 05:05:41 PM CDT 2026
+Node: Slurm-6-7
+[tinystories_gpt2] He et al. same_clusters_as_DIME: C=500 T=22174 -> 2.7466  {'k': 200, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.704185350631502}
+[tinystories_gpt2] entry-matched He store infeasible: floor T=2982 (distinct tokens) > B=500 (6.0x)
+[tinystories_gpt2] He et al. their_regime_T~N/5: C=25 T=9695 -> 2.7868  {'k': 200, 'tau': 0.5, 'alpha': 0.01, 'mean_nll': 2.735972936064191}
+
+[tinystories_gpt2] === HE BASELINE SUMMARY ===  DIME 2.7452  GPT-only 2.7984
+  same_clusters_as_DIME        C=   500 T=  22174  val 2.7466
+  their_regime_T~N/5           C=    25 T=   9695  val 2.7868
+Job run_he_baseline.py (tinystories/gpt2) done: Sat Sep 19 05:06:43 PM CDT 2026

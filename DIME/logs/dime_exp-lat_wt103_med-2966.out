@@ -1,0 +1,9 @@
+Job run_latency.py (wikitext103/gpt2-medium) started: Sat Sep 19 03:44:20 PM CDT 2026
+Node: Slurm-6-7
+[wikitext103_gpt2-medium] N=381127 B=3811 D=1024 raw_k=300 dime_k=300
+[wikitext103_gpt2-medium] raw_full: {'k': 300, 'n_entries': 381127, 'single': {'mean_ms': 131.78195798536763, 'median_ms': 130.10590546764433}, 'batch': {'per_query_ms': 3.1532754677755293}}
+[wikitext103_gpt2-medium] raw_B: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 5.059924386441708, 'median_ms': 5.063859047368169}, 'batch': {'per_query_ms': 0.09322820078523364}}
+[wikitext103_gpt2-medium] dime: {'k': 300, 'n_entries': 3811, 'single': {'mean_ms': 5.0568687915802, 'median_ms': 5.0644646398723125}, 'batch': {'per_query_ms': 0.09401279203302693}}
+[wikitext103_gpt2-medium] bytes: {'raw_full': 1564145208, 'raw_B': 15640344, 'dime_pickle': 16793808, 'dime_sparse': 17467712, 'dime_nonzeros': 230326, 'ratio_raw_full_over_dime_pickle': 93.13820951150566, 'ratio_raw_full_over_dime_sparse': 89.54493914257345, 'dime_sparse_over_raw_B': 1.1168368163769289, 'dime_pickle_over_raw_B': 1.0737492730338924}
+[wikitext103_gpt2-medium] done
+Job run_latency.py (wikitext103/gpt2-medium) done: Sat Sep 19 03:48:45 PM CDT 2026
