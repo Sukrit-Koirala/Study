@@ -1,0 +1,70 @@
+Representation-ensembling experiment job started: Wed Oct 14 04:23:41 PM CDT 2026
+Node: Slurm-2-7
+Dual-extracting datastore / controller_train(VALIDATION) / val(TEST)...
+datastore: 49657  controller_train(VAL): 9652  val(TEST): 14097  [1.5s]
+Config A (base LM) test NLL: 2.7984
+
+--- Training FFN head (Control A: trained on the SAME representation as the output layer) ---
+Config B (base + FFN head): alpha=0.5  test NLL=2.5090
+
+--- Training ATT head (Control B: trained on the FFN-input/post-ln_2 representation — Khandelwal et al.'s own best-ablated choice, genuinely different from h_FFN) ---
+Config C (base + ATT head): alpha=0.4  test NLL=2.5675
+
+--- Config E: full raw kNN on h_ATT ---
+Config E (full raw kNN): {'k': 100, 'tau': 0.5, 'alpha': 0.25, 'mean_nll': 2.5716736258728696} -> test NLL=2.5833
+
+--- Config D: DIME (minibatch_kmeans) on h_ATT ---
+Config D (DIME): {'k': 10, 'tau': 0.5, 'alpha': 0.25, 'mean_nll': 2.6484973608770357} -> test NLL=2.6741
+  fraction of test positions where DIME's raw retrieval prob is ~0 (true token never in top-k clusters): 8.50%
+
+--- Config F: equal-budget raw retrieval on h_ATT ---
+Config F (equal-budget raw, n=500): {'k': 50, 'tau': 0.5, 'alpha': 0.05, 'mean_nll': 2.714319637608235} -> test NLL=2.7575
+
+--- Config G: base LM + ATT head + DIME (3-way, validation-tuned simplex) ---
+Config G weights (lm, head_att, dime)=(0.6, 0.4, 0.0)  test NLL=2.5675
+Config G control (shuffled DIME component) weights=(0.6, 0.4, 0.0)  test NLL=2.5675
+
+--- Per-token overlap analysis ---
+{
+  "both_help": 0.2998510321344967,
+  "only_dime_helps": 0.045257856281478326,
+  "only_head_helps": 0.22706958927431367,
+  "both_hurt": 0.42782152230971127
+}
+Document-level bootstrap, A-D improvement: {'point_estimate': 0.12432807305266534, 'ci_95_low': 0.10534251640035684, 'ci_95_high': 0.14434222137225589, 'n_documents': 70, 'n_bootstrap': 2000}
+Document-level bootstrap, A-C improvement: {'point_estimate': 0.23088572919368744, 'ci_95_low': 0.2082461029291153, 'ci_95_high': 0.25471156463027, 'n_documents': 70, 'n_bootstrap': 2000}
+{
+  "rarest_quartile": {
+    "n": 3510,
+    "delta_DIME": -0.058703691453219305,
+    "delta_head": -0.027969907969236374
+  },
+  "q2": {
+    "n": 3528,
+    "delta_DIME": 0.17730943373238392,
+    "delta_head": 0.35563087463378906
+  },
+  "q3": {
+    "n": 3325,
+    "delta_DIME": 0.2985819253435177,
+    "delta_head": 0.45719435811042786
+  },
+  "most_common_quartile": {
+    "n": 3734,
+    "delta_DIME": 0.09115431677803336,
+    "delta_head": 0.1548295021057129
+  }
+}
+
+=== SUMMARY ===
+A (base):              2.7984
+B (base+FFN head):      2.5090
+C (base+ATT head):      2.5675
+D (base+DIME):          2.6741
+E (full raw kNN):       2.5833
+F (equal-budget raw):   2.7575
+G (base+ATT head+DIME): 2.5675
+Delta_DIME=0.1243  Delta_head=0.2309  R_head=1.8571  Delta_incremental=0.0000  (shuffled control: 0.0000)
+
+All results saved to results/representation_ensembling_experiment.json
+Representation-ensembling experiment job done: Wed Oct 14 04:37:15 PM CDT 2026

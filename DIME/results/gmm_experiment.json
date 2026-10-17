@@ -1,0 +1,104 @@
+{
+  "phase": "gmm_experiment",
+  "dataset": "tinystories",
+  "model": "gpt2",
+  "n_clusters": 500,
+  "fixed_config": {
+    "k": 20,
+    "tau": 2.0,
+    "alpha": 0.05
+  },
+  "covariance_type": "diag",
+  "nll": {
+    "kmeans_hard_A": 2.7451901707666737,
+    "gmm_hard_B": 2.7377134790785065,
+    "gmm_soft_C": 2.737715875963484
+  },
+  "boundary_analysis": {
+    "bottom_1pct": {
+      "n_points": 496,
+      "mean_top1_responsibility": 0.9999696016311646,
+      "mean_top2_responsibility": 3.0335155315697193e-05,
+      "mean_responsibility_gap": 0.9999393224716187,
+      "mean_entropy": 0.00020387624681461602,
+      "mean_effective_n_components": 1.0002063512802124,
+      "frac_gmm_hard_disagrees_with_kmeans": 0.9193548387096774
+    },
+    "bottom_5pct": {
+      "n_points": 2482,
+      "mean_top1_responsibility": 0.9998571872711182,
+      "mean_top2_responsibility": 0.00014221361197996885,
+      "mean_responsibility_gap": 0.9997149109840393,
+      "mean_entropy": 0.0005124295712448657,
+      "mean_effective_n_components": 1.00059175491333,
+      "frac_gmm_hard_disagrees_with_kmeans": 0.9121676067687349
+    },
+    "bottom_10pct": {
+      "n_points": 4965,
+      "mean_top1_responsibility": 0.9998931884765625,
+      "mean_top2_responsibility": 0.00010653125355020165,
+      "mean_responsibility_gap": 0.9997866153717041,
+      "mean_entropy": 0.000439323514001444,
+      "mean_effective_n_components": 1.0004879236221313,
+      "frac_gmm_hard_disagrees_with_kmeans": 0.9073514602215509
+    }
+  },
+  "cluster_level_analysis": {
+    "n_components_matched_to_same_index": 240,
+    "n_components_total": 500,
+    "prototype_movement": {
+      "mean": 16.21848040448785,
+      "std": 12.750227778087984,
+      "min": 0.304075895955774,
+      "max": 174.3306571947213
+    },
+    "token_distribution_js_divergence": {
+      "mean": 0.3234132077688203,
+      "std": 0.17373440158011333,
+      "min": 0.0,
+      "max": 0.6931471805599454
+    },
+    "effective_mass_vs_hard_size": {
+      "hard_sizes": {
+        "mean": 99.314,
+        "std": 48.328949957556496
+      },
+      "soft_effective_mass": {
+        "mean": 99.31400299072266,
+        "std": 56.93506622314453
+      }
+    },
+    "mixture_weights_alpha": {
+      "mean": 0.0020000000949949026,
+      "std": 0.0011465668212622404,
+      "min": 8.055259240791202e-05,
+      "max": 0.006330549251288176
+    }
+  },
+  "boundary_stratified_val_nll": {
+    "kmeans_hard_A": {
+      "near_boundary_mean_nll": 2.79332986195644,
+      "interior_mean_nll": 2.697043649314253,
+      "n_near_boundary": 7049,
+      "n_interior": 7048
+    },
+    "gmm_hard_B": {
+      "near_boundary_mean_nll": 2.784955357948008,
+      "interior_mean_nll": 2.690464897331753,
+      "n_near_boundary": 7049,
+      "n_interior": 7048
+    },
+    "gmm_soft_C": {
+      "near_boundary_mean_nll": 2.7849552730257705,
+      "interior_mean_nll": 2.6904697763760748,
+      "n_near_boundary": 7049,
+      "n_interior": 7048
+    }
+  },
+  "sections_completed": [
+    "nll",
+    "boundary_analysis",
+    "cluster_level_analysis",
+    "boundary_stratified_val_nll"
+  ]
+}

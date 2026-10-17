@@ -1,0 +1,137 @@
+E1 (WikiText-103/gpt2) job started: Sat Oct 17 11:25:23 AM CDT 2026
+Node: Slurm-2-7
+Loading cache (datastore / controller_train / val)...
+datastore=381127 controller_train=90170 val=77089
+reusing tuned configs: raw={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}  gpt_only_nll=4.3610
+Building raw datastore index and DIME clusters...
+DIME clustering done in 186.9s
+Querying val set against both indices (k_max_raw=300, k_max_dime=100)...
+
+=== E1A: retrieval geometry ===
+{
+  "d_raw_nearest": {
+    "median": 14.395153045654297,
+    "p90": 18.80660934448242,
+    "p95": 20.508093643188467,
+    "p99": 25.563708877563474,
+    "mean": 14.128646530112777,
+    "std": 4.466001221850008
+  },
+  "d_dime_nearest": {
+    "median": 15.626697540283203,
+    "p90": 20.43048286437988,
+    "p95": 22.576746368408195,
+    "p99": 28.92963676452622,
+    "mean": 15.753366354341159,
+    "std": 4.482101911098286
+  },
+  "delta_d_signed": {
+    "median": 0.9669609069824219,
+    "p90": 5.130776214599608,
+    "p95": 7.224882888793942,
+    "p99": 12.326741142272915,
+    "mean": 1.6247198242283794,
+    "std": 2.943696700821499
+  },
+  "delta_d_abs": {
+    "median": 1.3910579681396484,
+    "p90": 5.134827232360839,
+    "p95": 7.2256570816040036,
+    "p99": 12.326741142272915,
+    "mean": 2.2071830201780216,
+    "std": 2.536416347744569
+  },
+  "frac_centroid_closer_than_nearest_raw_point": 0.2937773223157649
+}
+
+=== E1B: retrieval-distribution shift (tuned config) ===
+Computing per-query JS divergence (this loops over all val queries, dict-based)...
+JS divergence computed in 170.7s
+{
+  "js_divergence": {
+    "median": 0.365140895939113,
+    "p90": 0.5549166982201975,
+    "p95": 0.6223106593738794,
+    "p99": 0.678873993849163,
+    "mean": 0.35739881476741486,
+    "std": 0.15218928756796307
+  },
+  "raw_coverage": 0.6531930625640493,
+  "dime_coverage": 0.8683469755736876,
+  "p_raw_true_token": {
+    "median": 0.005962858585398447,
+    "p90": 0.7648587550928772,
+    "p95": 0.9901858939117395,
+    "p99": 0.9999999846483032,
+    "mean": 0.16704129138747043,
+    "std": 0.3009574559346014
+  },
+  "p_dime_true_token": {
+    "median": 0.0035340432509421826,
+    "p90": 0.19345016222634928,
+    "p95": 0.33136495129321997,
+    "p99": 0.9807993847375082,
+    "mean": 0.06788747196292577,
+    "std": 0.16644136675360663
+  }
+}
+queries with small |delta d| (<=p25) AND high JS (>=p75): 1443
+
+=== E1C: predictive degradation ===
+--- Comparison: matched ---
+{
+  "mean_nll_lm": 4.360986709594727,
+  "mean_nll_raw_mixed": 3.9387881280765904,
+  "mean_nll_dime_mixed": 4.020862277616639,
+  "delta_L": {
+    "median": 0.0,
+    "p90": 0.5812304575925277,
+    "p95": 1.2582391613954382,
+    "p99": 3.6120876626079217,
+    "mean": 0.08207414954004844,
+    "std": 1.0315119396717216
+  },
+  "gain_retention_R": 0.6621359532634168,
+  "sum_G_raw_positive": 46481.11703943624,
+  "sum_G_dime_on_raw_positive": 30776.81873965556,
+  "category_fractions": {
+    "raw_improves_dime_preserves": 0.06109821115853105,
+    "raw_improves_dime_worse_than_raw": 0.14009780902593108,
+    "raw_improves_dime_worse_than_lm": 0.11565852456251864,
+    "dime_beats_raw": 0.3631516818223093,
+    "neither_helps": 0.6391962536808105
+  }
+}
+--- Comparison: tuned ---
+{
+  "mean_nll_lm": 4.360986709594727,
+  "mean_nll_raw_mixed": 3.8825395972598655,
+  "mean_nll_dime_mixed": 4.011040197227825,
+  "delta_L": {
+    "median": -0.16522243229796918,
+    "p90": 0.9232595816268163,
+    "p95": 1.6323754574527634,
+    "p99": 4.068342083542385,
+    "mean": 0.1285005999679586,
+    "std": 0.9464274506332403
+  },
+  "gain_retention_R": 0.5735036937913545,
+  "sum_G_raw_positive": 49766.980119352374,
+  "sum_G_dime_on_raw_positive": 28541.54692728949,
+  "category_fractions": {
+    "raw_improves_dime_preserves": 0.029148127489006213,
+    "raw_improves_dime_worse_than_raw": 0.17169764817289107,
+    "raw_improves_dime_worse_than_lm": 0.12328607194281933,
+    "dime_beats_raw": 0.6685778775181933,
+    "neither_helps": 0.6295191272425379
+  }
+}
+document bootstrap (DIME-raw): {'point_estimate': 0.1285005999679586, 'ci_95_low': 0.11670360182238523, 'ci_95_high': 0.14105168533872967, 'n_sequences': 607, 'n_bootstrap': 2000}
+
+=== E1D: failure-case discovery (tuned config) ===
+saved worst/interesting/representative case files to /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1_wikitext103/diagnostics
+
+Saving per-query metrics table (CSV)...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1_wikitext103
+E1 (WikiText-103/gpt2) job done: Sat Oct 17 11:35:26 AM CDT 2026

@@ -1,0 +1,31 @@
+Clean rerun (wikitext103/gpt2) job started: Wed Oct 14 05:16:51 PM CDT 2026
+Node: Slurm-2-7
+[wikitext103_gpt2] dual-extracting datastore / controller_train(VALIDATION) / val(TEST)...
+[wikitext103_gpt2] datastore=381127 controller_train=90170 val=77089  [9.8s]
+[wikitext103_gpt2] n_clusters=3811
+[wikitext103_gpt2] A (base LM): test NLL=4.3610
+[wikitext103_gpt2] --- Config B: DIME(h_out) ---
+  B (DIME/h_out): {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.004420318172836} -> interpolated test NLL=4.0120  standalone test NLL=8.2839
+[wikitext103_gpt2] --- Config C: DIME(h_att) ---
+  C (DIME/h_att): {'k': 10, 'tau': 0.5, 'alpha': 0.25, 'mean_nll': 3.809989459806145} -> interpolated test NLL=3.8207  standalone test NLL=7.3403
+[wikitext103_gpt2] --- Config F: full raw kNN(h_out) ---
+  F (raw kNN/h_out): {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.8806013761643783} -> interpolated test NLL=3.8825  standalone test NLL=11.6950
+[wikitext103_gpt2] --- Config G: full raw kNN(h_att) ---
+  G (raw kNN/h_att): {'k': 300, 'tau': 0.5, 'alpha': 0.5, 'mean_nll': 3.67001650176181} -> interpolated test NLL=3.6731  standalone test NLL=8.6420
+[wikitext103_gpt2] --- Config D: learned FFN head (h_out) ---
+  D: alpha=0.55  interpolated test NLL=3.5638  standalone test NLL=4.3043
+[wikitext103_gpt2] --- Config E: learned ATT head (h_att) ---
+  E: alpha=0.6  interpolated test NLL=3.5340  standalone test NLL=4.0815
+[wikitext103_gpt2] --- Config H: unigram control ---
+  H: alpha=0.1  interpolated test NLL=4.2046  standalone test NLL=7.6648
+[wikitext103_gpt2] --- Config I: FFN head trained on shuffled labels ---
+  I: alpha=0.1  interpolated test NLL=4.2166  standalone test NLL=7.8621
+[wikitext103_gpt2] --- Primary comparisons ---
+  DIME_hout_vs_DIME_hatt: mean_diff=0.1913  boot_CI=[0.1826, 0.2011]
+  rawknn_hout_vs_rawknn_hatt: mean_diff=0.2095  boot_CI=[0.1961, 0.2240]
+  FFNhead_vs_ATThead: mean_diff=0.0297  boot_CI=[0.0265, 0.0328]
+  DIME_hatt_vs_rawknn_hatt: mean_diff=0.1476  boot_CI=[0.1303, 0.1647]
+  learnedheads_vs_base: mean_diff=-0.7972  boot_CI=[-0.8359, -0.7607]
+[wikitext103_gpt2] per-position NLL arrays saved to results_clean_rerun/wikitext103_gpt2_positions.npz
+[wikitext103_gpt2] summary saved to results_clean_rerun/wikitext103_gpt2_summary.json
+Clean rerun (wikitext103/gpt2) job done: Wed Oct 14 07:31:09 PM CDT 2026

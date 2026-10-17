@@ -1,0 +1,31 @@
+Clean rerun (tinystories/gpt2) job started: Wed Oct 14 05:16:51 PM CDT 2026
+Node: Slurm-2-7
+[tinystories_gpt2] dual-extracting datastore / controller_train(VALIDATION) / val(TEST)...
+[tinystories_gpt2] datastore=49657 controller_train=9652 val=14097  [1.5s]
+[tinystories_gpt2] n_clusters=497
+[tinystories_gpt2] A (base LM): test NLL=2.7984
+[tinystories_gpt2] --- Config B: DIME(h_out) ---
+  B (DIME/h_out): {'k': 20, 'tau': 2.0, 'alpha': 0.05, 'mean_nll': 2.7044084464158518} -> interpolated test NLL=2.7442  standalone test NLL=6.3981
+[tinystories_gpt2] --- Config C: DIME(h_att) ---
+  C (DIME/h_att): {'k': 10, 'tau': 0.5, 'alpha': 0.25, 'mean_nll': 2.6541857958853456} -> interpolated test NLL=2.6779  standalone test NLL=5.0974
+[tinystories_gpt2] --- Config F: full raw kNN(h_out) ---
+  F (raw kNN/h_out): {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 2.658197441933184} -> interpolated test NLL=2.6928  standalone test NLL=8.7000
+[tinystories_gpt2] --- Config G: full raw kNN(h_att) ---
+  G (raw kNN/h_att): {'k': 100, 'tau': 0.5, 'alpha': 0.25, 'mean_nll': 2.5716736258728696} -> interpolated test NLL=2.5833  standalone test NLL=6.4901
+[tinystories_gpt2] --- Config D: learned FFN head (h_out) ---
+  D: alpha=0.5  interpolated test NLL=2.5090  standalone test NLL=3.4830
+[tinystories_gpt2] --- Config E: learned ATT head (h_att) ---
+  E: alpha=0.4  interpolated test NLL=2.5675  standalone test NLL=3.1888
+[tinystories_gpt2] --- Config H: unigram control ---
+  H: alpha=0.0  interpolated test NLL=2.7984  standalone test NLL=6.7488
+[tinystories_gpt2] --- Config I: FFN head trained on shuffled labels ---
+  I: alpha=0.0  interpolated test NLL=2.7984  standalone test NLL=6.7430
+[tinystories_gpt2] --- Primary comparisons ---
+  DIME_hout_vs_DIME_hatt: mean_diff=0.0663  boot_CI=[0.0556, 0.0780]
+  rawknn_hout_vs_rawknn_hatt: mean_diff=0.1095  boot_CI=[0.1002, 0.1190]
+  FFNhead_vs_ATThead: mean_diff=-0.0586  boot_CI=[-0.0634, -0.0542]
+  DIME_hatt_vs_rawknn_hatt: mean_diff=0.0946  boot_CI=[0.0862, 0.1036]
+  learnedheads_vs_base: mean_diff=-0.2895  boot_CI=[-0.3159, -0.2646]
+[tinystories_gpt2] per-position NLL arrays saved to results_clean_rerun/tinystories_gpt2_positions.npz
+[tinystories_gpt2] summary saved to results_clean_rerun/tinystories_gpt2_summary.json
+Clean rerun (tinystories/gpt2) job done: Wed Oct 14 05:35:18 PM CDT 2026

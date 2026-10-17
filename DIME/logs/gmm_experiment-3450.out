@@ -1,0 +1,186 @@
+GMM experiment (TinyStories/gpt2) job started: Tue Oct 13 03:04:54 PM CDT 2026
+Node: Slurm-2-7
+--- Sanity check: synthetic 2D GMM vs k-means boundaries ---
+[equal_weights_equal_spherical] grid-point agreement between k-means and GMM boundary: 100.000%
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/sanity_equal_weights_equal_spherical.png
+[unequal_weights] grid-point agreement between k-means and GMM boundary: 98.104%
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/sanity_unequal_weights.png
+[unequal_spherical_variance] grid-point agreement between k-means and GMM boundary: 67.294%
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/sanity_unequal_spherical_variance.png
+[diagonal_anisotropic] EM log-likelihood history: [np.float64(-4.3566), np.float64(-4.314), np.float64(-4.312), np.float64(-4.3117), np.float64(-4.3116), np.float64(-4.3116), np.float64(-4.3116), np.float64(-4.3116), np.float64(-4.3116), np.float64(-4.3116), np.float64(-4.3116)]
+[diagonal_anisotropic] grid-point agreement between k-means and GMM boundary: 54.934%
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/sanity_diagonal_anisotropic.png
+
+=== SANITY CHECK SUMMARY ===
+equal_weights_equal_spherical: 100.000% grid agreement with k-means
+unequal_weights: 98.104% grid agreement with k-means
+unequal_spherical_variance: 67.294% grid agreement with k-means
+diagonal_anisotropic: 54.934% grid agreement with k-means
+
+Expected: 'equal_weights_equal_spherical' should be ~100% (exact algebraic identity — any shortfall indicates an implementation bug). The other three should show visibly lower agreement, each for a different reason (weights, variance, or full anisotropic covariance), demonstrating which GMM degree of freedom is responsible for the boundary change.
+
+--- Main experiment: TinyStories/gpt2, B=500 ---
+Encoding datastore / val...
+datastore: 49657  val: 14097
+
+--- Variant A: k-means hard DIME ---
+Variant A val mean NLL: 2.7452
+
+--- Variant B: GMM-hard DIME ---
+  EM iter 1: mean log-likelihood = -192.733816
+  EM iter 2: mean log-likelihood = -123.462087
+  EM iter 3: mean log-likelihood = -97.725273
+  EM iter 4: mean log-likelihood = -85.431276
+  EM iter 5: mean log-likelihood = -78.313327
+  EM iter 6: mean log-likelihood = -74.455046
+  EM iter 7: mean log-likelihood = -71.771213
+  EM iter 8: mean log-likelihood = -70.102731
+  EM iter 9: mean log-likelihood = -68.983757
+  EM iter 10: mean log-likelihood = -68.168794
+  EM iter 11: mean log-likelihood = -67.480031
+  EM iter 12: mean log-likelihood = -67.066894
+  EM iter 13: mean log-likelihood = -66.727693
+  EM iter 14: mean log-likelihood = -66.431939
+  EM iter 15: mean log-likelihood = -66.204588
+  EM iter 16: mean log-likelihood = -65.920311
+  EM iter 17: mean log-likelihood = -65.756385
+  EM iter 18: mean log-likelihood = -65.620788
+  EM iter 19: mean log-likelihood = -65.468451
+  EM iter 20: mean log-likelihood = -65.321428
+  EM iter 21: mean log-likelihood = -65.191949
+  EM iter 22: mean log-likelihood = -65.037448
+  EM iter 23: mean log-likelihood = -64.910855
+  EM iter 24: mean log-likelihood = -64.826300
+  EM iter 25: mean log-likelihood = -64.765447
+  EM iter 26: mean log-likelihood = -64.708909
+  EM iter 27: mean log-likelihood = -64.651431
+  EM iter 28: mean log-likelihood = -64.594726
+  EM iter 29: mean log-likelihood = -64.546973
+  EM iter 30: mean log-likelihood = -64.500543
+  EM iter 31: mean log-likelihood = -64.452453
+  EM iter 32: mean log-likelihood = -64.391004
+  EM iter 33: mean log-likelihood = -64.346924
+  EM iter 34: mean log-likelihood = -64.315709
+  EM iter 35: mean log-likelihood = -64.285002
+  EM iter 36: mean log-likelihood = -64.250319
+  EM iter 37: mean log-likelihood = -64.207181
+  EM iter 38: mean log-likelihood = -64.145547
+  EM iter 39: mean log-likelihood = -64.097425
+  EM iter 40: mean log-likelihood = -64.066809
+  EM iter 41: mean log-likelihood = -64.043037
+  EM iter 42: mean log-likelihood = -64.008261
+  EM iter 43: mean log-likelihood = -63.984583
+  EM iter 44: mean log-likelihood = -63.963374
+  EM iter 45: mean log-likelihood = -63.946656
+  EM iter 46: mean log-likelihood = -63.934384
+  EM iter 47: mean log-likelihood = -63.924612
+  EM iter 48: mean log-likelihood = -63.915190
+  EM iter 49: mean log-likelihood = -63.906262
+  EM iter 50: mean log-likelihood = -63.901707
+Sanity check passed: responsibilities sum to 1 (min=1.000000, max=1.000000)
+Variant B val mean NLL: 2.7377
+
+--- Variant C: GMM-soft DIME ---
+Variant C val mean NLL: 2.7377
+
+--- Boundary analysis (datastore points) ---
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/boundary_margin_vs_gmm.png
+{
+  "bottom_1pct": {
+    "n_points": 496,
+    "mean_top1_responsibility": 0.9999696016311646,
+    "mean_top2_responsibility": 3.0335155315697193e-05,
+    "mean_responsibility_gap": 0.9999393224716187,
+    "mean_entropy": 0.00020387624681461602,
+    "mean_effective_n_components": 1.0002063512802124,
+    "frac_gmm_hard_disagrees_with_kmeans": 0.9193548387096774
+  },
+  "bottom_5pct": {
+    "n_points": 2482,
+    "mean_top1_responsibility": 0.9998571872711182,
+    "mean_top2_responsibility": 0.00014221361197996885,
+    "mean_responsibility_gap": 0.9997149109840393,
+    "mean_entropy": 0.0005124295712448657,
+    "mean_effective_n_components": 1.00059175491333,
+    "frac_gmm_hard_disagrees_with_kmeans": 0.9121676067687349
+  },
+  "bottom_10pct": {
+    "n_points": 4965,
+    "mean_top1_responsibility": 0.9998931884765625,
+    "mean_top2_responsibility": 0.00010653125355020165,
+    "mean_responsibility_gap": 0.9997866153717041,
+    "mean_entropy": 0.000439323514001444,
+    "mean_effective_n_components": 1.0004879236221313,
+    "frac_gmm_hard_disagrees_with_kmeans": 0.9073514602215509
+  }
+}
+
+--- Cluster-level analysis (k-means hard [A] vs. GMM-soft [C]) ---
+{
+  "n_components_matched_to_same_index": 240,
+  "n_components_total": 500,
+  "prototype_movement": {
+    "mean": 16.21848040448785,
+    "std": 12.750227778087984,
+    "min": 0.304075895955774,
+    "max": 174.3306571947213
+  },
+  "token_distribution_js_divergence": {
+    "mean": 0.3234132077688203,
+    "std": 0.17373440158011333,
+    "min": 0.0,
+    "max": 0.6931471805599454
+  },
+  "effective_mass_vs_hard_size": {
+    "hard_sizes": {
+      "mean": 99.314,
+      "std": 48.328949957556496
+    },
+    "soft_effective_mass": {
+      "mean": 99.31400299072266,
+      "std": 56.93506622314453
+    }
+  },
+  "mixture_weights_alpha": {
+    "mean": 0.0020000000949949026,
+    "std": 0.0011465668212622404,
+    "min": 8.055259240791202e-05,
+    "max": 0.006330549251288176
+  }
+}
+
+--- Boundary-stratified val evaluation ---
+{
+  "kmeans_hard_A": {
+    "near_boundary_mean_nll": 2.79332986195644,
+    "interior_mean_nll": 2.697043649314253,
+    "n_near_boundary": 7049,
+    "n_interior": 7048
+  },
+  "gmm_hard_B": {
+    "near_boundary_mean_nll": 2.784955357948008,
+    "interior_mean_nll": 2.690464897331753,
+    "n_near_boundary": 7049,
+    "n_interior": 7048
+  },
+  "gmm_soft_C": {
+    "near_boundary_mean_nll": 2.7849552730257705,
+    "interior_mean_nll": 2.6904697763760748,
+    "n_near_boundary": 7049,
+    "n_interior": 7048
+  }
+}
+
+=== INTERPRETATION ===
+A (k-means hard):  2.7452
+B (GMM hard):      2.7377   (A vs B isolates: does the boundary alone matter?)
+C (GMM soft):      2.7377   (B vs C isolates: does soft membership add anything?)
+Mean prototype movement B->C: 16.218480
+Mean token-distribution JS divergence B->C: 0.323413
+bottom_1pct: GMM-hard disagrees with k-means on 91.9% of points
+bottom_5pct: GMM-hard disagrees with k-means on 91.2% of points
+bottom_10pct: GMM-hard disagrees with k-means on 90.7% of points
+Boundary-stratified gains (near-boundary vs interior val queries) — see results['boundary_stratified_val_nll'] for whether any A->B->C improvement is concentrated specifically near k-means' boundaries.
+
+All results saved to results/gmm_experiment.json
+GMM experiment job done: Tue Oct 13 03:09:37 PM CDT 2026

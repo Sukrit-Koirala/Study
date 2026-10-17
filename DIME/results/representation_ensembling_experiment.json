@@ -1,0 +1,144 @@
+{
+  "phase": "representation_ensembling_experiment",
+  "dataset": "tinystories",
+  "model": "gpt2",
+  "n_clusters": 500,
+  "layer_idx": -1,
+  "split_mapping": {
+    "train": "datastore",
+    "validation": "controller_train",
+    "test": "val"
+  },
+  "data_sizes": {
+    "datastore": 49657,
+    "controller_train": 9652,
+    "val": 14097
+  },
+  "extraction_time_sec": 1.4549944759346545,
+  "configs": {
+    "A_base_lm": {
+      "test_nll": 2.7984323501586914
+    },
+    "B_base_plus_ffn_head": {
+      "alpha": 0.5,
+      "test_nll": 2.508955717086792,
+      "train_time_sec": 289.32532231276855,
+      "memory_bytes": 154389504
+    },
+    "C_base_plus_att_head": {
+      "alpha": 0.4,
+      "test_nll": 2.5675466060638428,
+      "train_time_sec": 392.43688839906827,
+      "memory_bytes": 154389504
+    },
+    "D_base_plus_dime": {
+      "best_config": {
+        "k": 10,
+        "tau": 0.5,
+        "alpha": 0.25,
+        "mean_nll": 2.6484973608770357
+      },
+      "test_nll": 2.6741041913799415
+    },
+    "E_full_raw_knn": {
+      "best_config": {
+        "k": 100,
+        "tau": 0.5,
+        "alpha": 0.25,
+        "mean_nll": 2.5716736258728696
+      },
+      "test_nll": 2.5832971309333277
+    },
+    "F_equal_budget_raw": {
+      "best_config": {
+        "k": 50,
+        "tau": 0.5,
+        "alpha": 0.05,
+        "mean_nll": 2.714319637608235
+      },
+      "n_selected": 500,
+      "test_nll": 2.7574950757186665
+    },
+    "G_base_plus_att_head_plus_dime": {
+      "weights_lm_head_dime": [
+        0.6,
+        0.4,
+        0.0
+      ],
+      "test_nll": 2.5675465280275493,
+      "validation_control_shuffled_dime": {
+        "weights_lm_head_dime": [
+          0.6,
+          0.4,
+          0.0
+        ],
+        "test_nll": 2.5675465280275493
+      }
+    }
+  },
+  "delta_metrics": {
+    "delta_DIME": 0.12432815877874992,
+    "delta_head": 0.23088574409484863,
+    "R_head": 1.8570671870539393,
+    "delta_incremental": 7.8036293427175e-08,
+    "delta_incremental_shuffled_control": 7.8036293427175e-08,
+    "note": "R_head measures how much of DIME's NLL gain the learned intermediate predictor reproduces under THESE conditions \u2014 not a causal attribution. delta_incremental should be compared against delta_incremental_shuffled_control to judge whether G's gain over C is real DIME signal or just extra tuning freedom."
+  },
+  "overlap_analysis": {
+    "both_help": 0.2998510321344967,
+    "only_dime_helps": 0.045257856281478326,
+    "only_head_helps": 0.22706958927431367,
+    "both_hurt": 0.42782152230971127
+  },
+  "paired_significance_A_vs_D": {
+    "t_stat": 18.01763791466671,
+    "p_value": 9.030055745629938e-72,
+    "wilcoxon_p": 3.901418619630063e-96
+  },
+  "document_bootstrap": {
+    "A_minus_D": {
+      "point_estimate": 0.12432807305266534,
+      "ci_95_low": 0.10534251640035684,
+      "ci_95_high": 0.14434222137225589,
+      "n_documents": 70,
+      "n_bootstrap": 2000
+    },
+    "A_minus_C": {
+      "point_estimate": 0.23088572919368744,
+      "ci_95_low": 0.2082461029291153,
+      "ci_95_high": 0.25471156463027,
+      "n_documents": 70,
+      "n_bootstrap": 2000
+    }
+  },
+  "token_frequency_stratified": {
+    "rarest_quartile": {
+      "n": 3510,
+      "delta_DIME": -0.058703691453219305,
+      "delta_head": -0.027969907969236374
+    },
+    "q2": {
+      "n": 3528,
+      "delta_DIME": 0.17730943373238392,
+      "delta_head": 0.35563087463378906
+    },
+    "q3": {
+      "n": 3325,
+      "delta_DIME": 0.2985819253435177,
+      "delta_head": 0.45719435811042786
+    },
+    "most_common_quartile": {
+      "n": 3734,
+      "delta_DIME": 0.09115431677803336,
+      "delta_head": 0.1548295021057129
+    }
+  },
+  "frac_dime_raw_retrieval_zero_on_test": 0.08498262041569128,
+  "sections_completed": [
+    "configs",
+    "delta_metrics",
+    "overlap_analysis",
+    "document_bootstrap",
+    "token_frequency_stratified"
+  ]
+}

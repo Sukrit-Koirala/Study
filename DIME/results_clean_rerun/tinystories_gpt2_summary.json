@@ -1,0 +1,158 @@
+{
+  "phase": "clean_rerun",
+  "dataset": "tinystories",
+  "model": "gpt2",
+  "split_mapping": {
+    "train": "datastore",
+    "validation": "controller_train",
+    "test": "val"
+  },
+  "data_sizes": {
+    "datastore": 49657,
+    "controller_train": 9652,
+    "val": 14097
+  },
+  "n_clusters": 497,
+  "extraction_time_sec": 1.4781322879716754,
+  "configs": {
+    "A_base_lm": {
+      "test_nll": 2.7984323501586914
+    },
+    "B_dime_hout": {
+      "best_config": {
+        "k": 20,
+        "tau": 2.0,
+        "alpha": 0.05,
+        "mean_nll": 2.7044084464158518
+      },
+      "interpolated_test_nll": 2.7441819714364235,
+      "standalone_test_nll": 6.3981078975204095,
+      "train_time_sec": 99.1188625949435
+    },
+    "C_dime_hatt": {
+      "best_config": {
+        "k": 10,
+        "tau": 0.5,
+        "alpha": 0.25,
+        "mean_nll": 2.6541857958853456
+      },
+      "interpolated_test_nll": 2.6778751104833076,
+      "standalone_test_nll": 5.097351835691783,
+      "train_time_sec": 94.78146453108639
+    },
+    "F_rawknn_hout": {
+      "best_config": {
+        "k": 100,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 2.658197441933184
+      },
+      "interpolated_test_nll": 2.692845172428664,
+      "standalone_test_nll": 8.700008589987617,
+      "train_time_sec": 10.153537721838802
+    },
+    "G_rawknn_hatt": {
+      "best_config": {
+        "k": 100,
+        "tau": 0.5,
+        "alpha": 0.25,
+        "mean_nll": 2.5716736258728696
+      },
+      "interpolated_test_nll": 2.5832971309333277,
+      "standalone_test_nll": 6.490143584997744,
+      "train_time_sec": 10.117347515188158
+    },
+    "D_ffn_head": {
+      "alpha": 0.5,
+      "interpolated_test_nll": 2.508955717086792,
+      "standalone_test_nll": 3.4830198287963867,
+      "train_time_sec": 287.78534160461277,
+      "memory_bytes": 154389504
+    },
+    "E_att_head": {
+      "alpha": 0.4,
+      "interpolated_test_nll": 2.5675466060638428,
+      "standalone_test_nll": 3.1888206005096436,
+      "train_time_sec": 392.1824519848451,
+      "memory_bytes": 154389504
+    },
+    "H_unigram_control": {
+      "alpha": 0.0,
+      "interpolated_test_nll": 2.798432255793555,
+      "standalone_test_nll": 6.748750351090642
+    },
+    "I_shuffled_label_head": {
+      "alpha": 0.0,
+      "interpolated_test_nll": 2.7984323501586914,
+      "standalone_test_nll": 6.743010520935059,
+      "train_time_sec": 157.55859921500087,
+      "note": "same h_out contexts and same marginal token-frequency distribution as D, but context<->token pairing destroyed by shuffling labels before training."
+    }
+  },
+  "primary_comparisons": {
+    "DIME_hout_vs_DIME_hatt": {
+      "mean_diff_x_minus_y": 0.06630686095311661,
+      "paired_t_p": 2.049582209894392e-54,
+      "wilcoxon_p": 8.292438264439513e-63,
+      "document_bootstrap": {
+        "point_estimate": 0.06630686095311661,
+        "ci_95_low": 0.055558837406338595,
+        "ci_95_high": 0.07799057178544483,
+        "n_documents": 70,
+        "n_bootstrap": 2000
+      }
+    },
+    "rawknn_hout_vs_rawknn_hatt": {
+      "mean_diff_x_minus_y": 0.10954804149533624,
+      "paired_t_p": 7.871346756106724e-158,
+      "wilcoxon_p": 7.247119905736328e-33,
+      "document_bootstrap": {
+        "point_estimate": 0.10954804149533624,
+        "ci_95_low": 0.10024842714392662,
+        "ci_95_high": 0.11899335776896905,
+        "n_documents": 70,
+        "n_bootstrap": 2000
+      }
+    },
+    "FFNhead_vs_ATThead": {
+      "mean_diff_x_minus_y": -0.05859072878956795,
+      "paired_t_p": 0.0,
+      "wilcoxon_p": 0.0,
+      "document_bootstrap": {
+        "point_estimate": -0.05859072878956795,
+        "ci_95_low": -0.0634033778682351,
+        "ci_95_high": -0.0542028347030282,
+        "n_documents": 70,
+        "n_bootstrap": 2000
+      }
+    },
+    "DIME_hatt_vs_rawknn_hatt": {
+      "mean_diff_x_minus_y": 0.0945779795499792,
+      "paired_t_p": 6.461287163229325e-160,
+      "wilcoxon_p": 0.0,
+      "document_bootstrap": {
+        "point_estimate": 0.0945779795499792,
+        "ci_95_low": 0.08619964158153848,
+        "ci_95_high": 0.10359286741798933,
+        "n_documents": 70,
+        "n_bootstrap": 2000
+      }
+    },
+    "learnedheads_vs_base": {
+      "mean_diff_x_minus_y": -0.2894764542579651,
+      "paired_t_p": 0.0,
+      "wilcoxon_p": 0.0,
+      "document_bootstrap": {
+        "point_estimate": -0.2894764542579651,
+        "ci_95_low": -0.31588811203837397,
+        "ci_95_high": -0.2646477356553078,
+        "n_documents": 70,
+        "n_bootstrap": 2000
+      }
+    }
+  },
+  "sections_completed": [
+    "configs",
+    "primary_comparisons"
+  ]
+}

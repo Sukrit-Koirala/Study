@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/run_gmm_deep_dive.py", line 34, in <module>
+    from gmm_dime_construction import (
+    ...<3 lines>...
+    )
+  File "/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/gmm_dime_construction.py", line 402
+    }
+    ^
+SyntaxError: unmatched '}'

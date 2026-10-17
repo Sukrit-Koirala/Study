@@ -1,0 +1,41 @@
+{
+  "dataset": "wikitext103",
+  "model": "gpt2",
+  "seq_len": 128,
+  "n_clusters": 3811,
+  "seed": 42,
+  "distance_metric": "euclidean",
+  "representation": "hidden_states[-1] (final-layer output)",
+  "data_sizes": {
+    "datastore": 381127,
+    "controller_train": 90170,
+    "val": 77089
+  },
+  "matched_config": {
+    "k": 20,
+    "tau": 2.0,
+    "alpha": 0.25
+  },
+  "tuned_raw_config": {
+    "k": 300,
+    "tau": 1.0,
+    "alpha": 0.25,
+    "mean_nll": 3.880601986461873
+  },
+  "tuned_dime_config": {
+    "k": 100,
+    "tau": 2.0,
+    "alpha": 0.1,
+    "mean_nll": 4.003112141600259
+  },
+  "clustering": "sklearn.cluster.MiniBatchKMeans, seed=42",
+  "retrieval_search": "sklearn.neighbors.NearestNeighbors (exact, not approximate)",
+  "numpy_version": "2.4.6",
+  "python_version": "3.13.12",
+  "cache_files": [
+    "wikitext103_gpt2_datastore.npz",
+    "wikitext103_gpt2_controller_train.npz",
+    "wikitext103_gpt2_val.npz"
+  ],
+  "note_on_sequence_bootstrap_unit": "one 128-token chunk (127 positions), NOT a WikiText row or article -- rows are concatenated across many rows per chunk, so chunk is the cleanest available sequence-level unit without extra metadata."
+}

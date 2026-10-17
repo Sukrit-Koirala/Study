@@ -1,0 +1,420 @@
+GMM deep-dive (TinyStories/gpt2) job started: Tue Oct 13 04:04:28 PM CDT 2026
+Node: Slurm-2-7
+Encoding datastore / controller_train / val...
+datastore: 49657  controller_train: 9652  val: 14097
+
+=== k-means baseline ===
+k-means controller-train NLL: 2.7039
+
+=== Section 1/2: EM convergence + covariance family comparison ===
+
+--- fitting learned_spherical (spherical) ---
+  EM iter 1: ll=-694.474561  rel_improve=None  frac_changed=None  dead=0
+  EM iter 2: ll=-686.826167  rel_improve=0.01101320949672868  frac_changed=0.0555812876331635  dead=0
+  EM iter 3: ll=-683.364423  rel_improve=0.005040203863877323  frac_changed=0.040054775761725434  dead=0
+  EM iter 4: ll=-681.158381  rel_improve=0.0032282072099381574  frac_changed=0.031032885595182955  dead=0
+  EM iter 5: ll=-679.533929  rel_improve=0.0023848375934811925  frac_changed=0.026824012727309342  dead=0
+  EM iter 6: ll=-678.474838  rel_improve=0.001558555136867387  frac_changed=0.02160823247477697  dead=0
+  EM iter 7: ll=-677.732806  rel_improve=0.001093675953937598  frac_changed=0.017641017379221458  dead=0
+  EM iter 8: ll=-677.187257  rel_improve=0.0008049624806887736  frac_changed=0.015909136677608394  dead=0
+  EM iter 9: ll=-676.711845  rel_improve=0.0007020384847335727  frac_changed=0.013532835249813722  dead=0
+  EM iter 10: ll=-676.331725  rel_improve=0.0005617168408302288  frac_changed=0.011962059729746058  dead=0
+  EM iter 11: ll=-676.016537  rel_improve=0.00046602513278073835  frac_changed=0.01053225124353062  dead=0
+  EM iter 12: ll=-675.726544  rel_improve=0.0004289733332330076  frac_changed=0.00902189016654248  dead=0
+  EM iter 13: ll=-675.436680  rel_improve=0.00042896607300592273  frac_changed=0.007994844634190547  dead=0
+  EM iter 14: ll=-675.218331  rel_improve=0.0003232716333742065  frac_changed=0.007290009464929416  dead=0
+  EM iter 15: ll=-675.039942  rel_improve=0.00026419484638110765  frac_changed=0.006424069114122883  dead=0
+  EM iter 16: ll=-674.814014  rel_improve=0.0003346877015740511  frac_changed=0.006142135046418431  dead=0
+  EM iter 17: ll=-674.608267  rel_improve=0.0003048948517002398  frac_changed=0.006142135046418431  dead=0
+  EM iter 18: ll=-674.431021  rel_improve=0.00026273890487082214  frac_changed=0.005658819501782226  dead=0
+  EM iter 19: ll=-674.295688  rel_improve=0.00020066307773054722  frac_changed=0.005356747286384599  dead=0
+  EM iter 20: ll=-674.194948  rel_improve=0.00014939981052158495  frac_changed=0.005256056547918723  dead=0
+  EM iter 21: ll=-674.099350  rel_improve=0.00014179518923215572  frac_changed=0.005034536923293796  dead=0
+  EM iter 22: ll=-673.996317  rel_improve=0.00015284636711918246  frac_changed=0.00493384618482792  dead=0
+  EM iter 23: ll=-673.865691  rel_improve=0.0001938073250297081  frac_changed=0.004651912117123467  dead=0
+  EM iter 24: ll=-673.771003  rel_improve=0.00014051535626545233  frac_changed=0.004269287310953138  dead=0
+  EM iter 25: ll=-673.697899  rel_improve=0.00010849913035564882  frac_changed=0.003967215095555511  dead=0
+  EM iter 26: ll=-673.628212  rel_improve=0.00010343955015830387  frac_changed=0.0036047284370783576  dead=0
+  EM iter 27: ll=-673.542615  rel_improve=0.00012706854455109395  frac_changed=0.0034033469601466057  dead=0
+  EM iter 28: ll=-673.456320  rel_improve=0.00012812106803941788  frac_changed=0.003443623255532956  dead=0
+  EM iter 29: ll=-673.370207  rel_improve=0.00012786765531097556  frac_changed=0.002859616972430876  dead=0
+  EM iter 30: ll=-673.298413  rel_improve=0.00010661960994819264  frac_changed=0.0029401695632035765  dead=0
+  EM iter 31: ll=-673.204652  rel_improve=0.00013925621952933875  frac_changed=0.002758926233965  dead=0
+  EM iter 32: ll=-673.152924  rel_improve=7.683713344148433e-05  frac_changed=0.0022756106893287954  dead=0
+  EM iter 33: ll=-673.125170  rel_improve=4.123119747735761e-05  frac_changed=0.002114505507783394  dead=0
+  EM iter 34: ll=-673.096746  rel_improve=4.2225593773961324e-05  frac_changed=0.002134643655476569  dead=0
+  EM iter 35: ll=-673.070993  rel_improve=3.8260887597794576e-05  frac_changed=0.002013814769317518  dead=0
+  EM iter 36: ll=-673.038256  rel_improve=4.8637896398295674e-05  frac_changed=0.0020339529170106934  dead=0
+  EM iter 37: ll=-673.009123  rel_improve=4.3286353366291576e-05  frac_changed=0.0018527095877721167  dead=0
+  EM iter 38: ll=-672.981718  rel_improve=4.072014642716323e-05  frac_changed=0.001772156996999416  dead=0
+  EM iter 39: ll=-672.959081  rel_improve=3.3636207390154076e-05  frac_changed=0.0018325714400789415  dead=0
+  EM iter 40: ll=-672.934304  rel_improve=3.6818535291507916e-05  frac_changed=0.0017117425539198905  dead=0
+  EM iter 41: ll=-672.900989  rel_improve=4.950650321476646e-05  frac_changed=0.002013814769317518  dead=0
+  EM iter 42: ll=-672.862197  rel_improve=5.764969580656027e-05  frac_changed=0.0019534003262379925  dead=0
+  EM iter 43: ll=-672.813705  rel_improve=7.206773478368262e-05  frac_changed=0.0017520188493062407  dead=0
+  EM iter 44: ll=-672.764292  rel_improve=7.344328255073912e-05  frac_changed=0.002074229212397044  dead=0
+  EM iter 45: ll=-672.725949  rel_improve=5.6992738084773e-05  frac_changed=0.0019131240308516422  dead=0
+  EM iter 46: ll=-672.688553  rel_improve=5.558878169501271e-05  frac_changed=0.0017922951446925912  dead=0
+  EM iter 47: ll=-672.634485  rel_improve=8.037514947572503e-05  frac_changed=0.0019131240308516422  dead=0
+  EM iter 48: ll=-672.599702  rel_improve=5.171293715154014e-05  frac_changed=0.0013693940431359123  dead=0
+  EM iter 49: ll=-672.576232  rel_improve=3.48940089343936e-05  frac_changed=0.001993676621624343  dead=0
+  EM iter 50: ll=-672.543172  rel_improve=4.915408486578688e-05  frac_changed=0.001993676621624343  dead=0
+  EM iter 51: ll=-672.502985  rel_improve=5.9753973611869195e-05  frac_changed=0.002074229212397044  dead=0
+  EM iter 52: ll=-672.429885  rel_improve=0.00010869794002908066  frac_changed=0.0020540910647038686  dead=0
+  EM iter 53: ll=-672.402113  rel_improve=4.1301915696613516e-05  frac_changed=0.001651328110840365  dead=0
+  EM iter 54: ll=-672.378259  rel_improve=3.547449893378481e-05  frac_changed=0.0016916044062267152  dead=0
+  EM iter 55: ll=-672.354104  rel_improve=3.59251876803685e-05  frac_changed=0.0015103610769881387  dead=0
+  EM iter 56: ll=-672.335153  rel_improve=2.8185734286729218e-05  frac_changed=0.0015103610769881387  dead=0
+  EM iter 57: ll=-672.318855  rel_improve=2.4241621271244208e-05  frac_changed=0.0013895321908290875  dead=0
+  EM iter 58: ll=-672.304475  rel_improve=2.1387845132124097e-05  frac_changed=0.0012082888615905108  dead=0
+  EM iter 59: ll=-672.290404  rel_improve=2.0930283780542665e-05  frac_changed=0.0012082888615905108  dead=0
+  EM iter 60: ll=-672.275492  rel_improve=2.2181301664993525e-05  frac_changed=0.0010673218277382846  dead=0
+  EM iter 61: ll=-672.261403  rel_improve=2.095593642925082e-05  frac_changed=0.0011680125662041606  dead=0
+  EM iter 62: ll=-672.241189  rel_improve=3.0069173529760836e-05  frac_changed=0.0013089796000563868  dead=0
+  EM iter 63: ll=-672.216702  rel_improve=3.642634773786183e-05  frac_changed=0.0012485651569768613  dead=0
+  EM iter 64: ll=-672.199881  rel_improve=2.5023016870845582e-05  frac_changed=0.0012888414523632115  dead=0
+  EM iter 65: ll=-672.182875  rel_improve=2.529826739102223e-05  frac_changed=0.000886078498499708  dead=0
+  EM iter 66: ll=-672.170079  rel_improve=1.9037817655132462e-05  frac_changed=0.0009666310892724087  dead=0
+  EM iter 67: ll=-672.160403  rel_improve=1.4393838312432964e-05  frac_changed=0.0008055259077270072  dead=0
+  EM iter 68: ll=-672.154526  rel_improve=8.744101942661497e-06  frac_changed=0.0006041444307952554  dead=0
+  EM iter 69: ll=-672.149054  rel_improve=8.140277828919896e-06  frac_changed=0.000443039249249854  dead=0
+  EM iter 70: ll=-672.143976  rel_improve=7.555026752928212e-06  frac_changed=0.0005437299877157299  dead=0
+  EM converged at iter 70: relative improvement < 1e-05 for 3 consecutive iterations
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/em_diagnostics_learned_spherical.png
+  checkpoint iter 10: ll=-676.3317 ct_nll=2.7012
+  checkpoint iter 20: ll=-674.1949 ct_nll=2.7003
+  checkpoint iter 30: ll=-673.2984 ct_nll=2.7001
+  checkpoint iter 40: ll=-672.9343 ct_nll=2.7000
+  checkpoint iter 50: ll=-672.5432 ct_nll=2.6995
+  checkpoint iter 60: ll=-672.2755 ct_nll=2.6995
+  checkpoint iter 70: ll=-672.1440 ct_nll=2.6994
+
+--- fitting diagonal (diag) ---
+  EM iter 1: ll=-192.733816  rel_improve=None  frac_changed=None  dead=0
+  EM iter 2: ll=-123.462087  rel_improve=0.35941658404747934  frac_changed=0.2892643534647683  dead=0
+  EM iter 3: ll=-97.725273  rel_improve=0.20845924571474478  frac_changed=0.15143887065267736  dead=0
+  EM iter 4: ll=-85.431276  rel_improve=0.12580161265061052  frac_changed=0.09378335380711682  dead=0
+  EM iter 5: ll=-78.313327  rel_improve=0.08331783798468825  frac_changed=0.05944781199025314  dead=0
+  EM iter 6: ll=-74.455046  rel_improve=0.04926723390153354  frac_changed=0.0439817145618946  dead=0
+  EM iter 7: ll=-71.771213  rel_improve=0.03604634760396632  frac_changed=0.03191896409368266  dead=0
+  EM iter 8: ll=-70.102731  rel_improve=0.023247241498418128  frac_changed=0.024467849447207847  dead=0
+  EM iter 9: ll=-68.983757  rel_improve=0.01596191263817749  frac_changed=0.018345852548482592  dead=0
+  EM iter 10: ll=-68.168794  rel_improve=0.011813840835205753  frac_changed=0.013955736351370401  dead=0
+  EM iter 11: ll=-67.480031  rel_improve=0.01010379349180923  frac_changed=0.011881507138973357  dead=0
+  EM iter 12: ll=-67.066894  rel_improve=0.0061223518357403335  frac_changed=0.009082304609622007  dead=0
+  EM iter 13: ll=-66.727693  rel_improve=0.005057647924154092  frac_changed=0.008498298326519927  dead=0
+  EM iter 14: ll=-66.431939  rel_improve=0.004432262323391148  frac_changed=0.0070282135449181386  dead=0
+  EM iter 15: ll=-66.204588  rel_improve=0.00342230213261328  frac_changed=0.005960891717179854  dead=0
+  EM iter 16: ll=-65.920311  rel_improve=0.004293928503591473  frac_changed=0.005276194695611898  dead=0
+  EM iter 17: ll=-65.756385  rel_improve=0.00248672886437703  frac_changed=0.005135227661759671  dead=0
+  EM iter 18: ll=-65.620788  rel_improve=0.002062111332174456  frac_changed=0.004712326560202993  dead=0
+  EM iter 19: ll=-65.468451  rel_improve=0.0023214764720746847  frac_changed=0.004551221378657591  dead=0
+  EM iter 20: ll=-65.321428  rel_improve=0.0022457012419809146  frac_changed=0.004772741003282518  dead=0
+  EM iter 21: ll=-65.191949  rel_improve=0.0019821800368126927  frac_changed=0.0045713595263507665  dead=0
+  EM iter 22: ll=-65.037448  rel_improve=0.002369940871059859  frac_changed=0.003967215095555511  dead=0
+  EM iter 23: ll=-64.910855  rel_improve=0.0019464605288918922  frac_changed=0.0034637614032261314  dead=0
+  EM iter 24: ll=-64.826300  rel_improve=0.001302632661061128  frac_changed=0.0031415510401353285  dead=0
+  EM iter 25: ll=-64.765447  rel_improve=0.0009387144926378129  frac_changed=0.0024769921662605473  dead=0
+  EM iter 26: ll=-64.708909  rel_improve=0.0008729576727114423  frac_changed=0.0025978210524195983  dead=0
+  EM iter 27: ll=-64.651431  rel_improve=0.0008882609135921637  frac_changed=0.002577682904726423  dead=0
+  EM iter 28: ll=-64.594726  rel_improve=0.0008770966922514263  frac_changed=0.002456854018567372  dead=0
+  EM iter 29: ll=-64.546973  rel_improve=0.0007392602696583416  frac_changed=0.002094367360090219  dead=0
+  EM iter 30: ll=-64.500543  rel_improve=0.0007193267139320158  frac_changed=0.0022957488370219706  dead=0
+  EM iter 31: ll=-64.452453  rel_improve=0.00074557956216797  frac_changed=0.0019131240308516422  dead=0
+  EM iter 32: ll=-64.391004  rel_improve=0.0009533957278712146  frac_changed=0.0019332621785448174  dead=0
+  EM iter 33: ll=-64.346924  rel_improve=0.0006845620749637673  frac_changed=0.0016110518154540145  dead=0
+  EM iter 34: ll=-64.315709  rel_improve=0.0004851059211145724  frac_changed=0.0016311899631471897  dead=0
+  EM iter 35: ll=-64.285002  rel_improve=0.0004774510367593546  frac_changed=0.001651328110840365  dead=0
+  EM iter 36: ll=-64.250319  rel_improve=0.0005395185515370923  frac_changed=0.0016916044062267152  dead=0
+  EM iter 37: ll=-64.207181  rel_improve=0.0006714068155871335  frac_changed=0.0020540910647038686  dead=0
+  EM iter 38: ll=-64.145547  rel_improve=0.0009599166873631359  frac_changed=0.0018527095877721167  dead=0
+  EM iter 39: ll=-64.097425  rel_improve=0.0007502019733324962  frac_changed=0.0017117425539198905  dead=0
+  EM iter 40: ll=-64.066809  rel_improve=0.00047764267270740336  frac_changed=0.0010673218277382846  dead=0
+  EM iter 41: ll=-64.043037  rel_improve=0.00037105376186475784  frac_changed=0.001429808486215438  dead=0
+  EM iter 42: ll=-64.008261  rel_improve=0.0005430139753048112  frac_changed=0.0011478744185109853  dead=0
+  EM iter 43: ll=-63.984583  rel_improve=0.0003699154728007966  frac_changed=0.001006907384658759  dead=0
+  EM iter 44: ll=-63.963374  rel_improve=0.00033146920589064105  frac_changed=0.0009867692369655838  dead=0
+  EM iter 45: ll=-63.946656  rel_improve=0.0002613777280164412  frac_changed=0.0006846970215679561  dead=0
+  EM iter 46: ll=-63.934384  rel_improve=0.00019190241255974885  frac_changed=0.000563868135408905  dead=0
+  EM iter 47: ll=-63.924612  rel_improve=0.00015284291518204417  frac_changed=0.0004631773969430292  dead=0
+  EM iter 48: ll=-63.915190  rel_improve=0.0001473963446382876  frac_changed=0.00034234851078397807  dead=0
+  EM iter 49: ll=-63.906262  rel_improve=0.00013968521647905732  frac_changed=0.00034234851078397807  dead=0
+  EM iter 50: ll=-63.901707  rel_improve=7.12789046537328e-05  frac_changed=0.0003222103630908029  dead=0
+  EM iter 51: ll=-63.896720  rel_improve=7.803491583574703e-05  frac_changed=0.00034234851078397807  dead=0
+  EM iter 52: ll=-63.891547  rel_improve=8.095455437635454e-05  frac_changed=0.0003222103630908029  dead=0
+  EM iter 53: ll=-63.886393  rel_improve=8.06682210451619e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 54: ll=-63.882898  rel_improve=5.4708616288685976e-05  frac_changed=0.00038262480617032844  dead=0
+  EM iter 55: ll=-63.878288  rel_improve=7.216348757336724e-05  frac_changed=0.000221519624624927  dead=0
+  EM iter 56: ll=-63.873199  rel_improve=7.96684303627722e-05  frac_changed=0.00034234851078397807  dead=0
+  EM iter 57: ll=-63.867737  rel_improve=8.550998574328662e-05  frac_changed=0.00034234851078397807  dead=0
+  EM iter 58: ll=-63.861695  rel_improve=9.460564495256647e-05  frac_changed=0.00038262480617032844  dead=0
+  EM iter 59: ll=-63.852692  rel_improve=0.00014097812399237422  frac_changed=0.000221519624624927  dead=0
+  EM iter 60: ll=-63.846535  rel_improve=9.642653511730565e-05  frac_changed=0.00036248665847715325  dead=0
+  EM iter 61: ll=-63.839471  rel_improve=0.00011064297445549401  frac_changed=0.0002819340677044525  dead=0
+  EM iter 62: ll=-63.828770  rel_improve=0.0001676206427954616  frac_changed=0.00036248665847715325  dead=0
+  EM iter 63: ll=-63.814248  rel_improve=0.0002275111309006081  frac_changed=0.0003020722153976277  dead=0
+  EM iter 64: ll=-63.804055  rel_improve=0.00015973541604957314  frac_changed=0.0002013814769317518  dead=0
+  EM iter 65: ll=-63.798131  rel_improve=9.284394448883579e-05  frac_changed=0.00024165777231810218  dead=0
+  EM iter 66: ll=-63.791208  rel_improve=0.00010851866862675954  frac_changed=0.0003020722153976277  dead=0
+  EM iter 67: ll=-63.784300  rel_improve=0.00010829260746172801  frac_changed=0.00018124332923857663  dead=0
+  EM iter 68: ll=-63.778415  rel_improve=9.22597697511538e-05  frac_changed=0.00014096703385222626  dead=0
+  EM iter 69: ll=-63.773620  rel_improve=7.518323197936351e-05  frac_changed=0.0002013814769317518  dead=0
+  EM iter 70: ll=-63.771423  rel_improve=3.443884191970535e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 71: ll=-63.769096  rel_improve=3.6492206210218506e-05  frac_changed=0.00018124332923857663  dead=0
+  EM iter 72: ll=-63.765659  rel_improve=5.390838767767679e-05  frac_changed=0.0001006907384658759  dead=0
+  EM iter 73: ll=-63.761121  rel_improve=7.116240945173461e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 74: ll=-63.753393  rel_improve=0.00012120223208633868  frac_changed=0.00014096703385222626  dead=0
+  EM iter 75: ll=-63.750905  rel_improve=3.902867097954786e-05  frac_changed=0.00012082888615905109  dead=0
+  EM iter 76: ll=-63.749675  rel_improve=1.9292572115278825e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 77: ll=-63.747328  rel_improve=3.681525522538351e-05  frac_changed=8.055259077270072e-05  dead=0
+  EM iter 78: ll=-63.744314  rel_improve=4.728365523204871e-05  frac_changed=0.00014096703385222626  dead=0
+  EM iter 79: ll=-63.742750  rel_improve=2.4526497864742134e-05  frac_changed=8.055259077270072e-05  dead=0
+  EM iter 80: ll=-63.739851  rel_improve=4.54790691071176e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 81: ll=-63.733278  rel_improve=0.00010313006739437363  frac_changed=0.00014096703385222626  dead=0
+  EM iter 82: ll=-63.719727  rel_improve=0.000212613423657325  frac_changed=0.00014096703385222626  dead=0
+  EM iter 83: ll=-63.715256  rel_improve=7.0165449294247e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 84: ll=-63.712238  rel_improve=4.7366499524172846e-05  frac_changed=8.055259077270072e-05  dead=0
+  EM iter 85: ll=-63.710718  rel_improve=2.386567072846284e-05  frac_changed=0.00014096703385222626  dead=0
+  EM iter 86: ll=-63.707911  rel_improve=4.4050494311197416e-05  frac_changed=0.00014096703385222626  dead=0
+  EM iter 87: ll=-63.704456  rel_improve=5.424246858927617e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 88: ll=-63.701652  rel_improve=4.401009712936914e-05  frac_changed=8.055259077270072e-05  dead=0
+  EM iter 89: ll=-63.699171  rel_improve=3.894706167288879e-05  frac_changed=0.00016110518154540144  dead=0
+  EM iter 90: ll=-63.691578  rel_improve=0.00011919788969038686  frac_changed=0.00014096703385222626  dead=0
+  EM iter 91: ll=-63.688062  rel_improve=5.5203199407764064e-05  frac_changed=0.0001006907384658759  dead=0
+  EM iter 92: ll=-63.686466  rel_improve=2.5058402566471792e-05  frac_changed=0.00012082888615905109  dead=0
+  EM iter 93: ll=-63.684392  rel_improve=3.256155192114784e-05  frac_changed=0.0001006907384658759  dead=0
+  EM iter 94: ll=-63.683132  rel_improve=1.979959648078897e-05  frac_changed=0.00012082888615905109  dead=0
+  EM iter 95: ll=-63.682105  rel_improve=1.6126264741837357e-05  frac_changed=0.0001006907384658759  dead=0
+  EM iter 96: ll=-63.681076  rel_improve=1.6146527096002354e-05  frac_changed=6.0414443079525545e-05  dead=0
+  EM iter 97: ll=-63.679486  rel_improve=2.497154802306398e-05  frac_changed=6.0414443079525545e-05  dead=0
+  EM iter 98: ll=-63.678367  rel_improve=1.7571002824348555e-05  frac_changed=4.027629538635036e-05  dead=0
+  EM iter 99: ll=-63.678201  rel_improve=2.616552464209272e-06  frac_changed=0.0  dead=0
+  EM iter 100: ll=-63.678150  rel_improve=7.970402634711728e-07  frac_changed=0.0  dead=0
+  EM iter 101: ll=-63.678038  rel_improve=1.7495865127967547e-06  frac_changed=4.027629538635036e-05  dead=0
+  EM converged at iter 101: relative improvement < 1e-05 for 3 consecutive iterations
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/em_diagnostics_diagonal.png
+  checkpoint iter 10: ll=-68.1688 ct_nll=2.6959
+  checkpoint iter 20: ll=-65.3214 ct_nll=2.6949
+  checkpoint iter 30: ll=-64.5005 ct_nll=2.6954
+  checkpoint iter 40: ll=-64.0668 ct_nll=2.6950
+  checkpoint iter 50: ll=-63.9017 ct_nll=2.6950
+  checkpoint iter 60: ll=-63.8465 ct_nll=2.6950
+  checkpoint iter 70: ll=-63.7714 ct_nll=2.6949
+  checkpoint iter 80: ll=-63.7399 ct_nll=2.6949
+  checkpoint iter 90: ll=-63.6916 ct_nll=2.6948
+  checkpoint iter 100: ll=-63.6781 ct_nll=2.6948
+  checkpoint iter 101: ll=-63.6780 ct_nll=2.6948
+
+--- fitting tied_diagonal (tied_diag) ---
+  EM iter 1: ll=-274.940617  rel_improve=None  frac_changed=None  dead=0
+  EM iter 2: ll=-219.517722  rel_improve=0.20158133010224183  frac_changed=0.3227742312262118  dead=0
+  EM iter 3: ll=-197.855100  rel_improve=0.09868279308361508  frac_changed=0.162776647803935  dead=0
+  EM iter 4: ll=-188.576893  rel_improve=0.04689395050770292  frac_changed=0.09251465050244678  dead=0
+  EM iter 5: ll=-184.559672  rel_improve=0.021302825289985925  frac_changed=0.06168314638419558  dead=0
+  EM iter 6: ll=-181.757205  rel_improve=0.015184613886529185  frac_changed=0.04589483859274624  dead=0
+  EM iter 7: ll=-179.750576  rel_improve=0.011040158889716536  frac_changed=0.03520148216767022  dead=0
+  EM iter 8: ll=-178.511347  rel_improve=0.006894159585761419  frac_changed=0.0277503675211954  dead=0
+  EM iter 9: ll=-177.688956  rel_improve=0.004606939456333729  frac_changed=0.021386712850152045  dead=0
+  EM iter 10: ll=-177.048240  rel_improve=0.0036058323231009715  frac_changed=0.01860764846849387  dead=0
+  EM iter 11: ll=-176.524554  rel_improve=0.0029578710299956084  frac_changed=0.016352175926858246  dead=0
+  EM iter 12: ll=-176.083279  rel_improve=0.00249979102334371  frac_changed=0.013492558954427372  dead=0
+  EM iter 13: ll=-175.774559  rel_improve=0.0017532623227254555  frac_changed=0.011458606037416679  dead=0
+  EM iter 14: ll=-175.547518  rel_improve=0.0012916630963237413  frac_changed=0.009384376825019634  dead=0
+  EM iter 15: ll=-175.347060  rel_improve=0.0011418980517283767  frac_changed=0.007874015748031496  dead=0
+  EM iter 16: ll=-175.192852  rel_improve=0.0008794451346599762  frac_changed=0.006565036147975109  dead=0
+  EM iter 17: ll=-175.058475  rel_improve=0.0007670238742875881  frac_changed=0.005638681354089051  dead=0
+  EM iter 18: ll=-174.945787  rel_improve=0.000643718668612331  frac_changed=0.004369978049419014  dead=0
+  EM iter 19: ll=-174.852806  rel_improve=0.00053148287950661  frac_changed=0.003866524357089635  dead=0
+  EM iter 20: ll=-174.771355  rel_improve=0.0004658280255699231  frac_changed=0.003564452141692007  dead=0
+  EM iter 21: ll=-174.701127  rel_improve=0.00040182318967587206  frac_changed=0.002859616972430876  dead=0
+  EM iter 22: ll=-174.640474  rel_improve=0.0003471857985800757  frac_changed=0.004229011015566788  dead=0
+  EM iter 23: ll=-174.540998  rel_improve=0.0005696025691772442  frac_changed=0.003242241778601204  dead=0
+  EM iter 24: ll=-174.438204  rel_improve=0.0005889379541515773  frac_changed=0.003806109914010109  dead=0
+  EM iter 25: ll=-174.370147  rel_improve=0.0003901517288474796  frac_changed=0.0034637614032261314  dead=0
+  EM iter 26: ll=-174.307578  rel_improve=0.00035882931094852514  frac_changed=0.0028394788247377008  dead=0
+  EM iter 27: ll=-174.256830  rel_improve=0.000291140342251144  frac_changed=0.0030207221539762775  dead=0
+  EM iter 28: ll=-174.213056  rel_improve=0.000251203460512454  frac_changed=0.002517268461646898  dead=0
+  EM iter 29: ll=-174.170064  rel_improve=0.00024677726649768926  frac_changed=0.0024165777231810216  dead=0
+  EM iter 30: ll=-174.141131  rel_improve=0.00016612001115397378  frac_changed=0.0017520188493062407  dead=0
+  EM iter 31: ll=-174.118687  rel_improve=0.00012888496087040853  frac_changed=0.0015304992246813138  dead=0
+  EM iter 32: ll=-174.104289  rel_improve=8.268674404236886e-05  frac_changed=0.0017117425539198905  dead=0
+  EM iter 33: ll=-174.089905  rel_improve=8.262175457357542e-05  frac_changed=0.001449946633908613  dead=0
+  EM iter 34: ll=-174.078081  rel_improve=6.791767662592148e-05  frac_changed=0.001228427009283686  dead=0
+  EM iter 35: ll=-174.067292  rel_improve=6.197811160240272e-05  frac_changed=0.001228427009283686  dead=0
+  EM iter 36: ll=-174.056277  rel_improve=6.328019463629871e-05  frac_changed=0.000886078498499708  dead=0
+  EM iter 37: ll=-174.049765  rel_improve=3.74136280903834e-05  frac_changed=0.0007652496123406569  dead=0
+  EM iter 38: ll=-174.043882  rel_improve=3.379834196165588e-05  frac_changed=0.0007652496123406569  dead=0
+  EM iter 39: ll=-174.038795  rel_improve=2.922736387495706e-05  frac_changed=0.0006444207261816058  dead=0
+  EM iter 40: ll=-174.034204  rel_improve=2.6380094159959013e-05  frac_changed=0.0006041444307952554  dead=0
+  EM iter 41: ll=-174.029588  rel_improve=2.652303680226242e-05  frac_changed=0.0007652496123406569  dead=0
+  EM iter 42: ll=-174.024104  rel_improve=3.15150594007263e-05  frac_changed=0.0006444207261816058  dead=0
+  EM iter 43: ll=-174.019147  rel_improve=2.8481389070684674e-05  frac_changed=0.0006846970215679561  dead=0
+  EM iter 44: ll=-174.011984  rel_improve=4.1162601953157957e-05  frac_changed=0.0005235918400225548  dead=0
+  EM iter 45: ll=-174.004171  rel_improve=4.490056276593796e-05  frac_changed=0.000443039249249854  dead=0
+  EM iter 46: ll=-173.994777  rel_improve=5.3988342596610985e-05  frac_changed=0.000443039249249854  dead=0
+  EM iter 47: ll=-173.969912  rel_improve=0.0001429049980241194  frac_changed=0.0007853877600338321  dead=0
+  EM iter 48: ll=-173.903620  rel_improve=0.0003810542755664346  frac_changed=0.000443039249249854  dead=0
+  EM iter 49: ll=-173.875988  rel_improve=0.00015889537034857103  frac_changed=0.00034234851078397807  dead=0
+  EM iter 50: ll=-173.872769  rel_improve=1.8507744427828203e-05  frac_changed=0.0003020722153976277  dead=0
+  EM iter 51: ll=-173.870295  rel_improve=1.4228905900165246e-05  frac_changed=0.00034234851078397807  dead=0
+  EM iter 52: ll=-173.868231  rel_improve=1.1872094646679904e-05  frac_changed=0.0002819340677044525  dead=0
+  EM iter 53: ll=-173.866871  rel_improve=7.820739671516024e-06  frac_changed=0.0002617959200112774  dead=0
+  EM iter 54: ll=-173.866011  rel_improve=4.9516905638323345e-06  frac_changed=0.000221519624624927  dead=0
+  EM iter 55: ll=-173.865072  rel_improve=5.398549432464459e-06  frac_changed=0.00016110518154540144  dead=0
+  EM converged at iter 55: relative improvement < 1e-05 for 3 consecutive iterations
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/em_diagnostics_tied_diagonal.png
+  checkpoint iter 10: ll=-177.0482 ct_nll=2.6961
+  checkpoint iter 20: ll=-174.7714 ct_nll=2.6964
+  checkpoint iter 30: ll=-174.1411 ct_nll=2.6966
+  checkpoint iter 40: ll=-174.0342 ct_nll=2.6965
+  checkpoint iter 50: ll=-173.8728 ct_nll=2.6965
+  checkpoint iter 55: ll=-173.8651 ct_nll=2.6965
+
+--- equal_spherical_sanity (fixed, not EM-fit) ---
+equal_spherical_sanity vs k-means agreement: 99.994% (expected: 100.000%)
+
+Best family by controller-train NLL: diagonal
+
+=== Section 3: counterfactual decomposition ===
+  model0_means_only: ct_nll=2.7004  vs_kmeans_changed=70.27%  vs_previous_changed=70.27%
+  model1_alpha_equal_spherical: ct_nll=2.7007  vs_kmeans_changed=70.28%  vs_previous_changed=1.61%
+  model2_alpha_component_spherical: ct_nll=2.7128  vs_kmeans_changed=71.72%  vs_previous_changed=51.31%
+  model3_full_diagonal: ct_nll=2.6948  vs_kmeans_changed=79.86%  vs_previous_changed=76.49%
+
+=== Section 4: covariance diagnostics + reg_covar sensitivity ===
+  reg_covar=1e-06: ct_nll=2.6948  n_dead=0  n_iter=101
+  reg_covar=0.0001: ct_nll=2.6948  n_dead=0  n_iter=106
+  reg_covar=0.01: ct_nll=2.6977  n_dead=0  n_iter=85
+
+=== Section 5: multi-seed stability (diagonal covariance) ===
+  seed 42: ll=-63.6780  ct_nll=2.6948  n_iter=101
+  seed 43: ll=-64.7992  ct_nll=2.6968  n_iter=104
+  seed 44: ll=-67.6725  ct_nll=2.6980  n_iter=85
+  seed 45: ll=-66.1024  ct_nll=2.6978  n_iter=74
+  seed 46: ll=-65.4168  ct_nll=2.6985  n_iter=104
+  random-init (non-kmeans-seeded): ll=-69.6416  ct_nll=2.6999  n_iter=80
+
+=== Section 6: assignment comparison ===
+{
+  "n_components_matched_to_same_index": 245,
+  "fraction_points_agreeing_after_matching": 0.17687335118915762,
+  "adjusted_rand_index": 0.11618208722497506,
+  "normalized_mutual_info": 0.5461117217431126,
+  "cluster_size_correlation": 0.37878655160533264
+}
+Margin percentile -> disagreement fraction:
+  0-1%: disagree=92.1%  mean_margin=0.0289
+  1-5%: disagree=91.1%  mean_margin=0.1560
+  5-10%: disagree=90.3%  mean_margin=0.3612
+  10-25%: disagree=90.5%  mean_margin=0.8282
+  25-50%: disagree=87.0%  mean_margin=1.8780
+  50-100%: disagree=70.9%  mean_margin=6.8131
+
+=== Section 7: token-information diagnostics ===
+k-means: H(Y|C)=3.2102  I(C;Y)=2.6993
+GMM-hard: H(Y|C)=2.6484  I(C;Y)=3.2611
+
+=== Section 8: prototype movement vs JS divergence ===
+{
+  "n_components_matched_to_same_index": 245,
+  "n_components_total": 500,
+  "prototype_movement": {
+    "mean": 16.18277189494006,
+    "std": 12.790909491264804,
+    "min": 0.304075895955774,
+    "max": 184.99096530176135
+  },
+  "token_distribution_js_divergence": {
+    "mean": 0.32199129424027695,
+    "std": 0.17284700280075818,
+    "min": 0.0,
+    "max": 0.6931471805599454
+  },
+  "effective_mass_vs_hard_size": {
+    "hard_sizes": {
+      "mean": 99.314,
+      "std": 48.328949957556496
+    },
+    "soft_effective_mass": {
+      "mean": 99.314,
+      "std": 57.33797523456858
+    }
+  },
+  "mixture_weights_alpha": {
+    "mean": 0.002,
+    "std": 0.001154680613701363,
+    "min": 8.055259077270072e-05,
+    "max": 0.006484483557202408
+  }
+}
+
+=== Section 9: PCA visualization ===
+  saved /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/figures/pca_projection_overview.png
+  NOTE: UMAP was not run — it is not an existing project dependency, so it was skipped rather than silently adding a new one; PCA alone was explicitly prioritized.
+
+=== Section 10: boundary-stratified GMM improvement over k-means ===
+  [controller_train] boundary percentile -> (NLL_kmeans - NLL_gmm):
+    0-1%: -0.0202
+    1-5%: -0.0020
+    5-10%: +0.0004
+    10-25%: +0.0036
+    25-50%: +0.0087
+    50-100%: +0.0132
+  [validation] boundary percentile -> (NLL_kmeans - NLL_gmm):
+    0-1%: -0.0065
+    1-5%: +0.0218
+    5-10%: +0.0052
+    10-25%: +0.0072
+    25-50%: +0.0082
+    50-100%: +0.0066
+
+=== Section 11/13: complexity vs. performance, final NLL table ===
+{
+  "kmeans": {
+    "n_covariance_params": 0,
+    "converged_log_likelihood": null,
+    "assignment_disagreement_with_kmeans": 0.0,
+    "H_Y_given_C": 3.2102049458642457,
+    "controller_train_nll": 2.7038574684786205,
+    "validation_nll": 2.7451901707666737
+  },
+  "learned_spherical": {
+    "n_covariance_params": 500,
+    "converged_log_likelihood": -672.1439763254039,
+    "assignment_disagreement_with_kmeans": 0.3224318827154279,
+    "H_Y_given_C": 3.180395160930406,
+    "controller_train_nll": 2.699362601320824,
+    "validation_nll": 2.7401979664395433
+  },
+  "diagonal": {
+    "n_covariance_params": 384000,
+    "converged_log_likelihood": -63.678038445248895,
+    "assignment_disagreement_with_kmeans": 0.8231266488108424,
+    "H_Y_given_C": 2.648389485228122,
+    "controller_train_nll": 2.6948121544412578,
+    "validation_nll": 2.7376630319062816
+  },
+  "tied_diagonal": {
+    "n_covariance_params": 768,
+    "converged_log_likelihood": -173.86507189225713,
+    "assignment_disagreement_with_kmeans": 0.8369816944237469,
+    "H_Y_given_C": 2.620130881400362,
+    "controller_train_nll": 2.6964771513557833,
+    "validation_nll": 2.7380282633643436
+  }
+}
+
+=== FINAL INTERPRETATION ===
+1. Was the original 50-iteration GMM converged? Diagonal family converged=True after 101 iterations (rel_tol=1e-05).
+2. See likelihood_vs_dime_nll_*.png and checkpoint_curve in results JSON — compare whether controller_train_nll keeps improving after log-likelihood plateaus.
+3. See counterfactual_decomposition — compare frac_assignment_changed_vs_previous_model across model0->model1->model2->model3 to see which step moves the most points / NLL.
+4. Global assignment agreement with k-means (diagonal): 17.7%  ARI=0.1162
+5. See margin_percentile_disagreement_curve.png — check whether disagreement fraction rises monotonically toward the lowest-margin band.
+6. H(Y|C): k-means=3.2102 vs GMM-hard=2.6484 (lower is more informative clusters).
+7. See multi_seed_stability — log_likelihood_vs_nll_correlation=-0.7551, highest_likelihood_seed_is_best_nll_seed=True
+8. See point 7 — same correlation number answers this directly.
+9. See final_summary_table for the complexity/performance tradeoff across all 4 families.
+10. Judge from the combination of all of the above — see final_summary_table's validation_nll column for the headline comparison.
+
+All results saved to results/gmm_deep_dive.json
+GMM deep-dive job done: Tue Oct 13 05:12:48 PM CDT 2026
