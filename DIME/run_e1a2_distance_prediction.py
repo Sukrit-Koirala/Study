@@ -243,6 +243,27 @@ def main():
         print(f"[{name}] n={mask.sum()} ({mask.mean()*100:.2f}%)  mean_delta_L={rq3[name]['mean_delta_L']:.4f}  "
               f"frac_dime_improves={rq3[name]['frac_dime_improves_standalone']:.4f}  mean_js={rq3[name]['mean_js']:.4f}")
 
+        # Improvement/degradation magnitude comparison (closer vs. farther only), reusing
+        # the exact same finite-paired idx/delta_L/tol already computed above -- no new
+        # retrieval, no new tuning, no change to any prior E1/E1A.2 field.
+        if name in ("closer_centroid", "farther_centroid"):
+            dL = delta_L[idx]
+            improved = dL < 0
+            worsened = dL > 0
+            n_improved, n_worsened = int(improved.sum()), int(worsened.sum())
+            rq3[name]["magnitude_comparison"] = {
+                "mean_improvement_magnitude_mean_neg_deltaL": float(-dL[improved].mean()) if n_improved > 0 else None,
+                "mean_degradation_mean_deltaL": float(dL[worsened].mean()) if n_worsened > 0 else None,
+                "p95_degradation_among_worsened": float(np.percentile(dL[worsened], 95)) if n_worsened > 0 else None,
+                "n_improved": n_improved, "n_worsened": n_worsened,
+                "frac_dime_improves_standalone": float(improved.mean()),
+                "n_excluded_infinite_in_group": int(mask.sum()) - int(len(idx)),
+            }
+            consistency_ok = abs(rq3[name]["magnitude_comparison"]["frac_dime_improves_standalone"]
+                                  - rq3[name]["frac_dime_improves_standalone"]) < 1e-9
+            print(f"  [{name}] magnitude_comparison: {rq3[name]['magnitude_comparison']}  "
+                  f"(consistent with existing frac_dime_improves: {consistency_ok})")
+
     report["RQ3"] = rq3
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
