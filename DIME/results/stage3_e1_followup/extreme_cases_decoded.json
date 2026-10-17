@@ -1,0 +1,1628 @@
+{
+  "largest_positive_deltaL": [
+    {
+      "position_index": 75706,
+      "chunk_id": 596,
+      "alignment_validated": true,
+      "decoded_context": " film director Kirk Jones , who cast him in his 1998 feature film Waking",
+      "true_next_token": " Ned",
+      "true_token_id": 35754,
+      "p_lm_true": 5.655024779116502e-06,
+      "p_raw_standalone": 0.9914264876983676,
+      "p_dime_standalone": 0.00019758146859907854,
+      "delta_L_tuned": 9.20785883831464,
+      "js_tuned": 0.6746969986706781,
+      "d_raw_nearest": 16.1881160736084,
+      "d_dime_nearest": 22.955303192138672,
+      "top_raw_neighbor_tokens": [
+        " Ned",
+        " \"",
+        " ,",
+        " Evolution",
+        " in"
+      ],
+      "top_raw_neighbor_distances": [
+        16.1881160736084,
+        23.138879776000977,
+        23.95956802368164,
+        24.5657958984375,
+        24.587512969970703
+      ],
+      "top_dime_cluster_distances": [
+        22.955303192138672,
+        25.149154663085938,
+        25.264665603637695,
+        26.102598190307617,
+        26.723552703857422
+      ]
+    },
+    {
+      "position_index": 26148,
+      "chunk_id": 205,
+      "alignment_validated": true,
+      "decoded_context": " Loose was good and \" want [ ed ] people to hear as much of it as possible \" before she took time off . Two other songs , \" Te Busqu\u00e9 \" and \" No Hay",
+      "true_next_token": " Ig",
+      "true_token_id": 28818,
+      "p_lm_true": 6.424691946449457e-06,
+      "p_raw_standalone": 0.49381598082350253,
+      "p_dime_standalone": 9.435240478953436e-05,
+      "delta_L_tuned": 9.001219165445093,
+      "js_tuned": 0.4496788817547408,
+      "d_raw_nearest": 18.925132751464844,
+      "d_dime_nearest": 20.776464462280273,
+      "top_raw_neighbor_tokens": [
+        " Ig",
+        " Australia",
+        "in",
+        "en",
+        " Ig"
+      ],
+      "top_raw_neighbor_distances": [
+        18.925132751464844,
+        21.834318161010742,
+        22.089271545410156,
+        22.221229553222656,
+        22.32923698425293
+      ],
+      "top_dime_cluster_distances": [
+        20.776464462280273,
+        22.68886375427246,
+        22.813003540039062,
+        22.876991271972656,
+        23.25705909729004
+      ]
+    },
+    {
+      "position_index": 34502,
+      "chunk_id": 271,
+      "alignment_validated": true,
+      "decoded_context": " . \n<|endoftext|> Monument 114 was dedicated in 794 by Ruler 8 . It commemorates the death of an important noble , apparently a relative or vassal of Ruler 8 's predecessor Tuun",
+      "true_next_token": " Chap",
+      "true_token_id": 15954,
+      "p_lm_true": 9.932685316016432e-06,
+      "p_raw_standalone": 0.5591724985067199,
+      "p_dime_standalone": 0.00012268644795873719,
+      "delta_L_tuned": 8.793590825900466,
+      "js_tuned": 0.5053916737693802,
+      "d_raw_nearest": 11.800763130187988,
+      "d_dime_nearest": 13.825428009033203,
+      "top_raw_neighbor_tokens": [
+        " Chap",
+        " ..",
+        " Ph",
+        " ",
+        " ,"
+      ],
+      "top_raw_neighbor_distances": [
+        11.800763130187988,
+        14.321385383605957,
+        14.695448875427246,
+        14.883233070373535,
+        15.21240520477295
+      ],
+      "top_dime_cluster_distances": [
+        13.825428009033203,
+        15.195682525634766,
+        16.887065887451172,
+        17.256866455078125,
+        17.44286346435547
+      ]
+    },
+    {
+      "position_index": 29730,
+      "chunk_id": 234,
+      "alignment_validated": true,
+      "decoded_context": " Shiraz , Pasargadae , and Kashan . Wheeler",
+      "true_next_token": " enjoyed",
+      "true_token_id": 8359,
+      "p_lm_true": 3.343996866078669e-07,
+      "p_raw_standalone": 0.3672302097839826,
+      "p_dime_standalone": 0.00018270677064545908,
+      "delta_L_tuned": 8.505817010207295,
+      "js_tuned": 0.4410705656383469,
+      "d_raw_nearest": 12.73019027709961,
+      "d_dime_nearest": 15.719194412231445,
+      "top_raw_neighbor_tokens": [
+        " enjoyed",
+        " '",
+        " \u2013",
+        " ,",
+        " '"
+      ],
+      "top_raw_neighbor_distances": [
+        12.73019027709961,
+        13.431636810302734,
+        14.542778015136719,
+        14.884425163269043,
+        15.505158424377441
+      ],
+      "top_dime_cluster_distances": [
+        15.719194412231445,
+        16.172910690307617,
+        17.364757537841797,
+        17.474037170410156,
+        17.8463134765625
+      ]
+    },
+    {
+      "position_index": 58822,
+      "chunk_id": 463,
+      "alignment_validated": true,
+      "decoded_context": " return for this action , Mathews received the British East and West Africa campaign medal . \n<|endoftext|><|endoftext|> HMS",
+      "true_next_token": " Bore",
+      "true_token_id": 45409,
+      "p_lm_true": 5.752215201937361e-06,
+      "p_raw_standalone": 0.29453833116977124,
+      "p_dime_standalone": 0.00011962048116000324,
+      "delta_L_tuned": 8.3655696041096,
+      "js_tuned": 0.3860697533058379,
+      "d_raw_nearest": 16.156015396118164,
+      "d_dime_nearest": 17.946880340576172,
+      "top_raw_neighbor_tokens": [
+        " Bore",
+        " Robert",
+        " .",
+        " Co",
+        " Admir"
+      ],
+      "top_raw_neighbor_distances": [
+        16.156015396118164,
+        18.159629821777344,
+        18.216907501220703,
+        18.4044246673584,
+        18.481985092163086
+      ],
+      "top_dime_cluster_distances": [
+        17.946880340576172,
+        19.568981170654297,
+        20.4101505279541,
+        20.834529876708984,
+        21.428876876831055
+      ]
+    },
+    {
+      "position_index": 3025,
+      "chunk_id": 23,
+      "alignment_validated": true,
+      "decoded_context": "\n<|endoftext|> Silver background indicates overtime / shootout loss ( 1 point ) . \n<|endoftext|> = Games Played ; TOI = \n<|endoftext|> = Wins ; L = \n<|endoftext|><|endoftext|> = There 's",
+      "true_next_token": " Got",
+      "true_token_id": 11853,
+      "p_lm_true": 3.265965642640367e-05,
+      "p_raw_standalone": 0.9933590786509843,
+      "p_dime_standalone": 0.0002890956523832894,
+      "delta_L_tuned": 8.356993809687934,
+      "js_tuned": 0.6776680817040053,
+      "d_raw_nearest": 7.340799808502197,
+      "d_dime_nearest": 15.85031795501709,
+      "top_raw_neighbor_tokens": [
+        " Got",
+        " Got",
+        " not",
+        " already",
+        " White"
+      ],
+      "top_raw_neighbor_distances": [
+        7.340799808502197,
+        13.203476905822754,
+        15.113133430480957,
+        15.221383094787598,
+        15.312769889831543
+      ],
+      "top_dime_cluster_distances": [
+        15.85031795501709,
+        16.42734146118164,
+        16.63047218322754,
+        16.733413696289062,
+        16.91497802734375
+      ]
+    },
+    {
+      "position_index": 60192,
+      "chunk_id": 473,
+      "alignment_validated": true,
+      "decoded_context": " each . To solve this issue , the researchers came up with flexible PCI Express cables , and Tones developed a custom cage which allowed the video cards to suspend over the motherboard . \n<|endoftext|><|endoftext|> USS",
+      "true_next_token": " Bre",
+      "true_token_id": 3719,
+      "p_lm_true": 3.595314046833664e-05,
+      "p_raw_standalone": 0.8319160292224493,
+      "p_dime_standalone": 0.00020753656130577912,
+      "delta_L_tuned": 8.272928944069088,
+      "js_tuned": 0.6910622844479181,
+      "d_raw_nearest": 7.658204078674316,
+      "d_dime_nearest": 20.71240234375,
+      "top_raw_neighbor_tokens": [
+        " Bre",
+        " Atlanta",
+        " ",
+        " Stan",
+        " Miz"
+      ],
+      "top_raw_neighbor_distances": [
+        7.658204078674316,
+        9.2584810256958,
+        18.785083770751953,
+        18.820144653320312,
+        19.449270248413086
+      ],
+      "top_dime_cluster_distances": [
+        20.71240234375,
+        21.310699462890625,
+        21.872955322265625,
+        22.047975540161133,
+        22.283405303955078
+      ]
+    },
+    {
+      "position_index": 517,
+      "chunk_id": 4,
+      "alignment_validated": true,
+      "decoded_context": " \n<|endoftext|> 14 @,@ 000 buck &",
+      "true_next_token": " ball",
+      "true_token_id": 2613,
+      "p_lm_true": 3.387276956345886e-05,
+      "p_raw_standalone": 0.9347719464424806,
+      "p_dime_standalone": 0.00032983377556699325,
+      "delta_L_tuned": 8.211322668264238,
+      "js_tuned": 0.6189995286405056,
+      "d_raw_nearest": 9.3753080368042,
+      "d_dime_nearest": 14.720992088317871,
+      "top_raw_neighbor_tokens": [
+        " ball",
+        " composed",
+        " Pit",
+        " percussion",
+        " you"
+      ],
+      "top_raw_neighbor_distances": [
+        9.3753080368042,
+        15.311367988586426,
+        15.346056938171387,
+        15.445289611816406,
+        15.517809867858887
+      ],
+      "top_dime_cluster_distances": [
+        14.720992088317871,
+        14.865503311157227,
+        15.013554573059082,
+        15.10123348236084,
+        15.873209953308105
+      ]
+    },
+    {
+      "position_index": 39413,
+      "chunk_id": 310,
+      "alignment_validated": true,
+      "decoded_context": " Times , which published a condensed version of this writer 's findings ; and Alexander Cockburn , who devoted a series of columns in The Nation exposing the hoax . ... The periodicals in which From Time",
+      "true_next_token": " Imm",
+      "true_token_id": 9543,
+      "p_lm_true": 5.1134597924828995e-06,
+      "p_raw_standalone": 0.8145497822683464,
+      "p_dime_standalone": 0.0005570474373455882,
+      "delta_L_tuned": 8.124669461423734,
+      "js_tuned": 0.5155806733231718,
+      "d_raw_nearest": 20.146648406982422,
+      "d_dime_nearest": 24.6065731048584,
+      "top_raw_neighbor_tokens": [
+        " Imm",
+        " Dynamic",
+        " =",
+        " \"",
+        " "
+      ],
+      "top_raw_neighbor_distances": [
+        20.146648406982422,
+        25.685070037841797,
+        25.787206649780273,
+        25.84419059753418,
+        25.84781265258789
+      ],
+      "top_dime_cluster_distances": [
+        24.6065731048584,
+        26.109188079833984,
+        26.286022186279297,
+        26.455690383911133,
+        26.765567779541016
+      ]
+    },
+    {
+      "position_index": 74640,
+      "chunk_id": 587,
+      "alignment_validated": true,
+      "decoded_context": " The melody commonly associated with the rhyme was first recorded by the composer and nursery rhyme collector James William Elliott in his National Nursery Rhymes and Nursery Songs ( 1870 ) . The Roud",
+      "true_next_token": " Folk",
+      "true_token_id": 36111,
+      "p_lm_true": 1.8120537788490765e-05,
+      "p_raw_standalone": 0.5610697483157328,
+      "p_dime_standalone": 0.0002665781707921392,
+      "delta_L_tuned": 8.09098688839807,
+      "js_tuned": 0.46244540951421,
+      "d_raw_nearest": 16.198680877685547,
+      "d_dime_nearest": 17.65028190612793,
+      "top_raw_neighbor_tokens": [
+        " Folk",
+        "ney",
+        " @",
+        "air",
+        "way"
+      ],
+      "top_raw_neighbor_distances": [
+        16.198680877685547,
+        20.014802932739258,
+        20.117341995239258,
+        20.175800323486328,
+        20.200429916381836
+      ],
+      "top_dime_cluster_distances": [
+        17.65028190612793,
+        19.485719680786133,
+        20.94346046447754,
+        21.119367599487305,
+        21.212080001831055
+      ]
+    },
+    {
+      "position_index": 43234,
+      "chunk_id": 340,
+      "alignment_validated": true,
+      "decoded_context": " 12 years , finishing high school . Her father then met with financial difficulties , and she moved to Oregon , settling in Hillsboro . There , she put her younger brother and sister through school , while studying",
+      "true_next_token": " sten",
+      "true_token_id": 45219,
+      "p_lm_true": 1.3365097402129322e-05,
+      "p_raw_standalone": 0.6122389545701195,
+      "p_dime_standalone": 0.00039477178719564583,
+      "delta_L_tuned": 7.996955270899091,
+      "js_tuned": 0.6247299586692483,
+      "d_raw_nearest": 13.968049049377441,
+      "d_dime_nearest": 19.007753372192383,
+      "top_raw_neighbor_tokens": [
+        " sten",
+        " flowers",
+        " under",
+        " in",
+        " physics"
+      ],
+      "top_raw_neighbor_distances": [
+        13.968049049377441,
+        14.64043140411377,
+        18.205524444580078,
+        18.589534759521484,
+        18.832378387451172
+      ],
+      "top_dime_cluster_distances": [
+        19.007753372192383,
+        19.900827407836914,
+        20.47487449645996,
+        20.812471389770508,
+        21.907934188842773
+      ]
+    },
+    {
+      "position_index": 60195,
+      "chunk_id": 473,
+      "alignment_validated": true,
+      "decoded_context": " solve this issue , the researchers came up with flexible PCI Express cables , and Tones developed a custom cage which allowed the video cards to suspend over the motherboard . \n<|endoftext|><|endoftext|> USS Breese (",
+      "true_next_token": " DD",
+      "true_token_id": 20084,
+      "p_lm_true": 1.667389369686134e-05,
+      "p_raw_standalone": 0.9445568873155475,
+      "p_dime_standalone": 0.0006991154678914602,
+      "delta_L_tuned": 7.930543090800438,
+      "js_tuned": 0.6297001866842411,
+      "d_raw_nearest": 11.284928321838379,
+      "d_dime_nearest": 17.864748001098633,
+      "top_raw_neighbor_tokens": [
+        " DD",
+        " August",
+        " nicknamed",
+        " Cory",
+        "s"
+      ],
+      "top_raw_neighbor_distances": [
+        11.284928321838379,
+        15.266834259033203,
+        16.639179229736328,
+        16.760677337646484,
+        17.163232803344727
+      ],
+      "top_dime_cluster_distances": [
+        17.864748001098633,
+        18.18126678466797,
+        19.81714630126953,
+        20.54296112060547,
+        20.652307510375977
+      ]
+    },
+    {
+      "position_index": 40306,
+      "chunk_id": 317,
+      "alignment_validated": true,
+      "decoded_context": " Aaronovitch , May 1 , 2007 \n<|endoftext|> Mutinus elegans , commonly known as the elegant stinkhorn , the dog stinkhorn , the headless stinkhorn , or the devil 's",
+      "true_next_token": " dip",
+      "true_token_id": 19550,
+      "p_lm_true": 4.0903199987951666e-05,
+      "p_raw_standalone": 0.9420046942632956,
+      "p_dime_standalone": 0.0005449571286371874,
+      "delta_L_tuned": 7.855356536700909,
+      "js_tuned": 0.6229069397041322,
+      "d_raw_nearest": 12.151607513427734,
+      "d_dime_nearest": 16.757896423339844,
+      "top_raw_neighbor_tokens": [
+        " dip",
+        " lion",
+        " sul",
+        " Nag",
+        " and"
+      ],
+      "top_raw_neighbor_distances": [
+        12.151607513427734,
+        17.13071632385254,
+        17.197309494018555,
+        17.693378448486328,
+        17.71294593811035
+      ],
+      "top_dime_cluster_distances": [
+        16.757896423339844,
+        18.180034637451172,
+        18.66952133178711,
+        20.055866241455078,
+        20.52476692199707
+      ]
+    },
+    {
+      "position_index": 34141,
+      "chunk_id": 268,
+      "alignment_validated": true,
+      "decoded_context": " her over Philadelphia . \n<|endoftext|><|endoftext|><|endoftext|> = = Reception = = \n<|endoftext|><|endoftext|><|endoftext|> = Tonin\u00e1 = \n<|endoftext|><|endoftext|><|endoftext|> = = = = K 'inich Hix",
+      "true_next_token": " Chap",
+      "true_token_id": 15954,
+      "p_lm_true": 1.5833783209018293e-06,
+      "p_raw_standalone": 0.9986404374225585,
+      "p_dime_standalone": 0.0010095878581798162,
+      "delta_L_tuned": 7.799131702919892,
+      "js_tuned": 0.6853218348755004,
+      "d_raw_nearest": 7.697934627532959,
+      "d_dime_nearest": 16.11854362487793,
+      "top_raw_neighbor_tokens": [
+        " Chap",
+        " Chap",
+        " (",
+        "man",
+        " is"
+      ],
+      "top_raw_neighbor_distances": [
+        7.697934627532959,
+        13.968775749206543,
+        16.75554656982422,
+        16.75975227355957,
+        17.041589736938477
+      ],
+      "top_dime_cluster_distances": [
+        16.11854362487793,
+        16.547269821166992,
+        17.38105583190918,
+        17.76368522644043,
+        18.485139846801758
+      ]
+    },
+    {
+      "position_index": 26251,
+      "chunk_id": 206,
+      "alignment_validated": true,
+      "decoded_context": " . It was not released in the United States , but it was given airplay on Latin music radio stations and reached the top forty on Billboard 's Latin Pop Airplay chart . The \" No Hay",
+      "true_next_token": " Ig",
+      "true_token_id": 28818,
+      "p_lm_true": 9.732940270623658e-06,
+      "p_raw_standalone": 0.9991114316720248,
+      "p_dime_standalone": 0.0009501614434691774,
+      "delta_L_tuned": 7.786123735136368,
+      "js_tuned": 0.6866402066442157,
+      "d_raw_nearest": 12.454614639282227,
+      "d_dime_nearest": 22.79041862487793,
+      "top_raw_neighbor_tokens": [
+        " Ig",
+        " Ig",
+        " \"",
+        " Bun",
+        " Photograph"
+      ],
+      "top_raw_neighbor_distances": [
+        12.454614639282227,
+        16.545373916625977,
+        21.431737899780273,
+        22.569799423217773,
+        22.5787353515625
+      ],
+      "top_dime_cluster_distances": [
+        22.79041862487793,
+        23.342647552490234,
+        23.447782516479492,
+        24.278884887695312,
+        24.46778106689453
+      ]
+    }
+  ],
+  "largest_negative_deltaL": [
+    {
+      "position_index": 12836,
+      "chunk_id": 101,
+      "alignment_validated": true,
+      "decoded_context": ". Sexoturica compilation . \n<|endoftext|>",
+      "true_next_token": " Townsend",
+      "true_token_id": 46811,
+      "p_lm_true": 6.724149015369107e-11,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.000701005332980842,
+      "delta_L_tuned": -14.125198446855189,
+      "js_tuned": 0.06877694659924778,
+      "d_raw_nearest": 0.9612352252006531,
+      "d_dime_nearest": 1.447861671447754,
+      "top_raw_neighbor_tokens": [
+        " Flower",
+        " Fin",
+        " Summer",
+        " May",
+        "<|endoftext|>"
+      ],
+      "top_raw_neighbor_distances": [
+        0.9612352252006531,
+        1.3565962314605713,
+        1.3728561401367188,
+        1.4756706953048706,
+        1.497506856918335
+      ],
+      "top_dime_cluster_distances": [
+        1.447861671447754,
+        1.8460428714752197,
+        1.9896891117095947,
+        2.038792371749878,
+        2.1461024284362793
+      ]
+    },
+    {
+      "position_index": 39087,
+      "chunk_id": 307,
+      "alignment_validated": true,
+      "decoded_context": " charged topics such as Zionism , the demographic history of Palestine and his allegations of the existence of a \" Holocaust Industry \" that exploits the memory of the Holocaust to further Israeli and financial interests . \n<|endoftext|>",
+      "true_next_token": " Fin",
+      "true_token_id": 4463,
+      "p_lm_true": 3.4231242840299103e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0029133832630891367,
+      "delta_L_tuned": -13.938067525185259,
+      "js_tuned": 0.10080490781992271,
+      "d_raw_nearest": 1.062636137008667,
+      "d_dime_nearest": 1.3479321002960205,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        " =",
+        " The",
+        "<|endoftext|>",
+        "<|endoftext|>"
+      ],
+      "top_raw_neighbor_distances": [
+        1.062636137008667,
+        1.1134086847305298,
+        1.1371036767959595,
+        1.156449794769287,
+        1.2142735719680786
+      ],
+      "top_dime_cluster_distances": [
+        1.3479321002960205,
+        1.4323089122772217,
+        1.5892668962478638,
+        1.78902268409729,
+        1.9182442426681519
+      ]
+    },
+    {
+      "position_index": 34414,
+      "chunk_id": 270,
+      "alignment_validated": true,
+      "decoded_context": "\u00e1 . \n<|endoftext|> The Palace of the Underworld is entered via three step @-@ vaulted arches on the eastern side of the second terrace of the Acropolis . \n<|endoftext|><|endoftext|>",
+      "true_next_token": " Monument",
+      "true_token_id": 33075,
+      "p_lm_true": 2.1037087349906614e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0014960332639652374,
+      "delta_L_tuned": -13.75599117547386,
+      "js_tuned": 0.10290071082570607,
+      "d_raw_nearest": 1.3342806100845337,
+      "d_dime_nearest": 1.6171566247940063,
+      "top_raw_neighbor_tokens": [
+        " Heavy",
+        " Many",
+        "<|endoftext|>",
+        " Other",
+        " ="
+      ],
+      "top_raw_neighbor_distances": [
+        1.3342806100845337,
+        1.423643708229065,
+        1.431182861328125,
+        1.47629714012146,
+        1.4913636445999146
+      ],
+      "top_dime_cluster_distances": [
+        1.6171566247940063,
+        1.7314642667770386,
+        1.9954569339752197,
+        2.049168586730957,
+        2.0988237857818604
+      ]
+    },
+    {
+      "position_index": 1280,
+      "chunk_id": 10,
+      "alignment_validated": true,
+      "decoded_context": " critically considered less successful than Groundsel . \n<|endoftext|>",
+      "true_next_token": " Barker",
+      "true_token_id": 36933,
+      "p_lm_true": 2.0247151177876788e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0013482143142962155,
+      "delta_L_tuned": -13.689982222379065,
+      "js_tuned": 0.09506087569375891,
+      "d_raw_nearest": 1.132792353630066,
+      "d_dime_nearest": 1.3330936431884766,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        "<|endoftext|>",
+        " Zhou",
+        " Irish",
+        " ="
+      ],
+      "top_raw_neighbor_distances": [
+        1.132792353630066,
+        1.1607353687286377,
+        1.3231210708618164,
+        1.3848843574523926,
+        1.4632179737091064
+      ],
+      "top_dime_cluster_distances": [
+        1.3330936431884766,
+        1.8973816633224487,
+        1.9517954587936401,
+        2.1394903659820557,
+        2.162032127380371
+      ]
+    },
+    {
+      "position_index": 1035,
+      "chunk_id": 8,
+      "alignment_validated": true,
+      "decoded_context": " distinct promise . \" \n<|endoftext|> = = = Middle years = = = \n<|endoftext|><|endoftext|><|endoftext|>",
+      "true_next_token": " Barker",
+      "true_token_id": 36933,
+      "p_lm_true": 3.1066943462221275e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.001805837901525319,
+      "delta_L_tuned": -13.55637706559318,
+      "js_tuned": 0.09863847511116447,
+      "d_raw_nearest": 1.0775020122528076,
+      "d_dime_nearest": 1.4631426334381104,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        " =",
+        " =",
+        " The",
+        " V"
+      ],
+      "top_raw_neighbor_distances": [
+        1.0775020122528076,
+        1.2097094058990479,
+        1.2126617431640625,
+        1.2836236953735352,
+        1.3150635957717896
+      ],
+      "top_dime_cluster_distances": [
+        1.4631426334381104,
+        2.6526615619659424,
+        2.879743814468384,
+        3.0689334869384766,
+        3.117833137512207
+      ]
+    },
+    {
+      "position_index": 2861,
+      "chunk_id": 22,
+      "alignment_validated": true,
+      "decoded_context": "anded situations , allowing the most power @-@ play goals in the League , with 64 , and having the lowest penalty @-@ kill percentage , at 76 @.@ 64 % \n<|endoftext|>",
+      "true_next_token": " Fin",
+      "true_token_id": 4463,
+      "p_lm_true": 3.629486156064843e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0020598628091406624,
+      "delta_L_tuned": -13.533075586545015,
+      "js_tuned": 0.12005734215292962,
+      "d_raw_nearest": 1.3342056274414062,
+      "d_dime_nearest": 1.787981390953064,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        " =",
+        "<|endoftext|>",
+        " =",
+        " Mid"
+      ],
+      "top_raw_neighbor_distances": [
+        1.3342056274414062,
+        1.4727286100387573,
+        1.5484715700149536,
+        1.575871467590332,
+        1.612008810043335
+      ],
+      "top_dime_cluster_distances": [
+        1.787981390953064,
+        1.8611143827438354,
+        2.4493637084960938,
+        2.57330060005188,
+        2.6654913425445557
+      ]
+    },
+    {
+      "position_index": 3193,
+      "chunk_id": 25,
+      "alignment_validated": true,
+      "decoded_context": "<|endoftext|><|endoftext|><|endoftext|> = = Description and career as Fingal = = \n<|endoftext|><|endoftext|><|endoftext|>",
+      "true_next_token": " Fernandez",
+      "true_token_id": 39692,
+      "p_lm_true": 4.737881267868893e-11,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.00020605606155111656,
+      "delta_L_tuned": -13.242829503054567,
+      "js_tuned": 0.09494887764796545,
+      "d_raw_nearest": 1.527187466621399,
+      "d_dime_nearest": 2.0783398151397705,
+      "top_raw_neighbor_tokens": [
+        " The",
+        " =",
+        " The",
+        " In",
+        " The"
+      ],
+      "top_raw_neighbor_distances": [
+        1.527187466621399,
+        1.8394863605499268,
+        1.8765296936035156,
+        1.9050477743148804,
+        1.9348725080490112
+      ],
+      "top_dime_cluster_distances": [
+        2.0783398151397705,
+        2.1039535999298096,
+        2.686084270477295,
+        3.2331295013427734,
+        3.281541347503662
+      ]
+    },
+    {
+      "position_index": 16727,
+      "chunk_id": 131,
+      "alignment_validated": true,
+      "decoded_context": " Gatorade , appearing in over 20 commercials for the company since 1991 , including the \" Be Like Mike \" commercials in which a song was sung by children wishing to be like Jordan . \n<|endoftext|>",
+      "true_next_token": " Polish",
+      "true_token_id": 15945,
+      "p_lm_true": 8.012652208400084e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0013851849640552423,
+      "delta_L_tuned": -12.346347075121324,
+      "js_tuned": 0.10660198975644453,
+      "d_raw_nearest": 1.081141710281372,
+      "d_dime_nearest": 1.2888884544372559,
+      "top_raw_neighbor_tokens": [
+        " In",
+        " The",
+        "<|endoftext|>",
+        " =",
+        " Tru"
+      ],
+      "top_raw_neighbor_distances": [
+        1.081141710281372,
+        1.1190379858016968,
+        1.1274255514144897,
+        1.1371294260025024,
+        1.1606597900390625
+      ],
+      "top_dime_cluster_distances": [
+        1.2888884544372559,
+        1.3359484672546387,
+        1.6338410377502441,
+        1.634892463684082,
+        1.7470805644989014
+      ]
+    },
+    {
+      "position_index": 51345,
+      "chunk_id": 404,
+      "alignment_validated": true,
+      "decoded_context": " move has certain drawbacks . Fischer once went so far as to claim that after 1.Nf3 Nf6 2.g3 g6 3.Bg2 Bg7 4",
+      "true_next_token": " @",
+      "true_token_id": 2488,
+      "p_lm_true": 3.7653034468121405e-08,
+      "p_raw_standalone": 6.334380139511928e-09,
+      "p_dime_standalone": 0.056867261672074586,
+      "delta_L_tuned": -12.15832538925461,
+      "js_tuned": 0.5907301049083677,
+      "d_raw_nearest": 11.037636756896973,
+      "d_dime_nearest": 31.476232528686523,
+      "top_raw_neighbor_tokens": [
+        ".",
+        "@",
+        " \"",
+        "@",
+        "."
+      ],
+      "top_raw_neighbor_distances": [
+        11.037636756896973,
+        27.355674743652344,
+        28.1015682220459,
+        28.15391731262207,
+        28.563045501708984
+      ],
+      "top_dime_cluster_distances": [
+        31.476232528686523,
+        31.734018325805664,
+        33.611324310302734,
+        35.47048568725586,
+        35.74055862426758
+      ]
+    },
+    {
+      "position_index": 41698,
+      "chunk_id": 328,
+      "alignment_validated": true,
+      "decoded_context": " greater gravity is the murder of family members , including \" infanticide , fratricide , parricide , the murder of a spouse and procured abortion . \" \n<|endoftext|><|endoftext|><|endoftext|>",
+      "true_next_token": " Church",
+      "true_token_id": 4564,
+      "p_lm_true": 7.25296267489739e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0007886015845471391,
+      "delta_L_tuned": -11.882460200575098,
+      "js_tuned": 0.10936502426419215,
+      "d_raw_nearest": 0.8889268040657043,
+      "d_dime_nearest": 1.163278341293335,
+      "top_raw_neighbor_tokens": [
+        " \"",
+        " The",
+        " Egyptian",
+        " =",
+        "<|endoftext|>"
+      ],
+      "top_raw_neighbor_distances": [
+        0.8889268040657043,
+        0.9076274037361145,
+        0.9569979310035706,
+        1.0553216934204102,
+        1.068959355354309
+      ],
+      "top_dime_cluster_distances": [
+        1.163278341293335,
+        1.2843823432922363,
+        1.7422435283660889,
+        1.8022685050964355,
+        1.803500771522522
+      ]
+    },
+    {
+      "position_index": 44883,
+      "chunk_id": 353,
+      "alignment_validated": true,
+      "decoded_context": " Cai Fu , and makes the outlaw Lu Zhishen his sworn brother . Because of his association with the outlaws , he is often confused with the similarly named outlaw Zhou Tong . \n<|endoftext|>",
+      "true_next_token": " Zhou",
+      "true_token_id": 32222,
+      "p_lm_true": 9.175925574922417e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0009720066300032787,
+      "delta_L_tuned": -11.856773231543654,
+      "js_tuned": 0.10168180477800973,
+      "d_raw_nearest": 1.0454435348510742,
+      "d_dime_nearest": 1.287015676498413,
+      "top_raw_neighbor_tokens": [
+        " Ab",
+        " =",
+        " From",
+        " Along",
+        "<|endoftext|>"
+      ],
+      "top_raw_neighbor_distances": [
+        1.0454435348510742,
+        1.061363697052002,
+        1.0684350728988647,
+        1.1560393571853638,
+        1.1580719947814941
+      ],
+      "top_dime_cluster_distances": [
+        1.287015676498413,
+        1.3242993354797363,
+        1.5127006769180298,
+        1.5245904922485352,
+        1.6226838827133179
+      ]
+    },
+    {
+      "position_index": 21847,
+      "chunk_id": 172,
+      "alignment_validated": true,
+      "decoded_context": "<|endoftext|><|endoftext|><|endoftext|><|endoftext|>",
+      "true_next_token": " Wra",
+      "true_token_id": 27323,
+      "p_lm_true": 2.0051784885288804e-11,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 2.0131520544428953e-05,
+      "delta_L_tuned": -11.74020852876503,
+      "js_tuned": 0.05982209403742447,
+      "d_raw_nearest": 1.4033277034759521,
+      "d_dime_nearest": 1.6464734077453613,
+      "top_raw_neighbor_tokens": [
+        " Gal",
+        " =",
+        " The",
+        " With",
+        " ="
+      ],
+      "top_raw_neighbor_distances": [
+        1.4033277034759521,
+        1.4033277034759521,
+        1.4033277034759521,
+        1.4033277034759521,
+        1.4033277034759521
+      ],
+      "top_dime_cluster_distances": [
+        1.6464734077453613,
+        3.46374773979187,
+        4.5457916259765625,
+        9.543590545654297,
+        9.583243370056152
+      ]
+    },
+    {
+      "position_index": 42252,
+      "chunk_id": 332,
+      "alignment_validated": true,
+      "decoded_context": " civil law . \n<|endoftext|> = = Ninth commandment = = \n<|endoftext|> Chastity , which enables people to love others with upright and undivided hearts . \n<|endoftext|><|endoftext|><|endoftext|><|endoftext|>",
+      "true_next_token": " Recording",
+      "true_token_id": 43905,
+      "p_lm_true": 2.0666808542291193e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.00015983201533819106,
+      "delta_L_tuned": -11.537197673917337,
+      "js_tuned": 0.09393978325055705,
+      "d_raw_nearest": 1.3034348487854004,
+      "d_dime_nearest": 1.4180647134780884,
+      "top_raw_neighbor_tokens": [
+        " =",
+        " =",
+        " L",
+        " Elizabeth",
+        " Mod"
+      ],
+      "top_raw_neighbor_distances": [
+        1.3034348487854004,
+        1.327588438987732,
+        1.4026477336883545,
+        1.440728783607483,
+        1.457959771156311
+      ],
+      "top_dime_cluster_distances": [
+        1.4180647134780884,
+        1.7200288772583008,
+        2.2287168502807617,
+        2.46453595161438,
+        2.7259676456451416
+      ]
+    },
+    {
+      "position_index": 57489,
+      "chunk_id": 452,
+      "alignment_validated": true,
+      "decoded_context": "s late sister , and thus indeed Algernon 's elder brother . Having acquired such respectable relations , he is acceptable as a suitor for Gwendolen after all . \n<|endoftext|><|endoftext|>",
+      "true_next_token": " Wilde",
+      "true_token_id": 45622,
+      "p_lm_true": 8.119550032326117e-10,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0006201612584327918,
+      "delta_L_tuned": -11.529513148376944,
+      "js_tuned": 0.11478114927622418,
+      "d_raw_nearest": 0.908596396446228,
+      "d_dime_nearest": 1.1666789054870605,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        " Eaton",
+        "<|endoftext|>",
+        " In",
+        " ="
+      ],
+      "top_raw_neighbor_distances": [
+        0.908596396446228,
+        1.0717453956604004,
+        1.0741344690322876,
+        1.1124935150146484,
+        1.187676191329956
+      ],
+      "top_dime_cluster_distances": [
+        1.1666789054870605,
+        1.189378023147583,
+        1.6742374897003174,
+        1.9875963926315308,
+        2.0342724323272705
+      ]
+    },
+    {
+      "position_index": 45896,
+      "chunk_id": 361,
+      "alignment_validated": true,
+      "decoded_context": " , namely forty @-@ nine days . Then the body was taken up to be buried beside the Hill of Dripping Water \" . \n<|endoftext|> = = = Family = = = \n<|endoftext|>",
+      "true_next_token": " Zhou",
+      "true_token_id": 32222,
+      "p_lm_true": 1.3126078002301256e-09,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0008993687850583881,
+      "delta_L_tuned": -11.421527452451155,
+      "js_tuned": 0.11902871748713842,
+      "d_raw_nearest": 0.9555389881134033,
+      "d_dime_nearest": 1.6287332773208618,
+      "top_raw_neighbor_tokens": [
+        "<|endoftext|>",
+        " The",
+        "<|endoftext|>",
+        "<|endoftext|>",
+        "<|endoftext|>"
+      ],
+      "top_raw_neighbor_distances": [
+        0.9555389881134033,
+        1.1177642345428467,
+        1.1842503547668457,
+        1.2136849164962769,
+        1.2200121879577637
+      ],
+      "top_dime_cluster_distances": [
+        1.6287332773208618,
+        1.7884483337402344,
+        2.061062812805176,
+        2.231204032897949,
+        2.3946950435638428
+      ]
+    }
+  ],
+  "small_distance_high_js": [
+    {
+      "position_index": 4,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": "<|endoftext|> = = = Music",
+      "true_next_token": " =",
+      "true_token_id": 796,
+      "p_lm_true": 0.0833340585231781,
+      "p_raw_standalone": 0.1075075275401647,
+      "p_dime_standalone": 0.029929462819888425,
+      "delta_L_tuned": 0.13624140270038865,
+      "js_tuned": 0.38637180155300244,
+      "d_raw_nearest": 12.745771408081055,
+      "d_dime_nearest": 13.052770614624023,
+      "top_raw_neighbor_tokens": [
+        " (",
+        " described",
+        " FM",
+        " in",
+        " 1"
+      ],
+      "top_raw_neighbor_distances": [
+        12.745771408081055,
+        13.234942436218262,
+        14.193337440490723,
+        14.350326538085938,
+        14.430842399597168
+      ],
+      "top_dime_cluster_distances": [
+        13.052770614624023,
+        15.643373489379883,
+        15.792159080505371,
+        15.945642471313477,
+        16.171932220458984
+      ]
+    },
+    {
+      "position_index": 41,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": " = = Music = = = \n<|endoftext|> = = Reception = = \n<|endoftext|> In a preview of the TGS demo , Ryan Geddes of IGN was left excited as to where the",
+      "true_next_token": " game",
+      "true_token_id": 983,
+      "p_lm_true": 0.2539781928062439,
+      "p_raw_standalone": 0.027402531723287882,
+      "p_dime_standalone": 0.011577403773263143,
+      "delta_L_tuned": -0.1520408809952829,
+      "js_tuned": 0.40143310936045623,
+      "d_raw_nearest": 14.29028034210205,
+      "d_dime_nearest": 13.715790748596191,
+      "top_raw_neighbor_tokens": [
+        " interruption",
+        " live",
+        " sitcom",
+        " role",
+        " episode"
+      ],
+      "top_raw_neighbor_distances": [
+        14.29028034210205,
+        14.457643508911133,
+        14.633986473083496,
+        14.708901405334473,
+        14.895374298095703
+      ],
+      "top_dime_cluster_distances": [
+        13.715790748596191,
+        13.717103004455566,
+        16.704849243164062,
+        17.1400146484375,
+        17.337900161743164
+      ]
+    },
+    {
+      "position_index": 53,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": "ception = = \n<|endoftext|> In a preview of the TGS demo , Ryan Geddes of IGN was left excited as to where the game would go after completing the demo , along with enjoying the",
+      "true_next_token": " improved",
+      "true_token_id": 6596,
+      "p_lm_true": 0.00040531554259359837,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0,
+      "delta_L_tuned": -0.1823215243321883,
+      "js_tuned": 0.42692722430113456,
+      "d_raw_nearest": 13.577828407287598,
+      "d_dime_nearest": 13.271635055541992,
+      "top_raw_neighbor_tokens": [
+        " full",
+        " series",
+        " scenes",
+        " production",
+        " predecessors"
+      ],
+      "top_raw_neighbor_distances": [
+        13.577828407287598,
+        14.424452781677246,
+        15.369257926940918,
+        15.428582191467285,
+        15.434854507446289
+      ],
+      "top_dime_cluster_distances": [
+        13.271635055541992,
+        14.963407516479492,
+        15.095215797424316,
+        15.280379295349121,
+        15.716519355773926
+      ]
+    },
+    {
+      "position_index": 60,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": " a preview of the TGS demo , Ryan Geddes of IGN was left excited as to where the game would go after completing the demo , along with enjoying the improved visuals over Valkyria Chronicles",
+      "true_next_token": " II",
+      "true_token_id": 2873,
+      "p_lm_true": 0.03327086567878723,
+      "p_raw_standalone": 0.058142687314104276,
+      "p_dime_standalone": 0.0020178448242643876,
+      "delta_L_tuned": 0.26997985355741605,
+      "js_tuned": 0.40646852100658837,
+      "d_raw_nearest": 20.14445686340332,
+      "d_dime_nearest": 20.337078094482422,
+      "top_raw_neighbor_tokens": [
+        " III",
+        " :",
+        " Russia",
+        " II",
+        " Australia"
+      ],
+      "top_raw_neighbor_distances": [
+        20.14445686340332,
+        20.834306716918945,
+        21.073518753051758,
+        21.112285614013672,
+        21.6641845703125
+      ],
+      "top_dime_cluster_distances": [
+        20.337078094482422,
+        21.313297271728516,
+        22.041061401367188,
+        22.376482009887695,
+        22.606647491455078
+      ]
+    },
+    {
+      "position_index": 95,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": " over Valkyria Chronicles II . Kotaku 's Richard Eisenbeis was highly positive about the game , citing is story as a return to form after Valkyria Chronicles II and its gameplay being",
+      "true_next_token": " the",
+      "true_token_id": 262,
+      "p_lm_true": 0.01791859045624733,
+      "p_raw_standalone": 0.01978365370659965,
+      "p_dime_standalone": 0.04986880927495852,
+      "delta_L_tuned": -0.13839067010007344,
+      "js_tuned": 0.40707951411069343,
+      "d_raw_nearest": 15.61037540435791,
+      "d_dime_nearest": 16.011962890625,
+      "top_raw_neighbor_tokens": [
+        " ordinary",
+        " publicized",
+        " presented",
+        " too",
+        " placed"
+      ],
+      "top_raw_neighbor_distances": [
+        15.61037540435791,
+        15.66108512878418,
+        15.944007873535156,
+        15.961040496826172,
+        16.194215774536133
+      ],
+      "top_dime_cluster_distances": [
+        16.011962890625,
+        16.39573860168457,
+        16.840444564819336,
+        17.794513702392578,
+        17.913345336914062
+      ]
+    },
+    {
+      "position_index": 99,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": " Chronicles II . Kotaku 's Richard Eisenbeis was highly positive about the game , citing is story as a return to form after Valkyria Chronicles II and its gameplay being the best in the",
+      "true_next_token": " series",
+      "true_token_id": 2168,
+      "p_lm_true": 0.7431731224060059,
+      "p_raw_standalone": 0.010937452625028758,
+      "p_dime_standalone": 0.004680350508900275,
+      "delta_L_tuned": -0.17812728058155664,
+      "js_tuned": 0.4029446523525464,
+      "d_raw_nearest": 17.273239135742188,
+      "d_dime_nearest": 16.8674373626709,
+      "top_raw_neighbor_tokens": [
+        " game",
+        " ongoing",
+        " action",
+        " man",
+        " remix"
+      ],
+      "top_raw_neighbor_distances": [
+        17.273239135742188,
+        18.011642456054688,
+        18.228097915649414,
+        18.266016006469727,
+        18.69235610961914
+      ],
+      "top_dime_cluster_distances": [
+        16.8674373626709,
+        18.275144577026367,
+        18.9421329498291,
+        19.64611053466797,
+        19.740238189697266
+      ]
+    },
+    {
+      "position_index": 108,
+      "chunk_id": 0,
+      "alignment_validated": true,
+      "decoded_context": "beis was highly positive about the game , citing is story as a return to form after Valkyria Chronicles II and its gameplay being the best in the series . His main criticisms were its length and",
+      "true_next_token": " gameplay",
+      "true_token_id": 11327,
+      "p_lm_true": 0.005278557073324919,
+      "p_raw_standalone": 0.003279671694289692,
+      "p_dime_standalone": 1.0863099880029422e-05,
+      "delta_L_tuned": 0.005676069960515839,
+      "js_tuned": 0.4633797404249336,
+      "d_raw_nearest": 15.99752140045166,
+      "d_dime_nearest": 16.18610382080078,
+      "top_raw_neighbor_tokens": [
+        " occasional",
+        " near",
+        " continued",
+        " bosses",
+        " connection"
+      ],
+      "top_raw_neighbor_distances": [
+        15.99752140045166,
+        16.00467872619629,
+        16.14405632019043,
+        16.444259643554688,
+        16.610815048217773
+      ],
+      "top_dime_cluster_distances": [
+        16.18610382080078,
+        16.393381118774414,
+        16.733707427978516,
+        16.946733474731445,
+        17.304040908813477
+      ]
+    },
+    {
+      "position_index": 192,
+      "chunk_id": 1,
+      "alignment_validated": true,
+      "decoded_context": " Little Rock , Arkansas . Built in 1840 , it was part of Little Rock 's first military installation . Since its decommissioning , The Tower Building has housed two museums . It was home to the",
+      "true_next_token": " Arkansas",
+      "true_token_id": 14538,
+      "p_lm_true": 0.013781712390482426,
+      "p_raw_standalone": 0.0006695708755829056,
+      "p_dime_standalone": 0.0002160404795753596,
+      "delta_L_tuned": -0.16799685583964497,
+      "js_tuned": 0.42242521838304015,
+      "d_raw_nearest": 12.457600593566895,
+      "d_dime_nearest": 12.282730102539062,
+      "top_raw_neighbor_tokens": [
+        " institution",
+        " Trust",
+        " New",
+        " Department",
+        " Palace"
+      ],
+      "top_raw_neighbor_distances": [
+        12.457600593566895,
+        12.907590866088867,
+        12.984942436218262,
+        13.29688549041748,
+        13.772404670715332
+      ],
+      "top_dime_cluster_distances": [
+        12.282730102539062,
+        13.772919654846191,
+        13.991056442260742,
+        14.210067749023438,
+        14.77149772644043
+      ]
+    },
+    {
+      "position_index": 207,
+      "chunk_id": 1,
+      "alignment_validated": true,
+      "decoded_context": " 's first military installation . Since its decommissioning , The Tower Building has housed two museums . It was home to the Arkansas Museum of Natural History and Antiquities from 1942 to 1997 and the MacArthur",
+      "true_next_token": " Museum",
+      "true_token_id": 9594,
+      "p_lm_true": 0.11291944980621338,
+      "p_raw_standalone": 0.0010875337511295849,
+      "p_dime_standalone": 0.003907205085114059,
+      "delta_L_tuned": -0.1829535497106889,
+      "js_tuned": 0.3622924579157221,
+      "d_raw_nearest": 16.32598304748535,
+      "d_dime_nearest": 16.35235023498535,
+      "top_raw_neighbor_tokens": [
+        " Sloan",
+        " Bald",
+        " Bal",
+        " MTV",
+        " Central"
+      ],
+      "top_raw_neighbor_distances": [
+        16.32598304748535,
+        17.13805389404297,
+        17.24159049987793,
+        17.419225692749023,
+        17.493637084960938
+      ],
+      "top_dime_cluster_distances": [
+        16.35235023498535,
+        17.185306549072266,
+        17.208484649658203,
+        17.949045181274414,
+        17.98226547241211
+      ]
+    },
+    {
+      "position_index": 211,
+      "chunk_id": 1,
+      "alignment_validated": true,
+      "decoded_context": " installation . Since its decommissioning , The Tower Building has housed two museums . It was home to the Arkansas Museum of Natural History and Antiquities from 1942 to 1997 and the MacArthur Museum of Arkansas Military",
+      "true_next_token": " History",
+      "true_token_id": 7443,
+      "p_lm_true": 0.8152731657028198,
+      "p_raw_standalone": 0.004755619368881364,
+      "p_dime_standalone": 0.0006587854333068062,
+      "delta_L_tuned": -0.18046883752707948,
+      "js_tuned": 0.42451624801731747,
+      "d_raw_nearest": 20.52539825439453,
+      "d_dime_nearest": 20.613544464111328,
+      "top_raw_neighbor_tokens": [
+        " Field",
+        " (",
+        " Experiment",
+        " Board",
+        " L"
+      ],
+      "top_raw_neighbor_distances": [
+        20.52539825439453,
+        20.80564308166504,
+        20.8090877532959,
+        21.099946975708008,
+        21.12114715576172
+      ],
+      "top_dime_cluster_distances": [
+        20.613544464111328,
+        20.960006713867188,
+        22.082439422607422,
+        23.200756072998047,
+        23.231651306152344
+      ]
+    },
+    {
+      "position_index": 225,
+      "chunk_id": 1,
+      "alignment_validated": true,
+      "decoded_context": " museums . It was home to the Arkansas Museum of Natural History and Antiquities from 1942 to 1997 and the MacArthur Museum of Arkansas Military History since 2001 . It has also been the headquarters of the Little Rock",
+      "true_next_token": " \ufffd",
+      "true_token_id": 6184,
+      "p_lm_true": 3.5140822092216695e-06,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0,
+      "delta_L_tuned": -0.18232145042065007,
+      "js_tuned": 0.4466406103425554,
+      "d_raw_nearest": 15.973563194274902,
+      "d_dime_nearest": 15.777937889099121,
+      "top_raw_neighbor_tokens": [
+        " Chicago",
+        " County",
+        " Arsenal",
+        " British",
+        " County"
+      ],
+      "top_raw_neighbor_distances": [
+        15.973563194274902,
+        16.441829681396484,
+        17.016284942626953,
+        17.228246688842773,
+        17.71535301208496
+      ],
+      "top_dime_cluster_distances": [
+        15.777937889099121,
+        16.19305419921875,
+        17.19266128540039,
+        20.0765380859375,
+        20.949861526489258
+      ]
+    },
+    {
+      "position_index": 229,
+      "chunk_id": 1,
+      "alignment_validated": true,
+      "decoded_context": " home to the Arkansas Museum of Natural History and Antiquities from 1942 to 1997 and the MacArthur Museum of Arkansas Military History since 2001 . It has also been the headquarters of the Little Rock \u00c6sthetic",
+      "true_next_token": " Club",
+      "true_token_id": 6289,
+      "p_lm_true": 0.002054511569440365,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 5.585225421530241e-05,
+      "delta_L_tuned": -0.1853375787870437,
+      "js_tuned": 0.4242077902066022,
+      "d_raw_nearest": 19.55159568786621,
+      "d_dime_nearest": 19.733734130859375,
+      "top_raw_neighbor_tokens": [
+        " is",
+        " @",
+        " festival",
+        " ,",
+        " Gal"
+      ],
+      "top_raw_neighbor_distances": [
+        19.55159568786621,
+        19.719194412231445,
+        19.742650985717773,
+        19.833677291870117,
+        19.86565589904785
+      ],
+      "top_dime_cluster_distances": [
+        19.733734130859375,
+        20.503026962280273,
+        20.66050148010254,
+        20.68165397644043,
+        20.682388305664062
+      ]
+    },
+    {
+      "position_index": 255,
+      "chunk_id": 2,
+      "alignment_validated": true,
+      "decoded_context": " , R",
+      "true_next_token": "ector",
+      "true_token_id": 9250,
+      "p_lm_true": 0.0007423759088851511,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 1.4877874225224323e-05,
+      "delta_L_tuned": -0.18454582907985362,
+      "js_tuned": 0.5332157937363388,
+      "d_raw_nearest": 16.22809410095215,
+      "d_dime_nearest": 16.219993591308594,
+      "top_raw_neighbor_tokens": [
+        "xd",
+        "rey",
+        "AAF",
+        " &",
+        "r"
+      ],
+      "top_raw_neighbor_distances": [
+        16.22809410095215,
+        16.5788631439209,
+        17.19588279724121,
+        18.61945152282715,
+        19.048728942871094
+      ],
+      "top_dime_cluster_distances": [
+        16.219993591308594,
+        20.226268768310547,
+        20.544981002807617,
+        20.910795211791992,
+        21.051475524902344
+      ]
+    },
+    {
+      "position_index": 277,
+      "chunk_id": 2,
+      "alignment_validated": true,
+      "decoded_context": " , Rector and Totten signed an agreement placing the arsenal in the hands of state officials . That afternoon , the citizen",
+      "true_next_token": " militia",
+      "true_token_id": 21085,
+      "p_lm_true": 0.018031250685453415,
+      "p_raw_standalone": 0.0,
+      "p_dime_standalone": 0.0,
+      "delta_L_tuned": -0.18232148791433467,
+      "js_tuned": 0.423002889102236,
+      "d_raw_nearest": 17.3841609954834,
+      "d_dime_nearest": 17.709095001220703,
+      "top_raw_neighbor_tokens": [
+        " corps",
+        " Th",
+        " students",
+        " Sultan",
+        " music"
+      ],
+      "top_raw_neighbor_distances": [
+        17.3841609954834,
+        19.31012725830078,
+        19.316835403442383,
+        19.423730850219727,
+        19.558063507080078
+      ],
+      "top_dime_cluster_distances": [
+        17.709095001220703,
+        18.792484283447266,
+        18.84040069580078,
+        18.893259048461914,
+        19.354597091674805
+      ]
+    },
+    {
+      "position_index": 288,
+      "chunk_id": 2,
+      "alignment_validated": true,
+      "decoded_context": " , Rector and Totten signed an agreement placing the arsenal in the hands of state officials . That afternoon , the citizen militia marched to the arsenal with Governor Rector at its",
+      "true_next_token": " head",
+      "true_token_id": 1182,
+      "p_lm_true": 0.11895298212766647,
+      "p_raw_standalone": 0.0006018499595256136,
+      "p_dime_standalone": 0.0021142227258633306,
+      "delta_L_tuned": -0.1826093676870819,
+      "js_tuned": 0.4516373322852427,
+      "d_raw_nearest": 17.485469818115234,
+      "d_dime_nearest": 18.0749568939209,
+      "top_raw_neighbor_tokens": [
+        " gun",
+        " feet",
+        " ships",
+        " manager",
+        " centre"
+      ],
+      "top_raw_neighbor_distances": [
+        17.485469818115234,
+        19.5681209564209,
+        20.39638328552246,
+        20.506715774536133,
+        20.597900390625
+      ],
+      "top_dime_cluster_distances": [
+        18.0749568939209,
+        21.124303817749023,
+        21.992984771728516,
+        22.163204193115234,
+        22.345890045166016
+      ]
+    }
+  ]
+}

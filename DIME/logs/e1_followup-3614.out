@@ -1,0 +1,84 @@
+E1 follow-up job started: Sat Oct 17 12:26:10 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction)...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}
+Building raw index, re-deriving DIME clusters (seed=42, deterministic)...
+clustering done in 151.9s
+[matched] mean nll_raw=3.9388  mean nll_dime=4.0209
+[tuned] mean nll_raw=3.8825  mean nll_dime=4.0110
+
+=== Item 1: loss concentration ===
+[matched] +:40.3% -:36.3% 0:23.4%  pos_sum=17450.64 neg_sum=-11123.62
+  worst_1pct: {'n': 770, 'frac_of_total_positive_loss': 0.20810582089528698, 'mean_p_raw_standalone': 0.5215735291909721, 'mean_p_dime_standalone': 0.003203736134132336, 'mean_G_raw': 5.941391644773712, 'mean_js': 0.5874858408314146}
+  worst_5pct: {'n': 3854, 'frac_of_total_positive_loss': 0.5772549997727252, 'mean_p_raw_standalone': 0.42086967546573023, 'mean_p_dime_standalone': 0.0248684591689922, 'mean_G_raw': 4.0398930071547134, 'mean_js': 0.5265099605933337}
+  worst_10pct: {'n': 7708, 'frac_of_total_positive_loss': 0.766019641736916, 'mean_p_raw_standalone': 0.40634800219789363, 'mean_p_dime_standalone': 0.06080112635771699, 'mean_G_raw': 3.0944783672544545, 'mean_js': 0.47199716253578516}
+[tuned] +:33.1% -:66.9% 0:0.0%  pos_sum=21893.05 neg_sum=-11987.07
+  worst_1pct: {'n': 770, 'frac_of_total_positive_loss': 0.18797010577758838, 'mean_p_raw_standalone': 0.701579124378563, 'mean_p_dime_standalone': 0.005070451489738055, 'mean_G_raw': 6.60413950923884, 'mean_js': 0.5716223707496003}
+  worst_5pct: {'n': 3854, 'frac_of_total_positive_loss': 0.5347212529208136, 'mean_p_raw_standalone': 0.547854430855978, 'mean_p_dime_standalone': 0.05442625251126831, 'mean_G_raw': 4.6554609136766825, 'mean_js': 0.44981871149425645}
+  worst_10pct: {'n': 7708, 'frac_of_total_positive_loss': 0.7475588939075893, 'mean_p_raw_standalone': 0.4935619509585746, 'mean_p_dime_standalone': 0.14337127116850637, 'mean_G_raw': 4.213357158809301, 'mean_js': 0.35179038071900715}
+
+=== Item 2: spike investigation (tuned config) ===
+{
+  "predicted_delta_L_when_both_zero": -0.1823215567939547,
+  "n_both_standalone_exactly_zero": 10128,
+  "frac_both_standalone_exactly_zero": 0.13138061201987314,
+  "n_within_1e-4_of_predicted_spike": 13252,
+  "frac_within_1e-4_of_predicted_spike": 0.1719052004825591,
+  "n_both_contributions_negligible": 12824,
+  "fraction_of_both_zero_cases_that_land_at_predicted_spike": 0.9950631911532386
+}
+
+=== Item 3: matched-config relationships ===
+[matched] distance_vs_js: spearman={'rho': 0.15173990580279517, 'p_value': 0.0, 'ci_95_low': 0.14480644616307975, 'ci_95_high': 0.1584449596751114}
+[matched] js_vs_deltaL: spearman={'rho': -0.1004632401686164, 'p_value': 4.474959779685493e-172, 'ci_95_low': -0.10791594358666641, 'ci_95_high': -0.09291130778690909}
+[matched] distance_vs_deltaL: spearman={'rho': 0.14092938248997267, 'p_value': 0.0, 'ci_95_low': 0.1338679639758305, 'ci_95_high': 0.14840616559314615}
+[matched] gain retention R = 0.6621359532634168
+
+=== Item 4: 2x2 coverage table (tuned config) ===
+{
+  "both_cover": {
+    "n": 50333,
+    "mean_delta_L": 0.34867304101842367,
+    "median_delta_L": 0.007395060451889757,
+    "mean_p_lm_true": 0.21686182916164398,
+    "mean_G_raw": 0.8855452361720647,
+    "mean_G_dime": 0.536872195153641
+  },
+  "raw_only": {
+    "n": 21,
+    "mean_delta_L": 0.17999974566648014,
+    "median_delta_L": -0.18055902889717534,
+    "mean_p_lm_true": 0.3950432240962982,
+    "mean_G_raw": 0.0746392410795429,
+    "mean_G_dime": -0.10536050458693724
+  },
+  "dime_only": {
+    "n": 16607,
+    "mean_delta_L": -0.34931302856967145,
+    "median_delta_L": -0.1858121315138206,
+    "mean_p_lm_true": 0.08632435649633408,
+    "mean_G_raw": -0.2876675869775129,
+    "mean_G_dime": 0.06164544159215856
+  },
+  "neither_covers": {
+    "n": 10128,
+    "mean_delta_L": -0.1823179257358627,
+    "median_delta_L": -0.18232152462876305,
+    "mean_p_lm_true": 0.09049613028764725,
+    "mean_G_raw": -0.2876603460853824,
+    "mean_G_dime": -0.10534242034951967
+  }
+}
+
+=== Items 5/6: targeted context recovery ===
+re-tokenizing 67 val chunks to recover context for 95 target positions...
+alignment check: 67/67 chunks aligned (max p_lm diff < 1e-3); 0 MISALIGNED
+{
+  "threshold_used_p0.5": 1.9073486328125e-06,
+  "n_near_zero": 348,
+  "frac_near_zero": 0.004514262735280001,
+  "mean_delta_L_near_zero": 0.18053470683952338,
+  "note": "flagged as a descriptive audit, not automatically labeled leakage per instruction -- see extreme_cases_decoded.json's small_distance_high_js entries and the chunk-level alignment check above for whether repeated short contexts/near-duplicate text is visible in the decoded samples actually inspected."
+}
+
+All follow-up results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1_followup
