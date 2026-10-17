@@ -1,0 +1,25 @@
+E1A.2 job started: Sat Oct 17 03:02:55 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction)...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}
+Building raw index, re-deriving DIME clusters (seed=42, deterministic, same as E1/follow-up)...
+clustering done in 178.5s
+Computing standalone retrieval probabilities and NLL (no epsilon)...
+non-finite L_raw: 26735 (34.68%)  non-finite L_dime: 10149 (13.17%)
+
+=== RQ1: distance vs. predictive quality ===
+raw: d_raw vs L_raw -> {'n': 50354, 'pearson': {'r': 0.11328563539168199, 'p_value': 1.851534440808638e-143, 'ci_95_low': 0.10148214842663612, 'ci_95_high': 0.12427606145510965}, 'spearman': {'rho': 0.2028086390664464, 'p_value': 0.0, 'ci_95_low': 0.19361066259554002, 'ci_95_high': 0.21173068166342238}}
+dime: d_dime vs L_dime -> {'n': 66940, 'pearson': {'r': 0.18611997530512922, 'p_value': 0.0, 'ci_95_low': 0.17746107122003515, 'ci_95_high': 0.19451714698691402}, 'spearman': {'rho': 0.20384687314557243, 'p_value': 0.0, 'ci_95_low': 0.196472139657224, 'ci_95_high': 0.21133032692537437}}
+
+=== RQ2: distance change vs. prediction change ===
+delta_d vs delta_L -> {'n': 50333, 'pearson': {'r': 0.11603708552841814, 'p_value': 2.1292476101341265e-150, 'ci_95_low': 0.09875639904053801, 'ci_95_high': 0.13188400917223211}, 'spearman': {'rho': 0.09577948148512846, 'p_value': 6.989645818128096e-103, 'ci_95_low': 0.08638417259984528, 'ci_95_high': 0.10523938231652316}}  (excluded 26756 non-finite pairs)
+
+=== RQ3: closer-centroid vs. farther-centroid groups ===
+tolerance used for 'approximately equal': 0.143952 (1% of median raw nearest distance)
+[closer_centroid] n=20400 (26.46%)  mean_delta_L=0.6444  frac_dime_improves=0.2643  mean_js=0.2638
+[farther_centroid] n=51988 (67.44%)  mean_delta_L=0.8371  frac_dime_improves=0.3147  mean_js=0.3674
+[approximately_equal] n=4701 (6.10%)  mean_delta_L=0.6062  frac_dime_improves=0.2874  mean_js=0.2631
+
+All E1A.2 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1a2_distance_prediction
+E1's existing outputs (stage3_e1_wikitext103/, stage3_e1_followup/) were not touched.
+E1A.2 job done: Sat Oct 17 03:13:21 PM CDT 2026
