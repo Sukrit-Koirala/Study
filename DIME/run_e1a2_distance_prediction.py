@@ -24,13 +24,15 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from scipy import stats
 
 from cache_io import load_cache
 from knn import build_datastore, query_knn_indices
 from state_object import minibatch_kmeans_partition
 from results_io import save_results
-from e1_metrics import raw_standalone_prob, dime_standalone_prob, js_divergence_dict, raw_full_distribution, dime_full_distribution
+from e1_metrics import (
+    raw_standalone_prob, dime_standalone_prob, js_divergence_dict, raw_full_distribution, dime_full_distribution,
+    correlations_with_ci, binned_stats, plot_binned,
+)
 
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "..", "GPT_Module", "cache")
 OUT_DIR = os.path.join(os.path.dirname(__file__), "results", "stage3_e1a2_distance_prediction")
@@ -38,59 +40,6 @@ PLOT_DIR = os.path.join(OUT_DIR, "plots")
 os.makedirs(PLOT_DIR, exist_ok=True)
 
 N_CLUSTERS = 3811
-
-
-def correlations_with_ci(x, y, n_boot=2000, seed=42):
-    """Pearson + Spearman, each with a bootstrap 95% CI, computed over the SAME
-    resamples (one bootstrap loop, not two) for efficiency."""
-    rng = np.random.default_rng(seed)
-    n = len(x)
-    pear_r, pear_p = stats.pearsonr(x, y)
-    spear_r, spear_p = stats.spearmanr(x, y)
-    pear_boot, spear_boot = np.zeros(n_boot), np.zeros(n_boot)
-    for b in range(n_boot):
-        idx = rng.integers(0, n, size=n)
-        pear_boot[b] = stats.pearsonr(x[idx], y[idx])[0]
-        spear_boot[b] = stats.spearmanr(x[idx], y[idx])[0]
-    pl, ph = np.percentile(pear_boot, [2.5, 97.5])
-    sl, sh = np.percentile(spear_boot, [2.5, 97.5])
-    return {
-        "n": int(n),
-        "pearson": {"r": float(pear_r), "p_value": float(pear_p), "ci_95_low": float(pl), "ci_95_high": float(ph)},
-        "spearman": {"rho": float(spear_r), "p_value": float(spear_p), "ci_95_low": float(sl), "ci_95_high": float(sh)},
-    }
-
-
-def binned_stats(x, y, n_bins=10):
-    edges = np.quantile(x, np.linspace(0, 1, n_bins + 1))
-    bin_idx = np.clip(np.digitize(x, edges[1:-1]), 0, n_bins - 1)
-    out = []
-    for b in range(n_bins):
-        mask = bin_idx == b
-        if mask.sum() == 0:
-            continue
-        out.append({"bin": b, "n": int(mask.sum()), "x_mean": float(x[mask].mean()),
-                     "y_mean": float(y[mask].mean()), "y_median": float(np.median(y[mask]))})
-    return out
-
-
-def plot_binned(bins, xlabel, ylabel, title, path):
-    fig, ax = plt.subplots(figsize=(7, 5))
-    xs = [b["x_mean"] for b in bins]
-    means = [b["y_mean"] for b in bins]
-    medians = [b["y_median"] for b in bins]
-    ns = [b["n"] for b in bins]
-    ax.plot(xs, means, "o-", label="mean")
-    ax.plot(xs, medians, "s--", label="median")
-    for x, m, n in zip(xs, means, ns):
-        ax.annotate(f"n={n}", (x, m), fontsize=7, textcoords="offset points", xytext=(0, 6))
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.set_title(title)
-    ax.legend()
-    fig.tight_layout()
-    fig.savefig(path, dpi=130)
-    plt.close(fig)
 
 
 def main():
