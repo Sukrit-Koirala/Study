@@ -1,0 +1,179 @@
+E1B.3 job started: Mon Oct 19 10:49:13 AM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction)...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}  matched={'k': 20, 'tau': 2.0, 'alpha': 0.25}
+Re-deriving DIME clusters (seed=42, deterministic, same as every prior E1 script) -- this time ALSO keeping the per-point assignment array, which minibatch_kmeans_partition doesn't return (changing its return shape would break every existing caller).
+clustering done in 174.3s
+regression check (first 50 queries, standalone DIME prob of true token): mean=0.146249 -- should be a sane probability-like number, not NaN/negative
+
+################ CONFIG: matched (raw k=20,tau=2.0 | dime k=20,tau=2.0) ################
+Experiment A: cluster-selection overlap (full val set)...
+  mean frac_neighbor_overlap=0.9741  mean frac_mass_overlap=0.9776  corr(mass_overlap, JS) spearman=-0.2472
+Experiments B/C sample: 3000 queries, stratified across JS deciles (300 target per decile)
+Experiment B/C: within-cluster analysis + four-system reconstruction (sampled)...
+  verification: raw per-position true-token prob matches p_raw exactly for 3000/3000 sampled queries
+  verification: System 3's cluster set matches DIME's own selection for 3000/3000 sampled queries
+{
+  "system1_raw": {
+    "coverage": 0.46,
+    "p_true": {
+      "mean": 0.16170945939908604,
+      "median": 0.0,
+      "p90": 0.6374764787056431,
+      "p95": 0.9458033613630698,
+      "p99": 1.0
+    },
+    "n_finite": 1380,
+    "n_infinite": 1620,
+    "frac_improves_vs_raw": 0.0,
+    "frac_degrades_vs_raw": 0.0,
+    "mean_improvement_magnitude_vs_raw": null,
+    "mean_degradation_magnitude_vs_raw": null,
+    "p95_degradation_vs_raw": null
+  },
+  "system2_dime": {
+    "coverage": 0.7633333333333333,
+    "p_true": {
+      "mean": 0.07018494804234521,
+      "median": 0.003803303327333512,
+      "p90": 0.19065319742835535,
+      "p95": 0.3501093245948671,
+      "p99": 0.9823431151611617
+    },
+    "n_finite": 2290,
+    "n_infinite": 710,
+    "frac_improves_vs_raw": 0.11563636363636363,
+    "frac_degrades_vs_raw": 0.8843636363636364,
+    "mean_improvement_magnitude_vs_raw": 0.5237890685843343,
+    "mean_degradation_magnitude_vs_raw": 1.8425518976541682,
+    "p95_degradation_vs_raw": 5.596543871650416
+  },
+  "system3": {
+    "coverage": 0.7633333333333333,
+    "p_true": {
+      "mean": 0.10540447327044158,
+      "median": 0.008203050057714979,
+      "p90": 0.3218011860782341,
+      "p95": 0.6047653110279829,
+      "p99": 0.99491754269112
+    },
+    "n_finite": 2290,
+    "n_infinite": 710,
+    "frac_improves_vs_raw": 0.15418181818181817,
+    "frac_degrades_vs_raw": 0.8458181818181818,
+    "mean_improvement_magnitude_vs_raw": 0.423348395280383,
+    "mean_degradation_magnitude_vs_raw": 0.8906766339771196,
+    "p95_degradation_vs_raw": 2.5638577248529977
+  },
+  "system4": {
+    "coverage": 0.706,
+    "p_true": {
+      "mean": 0.07676706760814467,
+      "median": 0.005771349320705512,
+      "p90": 0.21641697365324483,
+      "p95": 0.3665280636743055,
+      "p99": 0.9965535303037503
+    },
+    "n_finite": 2118,
+    "n_infinite": 882,
+    "frac_improves_vs_raw": 0.13768115942028986,
+    "frac_degrades_vs_raw": 0.8565217391304348,
+    "mean_improvement_magnitude_vs_raw": 0.5022904486029369,
+    "mean_degradation_magnitude_vs_raw": 1.6325200455127529,
+    "p95_degradation_vs_raw": 4.552695642827156
+  }
+}
+  System3 - System2 correct-token prob change: mean=0.03522  median=0.00035
+Subgroup analysis...
+  [A_high_js_low_distance_change] n=137  mass_overlap=0.9723847489621784  sys3_recovery=0.0023719958023387636
+  [B_dime_improves] n=159  mass_overlap=0.989764126246679  sys3_recovery=-0.0006478814746465599
+  [C_dime_substantially_worsens] n=683  mass_overlap=0.9787299543288281  sys3_recovery=0.14299344635263014
+  [D_dime_only_coverage] n=915  mass_overlap=0.9818969521196442  sys3_recovery=-0.0005627999477727266
+
+################ CONFIG: tuned (raw k=300,tau=1.0 | dime k=100,tau=2.0) ################
+Experiment A: cluster-selection overlap (full val set)...
+  mean frac_neighbor_overlap=0.9992  mean frac_mass_overlap=0.9997  corr(mass_overlap, JS) spearman=-0.1111
+Experiments B/C sample: 3000 queries, stratified across JS deciles (300 target per decile)
+Experiment B/C: within-cluster analysis + four-system reconstruction (sampled)...
+  verification: raw per-position true-token prob matches p_raw exactly for 3000/3000 sampled queries
+  verification: System 3's cluster set matches DIME's own selection for 3000/3000 sampled queries
+{
+  "system1_raw": {
+    "coverage": 0.665,
+    "p_true": {
+      "mean": 0.1724167379652819,
+      "median": 0.00741291728975641,
+      "p90": 0.7865359745160316,
+      "p95": 0.9915609210375563,
+      "p99": 0.9999999998561047
+    },
+    "n_finite": 1995,
+    "n_infinite": 1005,
+    "frac_improves_vs_raw": 0.0,
+    "frac_degrades_vs_raw": 0.0,
+    "mean_improvement_magnitude_vs_raw": null,
+    "mean_degradation_magnitude_vs_raw": null,
+    "p95_degradation_vs_raw": null
+  },
+  "system2_dime": {
+    "coverage": 0.8673333333333333,
+    "p_true": {
+      "mean": 0.06902997085662894,
+      "median": 0.003749175601055103,
+      "p90": 0.2019533878176067,
+      "p95": 0.32971331413619936,
+      "p99": 0.9827990202253315
+    },
+    "n_finite": 2602,
+    "n_infinite": 398,
+    "frac_improves_vs_raw": 0.28986960882647944,
+    "frac_degrades_vs_raw": 0.7101303911735206,
+    "mean_improvement_magnitude_vs_raw": 1.5106031058554223,
+    "mean_degradation_magnitude_vs_raw": 1.8025930695321755,
+    "p95_degradation_vs_raw": 5.916452290316092
+  },
+  "system3": {
+    "coverage": 0.8673333333333333,
+    "p_true": {
+      "mean": 0.10279902748198837,
+      "median": 0.008599792469888345,
+      "p90": 0.3228254481622909,
+      "p95": 0.5769610821942814,
+      "p99": 0.9923670549712281
+    },
+    "n_finite": 2602,
+    "n_infinite": 398,
+    "frac_improves_vs_raw": 0.36609829488465395,
+    "frac_degrades_vs_raw": 0.633901705115346,
+    "mean_improvement_magnitude_vs_raw": 1.2101788477127848,
+    "mean_degradation_magnitude_vs_raw": 0.8725564508476374,
+    "p95_degradation_vs_raw": 2.693297996387786
+  },
+  "system4": {
+    "coverage": 0.8126666666666666,
+    "p_true": {
+      "mean": 0.07638919291060273,
+      "median": 0.005687234818056042,
+      "p90": 0.23467893824908312,
+      "p95": 0.38353792915909357,
+      "p99": 0.9958157076645197
+    },
+    "n_finite": 2438,
+    "n_infinite": 562,
+    "frac_improves_vs_raw": 0.29974937343358393,
+    "frac_degrades_vs_raw": 0.700250626566416,
+    "mean_improvement_magnitude_vs_raw": 1.3138606981867609,
+    "mean_degradation_magnitude_vs_raw": 1.5945776063093087,
+    "p95_degradation_vs_raw": 4.635120744689154
+  }
+}
+  System3 - System2 correct-token prob change: mean=0.03377  median=0.00069
+Subgroup analysis...
+  [A_high_js_low_distance_change] n=62  mass_overlap=0.9992770909673174  sys3_recovery=0.0027886749704348394
+  [B_dime_improves] n=578  mass_overlap=0.9998423494500387  sys3_recovery=-0.002247673663034325
+  [C_dime_substantially_worsens] n=636  mass_overlap=0.9999019988478207  sys3_recovery=0.146463722453934
+  [D_dime_only_coverage] n=608  mass_overlap=0.9995221834866416  sys3_recovery=-0.00018579578027010362
+
+All E1B.3 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1b3_cluster_vs_aggregation
+E1/E1A/E1A.2/E1B.2's existing outputs were not touched.
+E1B.3 job done: Mon Oct 19 11:05:02 AM CDT 2026

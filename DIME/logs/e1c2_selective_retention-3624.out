@@ -1,0 +1,106 @@
+E1C.2 job started: Mon Oct 19 01:58:05 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction) + the real, persisted E1C tuned per-query data...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}  matched={'k': 20, 'tau': 2.0, 'alpha': 0.25}
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1-series script)...
+clustering done in 178.1s
+Computing matched-config S1/S2 interpolated NLL (fresh, deterministic -- see docstring)...
+Computing the common-alpha (tuned k/tau) sensitivity ranking...
+Restricted-index generalization sample: 3000 queries (JS-stratified). Fixed-budget-comparison sample: 2000 queries (random).
+
+################ CONFIG: matched ################
+Section 4: identifying retained vectors per worst-query group...
+  worst 1%: n_queries=771  unique_vectors=13044  frac_of_datastore=0.03422
+  worst 5%: n_queries=3854  unique_vectors=53766  frac_of_datastore=0.14107
+  worst 10%: n_queries=7709  unique_vectors=95016  frac_of_datastore=0.24930
+  worst 20%: n_queries=15418  unique_vectors=158449  frac_of_datastore=0.41574
+  worst 1% hybrid storage: 53.121 MB  compression_vs_raw=22.07x  overhead_vs_dime=312.00%
+  worst 5% hybrid storage: 178.708 MB  compression_vs_raw=6.56x  overhead_vs_dime=1286.02%
+  worst 10% hybrid storage: 305.923 MB  compression_vs_raw=3.83x  overhead_vs_dime=2272.67%
+  worst 20% hybrid storage: 501.550 MB  compression_vs_raw=2.34x  overhead_vs_dime=3789.91%
+Section 6: reuse frequency, cluster concentration, random-group baseline...
+  worst 1%: clusters_touched=1675  top10_share=0.045  |  random-group unique_vectors=14892 (worst-group: 13044)
+  worst 5%: clusters_touched=3168  top10_share=0.020  |  random-group unique_vectors=64356 (worst-group: 53766)
+  worst 10%: clusters_touched=3459  top10_share=0.015  |  random-group unique_vectors=111134 (worst-group: 95016)
+  worst 20%: clusters_touched=3689  top10_share=0.011  |  random-group unique_vectors=175006 (worst-group: 158449)
+Section 7: oracle predictive recovery...
+  oracle worst 1%: mean_nll=3.9737  gap_recovered=57.427043063240944%  pos_loss_eliminated=20.827669051838047%
+  oracle worst 5%: mean_nll=3.8902  gap_recovered=159.1445231860941%  pos_loss_eliminated=57.71861623943293%
+  oracle worst 10%: mean_nll=3.8474  gap_recovered=211.24059408191732%  pos_loss_eliminated=76.61284560667417%
+  oracle worst 20%: mean_nll=3.8126  gap_recovered=253.6213412361621%  pos_loss_eliminated=91.98351644073053%
+Section 8/9: restricted-index diagnostics (worst-query-driven budgets)...
+  worst 1% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.8073929961089494  |  generalization-sample coverage=0.2557
+  worst 5% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.7220420342501297  |  generalization-sample coverage=0.3657
+  worst 10% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.6605396290050589  |  generalization-sample coverage=0.4077
+  worst 20% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.629559605655727  |  generalization-sample coverage=0.4610
+Section 9: fixed-budget baselines (random / frequency / oracle-derived selection)...
+  budget matching worst-1% (13044 vectors): random_nll=4.1249  freq_nll=4.1242  oracle_nll=4.1825  (eval sample, n=2000)
+  budget matching worst-5% (53766 vectors): random_nll=4.0281  freq_nll=4.0302  oracle_nll=3.9814  (eval sample, n=2000)
+  budget matching worst-10% (95016 vectors): random_nll=4.0276  freq_nll=4.0073  oracle_nll=3.9542  (eval sample, n=2000)
+  budget matching worst-20% (158449 vectors): random_nll=3.9727  freq_nll=3.9555  oracle_nll=3.9171  (eval sample, n=2000)
+
+################ CONFIG: tuned ################
+Section 4: identifying retained vectors per worst-query group...
+  worst 1%: n_queries=771  unique_vectors=106632  frac_of_datastore=0.27978
+  worst 5%: n_queries=3854  unique_vectors=255489  frac_of_datastore=0.67035
+  worst 10%: n_queries=7709  unique_vectors=313376  frac_of_datastore=0.82224
+  worst 20%: n_queries=15418  unique_vectors=350502  frac_of_datastore=0.91965
+  worst 1% hybrid storage: 341.747 MB  compression_vs_raw=3.43x  overhead_vs_dime=2550.51%
+  worst 5% hybrid storage: 800.822 MB  compression_vs_raw=1.46x  overhead_vs_dime=6110.99%
+  worst 10% hybrid storage: 979.345 MB  compression_vs_raw=1.20x  overhead_vs_dime=7495.58%
+  worst 20% hybrid storage: 1093.842 MB  compression_vs_raw=1.07x  overhead_vs_dime=8383.59%
+Section 6: reuse frequency, cluster concentration, random-group baseline...
+  worst 1%: clusters_touched=2801  top10_share=0.020  |  random-group unique_vectors=153050 (worst-group: 106632)
+  worst 5%: clusters_touched=3653  top10_share=0.010  |  random-group unique_vectors=312352 (worst-group: 255489)
+  worst 10%: clusters_touched=3764  top10_share=0.009  |  random-group unique_vectors=348260 (worst-group: 313376)
+  worst 20%: clusters_touched=3782  top10_share=0.009  |  random-group unique_vectors=366039 (worst-group: 350502)
+Section 7: oracle predictive recovery...
+  oracle worst 1%: mean_nll=3.9576  gap_recovered=41.58405774806886%  pos_loss_eliminated=18.815600297291326%
+  oracle worst 5%: mean_nll=3.8592  gap_recovered=118.17789020411766%  pos_loss_eliminated=53.472125292081344%
+  oracle worst 10%: mean_nll=3.7987  gap_recovered=165.22611802697242%  pos_loss_eliminated=74.76010672895447%
+  oracle worst 20%: mean_nll=3.7406  gap_recovered=210.45494870885886%  pos_loss_eliminated=95.22486284246227%
+Section 8/9: restricted-index diagnostics (worst-query-driven budgets)...
+  worst 1% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.6306787721573713  |  generalization-sample coverage=0.5733
+  worst 5% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.5280461857810067  |  generalization-sample coverage=0.6377
+  worst 10% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.44617892506594026  |  generalization-sample coverage=0.6477
+  worst 20% restricted index: on-target coverage=1.0000  reconstruction_rate_mean=0.4094056730228737  |  generalization-sample coverage=0.6553
+Section 9: fixed-budget baselines (random / frequency / oracle-derived selection)...
+  budget matching worst-1% (106632 vectors): random_nll=3.9699  freq_nll=3.9809  oracle_nll=4.0402  (eval sample, n=2000)
+  budget matching worst-5% (255489 vectors): random_nll=3.8933  freq_nll=3.9167  oracle_nll=3.8979  (eval sample, n=2000)
+  budget matching worst-10% (313376 vectors): random_nll=3.8778  freq_nll=3.8920  oracle_nll=3.8660  (eval sample, n=2000)
+  budget matching worst-20% (350502 vectors): random_nll=3.8784  freq_nll=3.8803  oracle_nll=3.8645  (eval sample, n=2000)
+
+################ PART B: S3 recovery on E1C's worst queries ################
+Computing S3 (query-conditioned) standalone probability for ALL queries, per config -- needed for both the worst-group analysis and the worst-vs-remaining-90% comparison.
+
+--- Part B, config: matched ---
+    sys3 progress: 10000/77089  (491.6 q/s, ETA 2.3 min)
+    sys3 progress: 20000/77089  (489.0 q/s, ETA 1.9 min)
+    sys3 progress: 30000/77089  (489.9 q/s, ETA 1.6 min)
+    sys3 progress: 40000/77089  (492.8 q/s, ETA 1.3 min)
+    sys3 progress: 50000/77089  (493.5 q/s, ETA 0.9 min)
+    sys3 progress: 60000/77089  (492.7 q/s, ETA 0.6 min)
+    sys3 progress: 70000/77089  (490.7 q/s, ETA 0.2 min)
+  worst 1%: frac_improved_by_S3=0.958  fraction_positive_loss_repaired=0.5816468064779461
+  worst 5%: frac_improved_by_S3=0.968  fraction_positive_loss_repaired=0.5015334980013197
+  worst 10%: frac_improved_by_S3=0.971  fraction_positive_loss_repaired=0.4722702615881612
+  [A_worst_10pct] n=7709  S2-S3 recovery=0.8206  contribution_to_total=0.8859654879604273
+  [B_remaining_90pct] n=69380  S2-S3 recovery=0.0117  contribution_to_total=0.11403451203957277
+
+--- Part B, config: tuned ---
+    sys3 progress: 10000/77089  (98.2 q/s, ETA 11.4 min)
+    sys3 progress: 20000/77089  (98.1 q/s, ETA 9.7 min)
+    sys3 progress: 30000/77089  (98.4 q/s, ETA 8.0 min)
+    sys3 progress: 40000/77089  (99.1 q/s, ETA 6.2 min)
+    sys3 progress: 50000/77089  (99.2 q/s, ETA 4.6 min)
+    sys3 progress: 60000/77089  (99.2 q/s, ETA 2.9 min)
+    sys3 progress: 70000/77089  (98.9 q/s, ETA 1.2 min)
+  worst 1%: frac_improved_by_S3=0.999  fraction_positive_loss_repaired=0.438116503805369
+  worst 5%: frac_improved_by_S3=0.994  fraction_positive_loss_repaired=0.3378490696872764
+  worst 10%: frac_improved_by_S3=0.978  fraction_positive_loss_repaired=0.286912544896722
+  [A_worst_10pct] n=7709  S2-S3 recovery=0.6103  contribution_to_total=0.934696168046131
+  [B_remaining_90pct] n=69380  S2-S3 recovery=0.0047  contribution_to_total=0.06530383195386898
+
+All E1C.2 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1c2_selective_retention
+No existing E1-series outputs were modified.
+E1C.2 job done: Mon Oct 19 02:26:44 PM CDT 2026

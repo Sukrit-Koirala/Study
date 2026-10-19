@@ -1,0 +1,219 @@
+E2 job started: Mon Oct 19 02:41:04 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (datastore/controller_train/val) + real persisted E1C tuned per-query data...
+datastore=381127  controller_train=90170  val=77089
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1-series script)...
+Computing S1/S2 baselines (val, full scale)...
+Computing S1/S2 baselines (controller_train, for beta-tuning and cluster-priority ranking)...
+Computing S3 (full member-aware) on val, matched config -- the uncompressed reference for R_S3...
+  mean L_S1=3.9387  L_S2=4.0209  L_S3=3.9282
+Validation: zero-budget hybrid == DIME; full-budget (beta=1, all members) hybrid == S3...
+  zero-budget == DIME: True (max abs diff 0.00e+00)
+  full-budget (beta=1) == S3: True (max abs diff 0.00e+00)
+Tuning beta on controller_train (small reference budget: 1 nearest-centroid member/cluster)...
+      progress: 30000/90170  (5457.4 q/s, ETA 0.2 min)
+      progress: 60000/90170  (5469.2 q/s, ETA 0.1 min)
+      progress: 90000/90170  (5466.6 q/s, ETA 0.0 min)
+  beta=0.25: controller_train NLL=4.0205
+      progress: 30000/90170  (5466.9 q/s, ETA 0.2 min)
+      progress: 60000/90170  (5480.5 q/s, ETA 0.1 min)
+      progress: 90000/90170  (5483.0 q/s, ETA 0.0 min)
+  beta=0.5: controller_train NLL=4.0403
+      progress: 30000/90170  (5463.0 q/s, ETA 0.2 min)
+      progress: 60000/90170  (5474.9 q/s, ETA 0.1 min)
+      progress: 90000/90170  (5476.1 q/s, ETA 0.0 min)
+  beta=0.75: controller_train NLL=4.0734
+      progress: 30000/90170  (5469.1 q/s, ETA 0.2 min)
+      progress: 60000/90170  (5466.5 q/s, ETA 0.1 min)
+      progress: 90000/90170  (5469.1 q/s, ETA 0.0 min)
+  beta=1.0: controller_train NLL=4.1951
+Selected FIXED beta=0.25 (common across every strategy/budget below)
+Computing cluster priority rankings (controller_train only)...
+  usage-based and sensitivity-based priority rankings computed (attribution: positive controller_train delta_L assigned to each query's TOP-1 nearest cluster only -- a simplified, stated attribution rule, not a causal decomposition across all k retrieved clusters)
+
+################ BUDGET: 1% of raw storage (~3811 vectors) ################
+  --- strategy: uniform ---
+    evaluating uniform@0.01 (77089 queries)...
+      progress: 20000/77089  (5452.1 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5461.3 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5459.3 q/s, ETA 0.1 min)
+    n_retained=3811  bytes=24.647MB  comp_ratio=47.5x  mean_nll=4.0288  R_S3=-8.560977390376035  (stable)
+  --- strategy: selective_usage ---
+    evaluating selective_usage@0.01 (77089 queries)...
+      progress: 20000/77089  (16327.9 q/s, ETA 0.1 min)
+      progress: 40000/77089  (16791.4 q/s, ETA 0.0 min)
+      progress: 60000/77089  (16682.3 q/s, ETA 0.0 min)
+    n_retained=3811  bytes=24.647MB  comp_ratio=47.5x  mean_nll=4.0199  R_S3=1.0366865171821424  (stable)
+  --- strategy: selective_sensitivity ---
+    evaluating selective_sensitivity@0.01 (77089 queries)...
+      progress: 20000/77089  (28514.7 q/s, ETA 0.0 min)
+      progress: 40000/77089  (27795.0 q/s, ETA 0.0 min)
+      progress: 60000/77089  (27917.9 q/s, ETA 0.0 min)
+    n_retained=3811  bytes=24.647MB  comp_ratio=47.5x  mean_nll=4.0177  R_S3=3.4397126653465593  (stable)
+  --- strategy: hybrid ---
+    evaluating hybrid@0.01 (77089 queries)...
+      progress: 20000/77089  (5500.3 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5506.6 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5506.0 q/s, ETA 0.1 min)
+    n_retained=3811  bytes=24.647MB  comp_ratio=47.5x  mean_nll=4.0288  R_S3=-8.560977390376035  (stable)
+
+################ BUDGET: 5% of raw storage (~19056 vectors) ################
+  --- strategy: uniform ---
+    evaluating uniform@0.05 (77089 queries)...
+      progress: 20000/77089  (3812.4 q/s, ETA 0.2 min)
+      progress: 40000/77089  (3814.9 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3814.6 q/s, ETA 0.1 min)
+    n_retained=18997  bytes=71.480MB  comp_ratio=16.4x  mean_nll=4.0165  R_S3=4.744971174216294  (stable)
+  --- strategy: selective_usage ---
+    evaluating selective_usage@0.05 (77089 queries)...
+      progress: 20000/77089  (4842.2 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4936.0 q/s, ETA 0.1 min)
+      progress: 60000/77089  (4904.3 q/s, ETA 0.1 min)
+    n_retained=19056  bytes=71.662MB  comp_ratio=16.3x  mean_nll=4.0163  R_S3=4.875076859162622  (stable)
+  --- strategy: selective_sensitivity ---
+    evaluating selective_sensitivity@0.05 (77089 queries)...
+      progress: 20000/77089  (8848.4 q/s, ETA 0.1 min)
+      progress: 40000/77089  (8524.4 q/s, ETA 0.1 min)
+      progress: 60000/77089  (8573.9 q/s, ETA 0.0 min)
+    n_retained=19056  bytes=71.662MB  comp_ratio=16.3x  mean_nll=4.0108  R_S3=10.908789622517517  (stable)
+  --- strategy: hybrid ---
+    evaluating hybrid@0.05 (77089 queries)...
+      progress: 20000/77089  (3937.7 q/s, ETA 0.2 min)
+      progress: 40000/77089  (3887.0 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3893.1 q/s, ETA 0.1 min)
+    n_retained=19056  bytes=71.662MB  comp_ratio=16.3x  mean_nll=4.0186  R_S3=2.430660648717307  (stable)
+
+################ BUDGET: 10% of raw storage (~38112 vectors) ################
+  --- strategy: uniform ---
+    evaluating uniform@0.1 (77089 queries)...
+      progress: 20000/77089  (2936.8 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2936.8 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2935.9 q/s, ETA 0.1 min)
+    n_retained=37788  bytes=129.432MB  comp_ratio=9.0x  mean_nll=4.0110  R_S3=10.627769231940649  (stable)
+  --- strategy: selective_usage ---
+    evaluating selective_usage@0.1 (77089 queries)...
+      progress: 20000/77089  (2612.1 q/s, ETA 0.4 min)
+      progress: 40000/77089  (2635.3 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2629.3 q/s, ETA 0.1 min)
+    n_retained=38112  bytes=130.431MB  comp_ratio=9.0x  mean_nll=4.0122  R_S3=9.377482671066  (stable)
+  --- strategy: selective_sensitivity ---
+    evaluating selective_sensitivity@0.1 (77089 queries)...
+      progress: 20000/77089  (4158.8 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4022.4 q/s, ETA 0.2 min)
+      progress: 60000/77089  (4039.8 q/s, ETA 0.1 min)
+    n_retained=38112  bytes=130.431MB  comp_ratio=9.0x  mean_nll=4.0060  R_S3=16.021280762165006  (stable)
+  --- strategy: hybrid ---
+    evaluating hybrid@0.1 (77089 queries)...
+      progress: 20000/77089  (2817.9 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2763.1 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2769.4 q/s, ETA 0.1 min)
+    n_retained=38112  bytes=130.431MB  comp_ratio=9.0x  mean_nll=4.0124  R_S3=9.102553890159934  (stable)
+
+################ Strategy A secondary: random vs nearest_centroid ################
+    evaluating uniform_random seed=42@0.01 (77089 queries)...
+      progress: 20000/77089  (5545.5 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5557.0 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5556.1 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=43@0.01 (77089 queries)...
+      progress: 20000/77089  (5459.7 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5467.8 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5470.2 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=44@0.01 (77089 queries)...
+      progress: 20000/77089  (5425.4 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5432.1 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5432.8 q/s, ETA 0.1 min)
+  budget 1%: random mean_nll=4.0341+/-0.0008  nearest_centroid=4.0288
+    evaluating uniform_random seed=42@0.05 (77089 queries)...
+      progress: 20000/77089  (3810.5 q/s, ETA 0.2 min)
+      progress: 40000/77089  (3816.9 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3817.0 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=43@0.05 (77089 queries)...
+      progress: 20000/77089  (3806.8 q/s, ETA 0.2 min)
+      progress: 40000/77089  (3806.4 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3805.6 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=44@0.05 (77089 queries)...
+      progress: 20000/77089  (3761.7 q/s, ETA 0.3 min)
+      progress: 40000/77089  (3765.8 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3767.7 q/s, ETA 0.1 min)
+  budget 5%: random mean_nll=4.0204+/-0.0008  nearest_centroid=4.0165
+    evaluating uniform_random seed=42@0.1 (77089 queries)...
+      progress: 20000/77089  (2851.7 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2851.3 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2851.5 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=43@0.1 (77089 queries)...
+      progress: 20000/77089  (2861.1 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2860.8 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2860.3 q/s, ETA 0.1 min)
+    evaluating uniform_random seed=44@0.1 (77089 queries)...
+      progress: 20000/77089  (2852.2 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2855.9 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2855.5 q/s, ETA 0.1 min)
+  budget 10%: random mean_nll=4.0131+/-0.0005  nearest_centroid=4.0110
+
+################ Part E: worst-query-group recovery ################
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (5459.2 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5469.8 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5473.5 q/s, ETA 0.1 min)
+  budget=1% strat=uniform: worst-10% repaired=-0.008976765004136897
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (15654.6 q/s, ETA 0.1 min)
+      progress: 40000/77089  (16120.8 q/s, ETA 0.0 min)
+      progress: 60000/77089  (16018.0 q/s, ETA 0.0 min)
+  budget=1% strat=selective_usage: worst-10% repaired=0.00473563727143524
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (28653.0 q/s, ETA 0.0 min)
+      progress: 40000/77089  (27974.5 q/s, ETA 0.0 min)
+      progress: 60000/77089  (28075.5 q/s, ETA 0.0 min)
+  budget=1% strat=selective_sensitivity: worst-10% repaired=0.018004887825799128
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (5452.7 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5462.6 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5469.0 q/s, ETA 0.1 min)
+  budget=1% strat=hybrid: worst-10% repaired=-0.008976765004136897
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (3786.3 q/s, ETA 0.3 min)
+      progress: 40000/77089  (3798.3 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3799.2 q/s, ETA 0.1 min)
+  budget=5% strat=uniform: worst-10% repaired=0.032794218026764826
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (4614.8 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4699.1 q/s, ETA 0.1 min)
+      progress: 60000/77089  (4669.1 q/s, ETA 0.1 min)
+  budget=5% strat=selective_usage: worst-10% repaired=0.022232542288057332
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (8271.6 q/s, ETA 0.1 min)
+      progress: 40000/77089  (7955.3 q/s, ETA 0.1 min)
+      progress: 60000/77089  (7998.4 q/s, ETA 0.0 min)
+  budget=5% strat=selective_sensitivity: worst-10% repaired=0.055271010532425814
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (3907.3 q/s, ETA 0.2 min)
+      progress: 40000/77089  (3854.7 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3858.5 q/s, ETA 0.1 min)
+  budget=5% strat=hybrid: worst-10% repaired=0.04337341084695288
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (2847.3 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2848.9 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2850.1 q/s, ETA 0.1 min)
+  budget=10% strat=uniform: worst-10% repaired=0.05349075376017721
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (2752.4 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2774.6 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2767.8 q/s, ETA 0.1 min)
+  budget=10% strat=selective_usage: worst-10% repaired=0.04276884945245104
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (4565.5 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4414.6 q/s, ETA 0.1 min)
+      progress: 60000/77089  (4431.6 q/s, ETA 0.1 min)
+  budget=10% strat=selective_sensitivity: worst-10% repaired=0.0785990988663308
+    evaluating worst-query-recompute (77089 queries)...
+      progress: 20000/77089  (2926.1 q/s, ETA 0.3 min)
+      progress: 40000/77089  (2870.4 q/s, ETA 0.2 min)
+      progress: 60000/77089  (2876.4 q/s, ETA 0.1 min)
+  budget=10% strat=hybrid: worst-10% repaired=0.0721096423587911
+
+Generating plots...
+
+All E2 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2_information_allocation
+No existing E1-series outputs were modified.
+E2 job done: Mon Oct 19 03:06:49 PM CDT 2026
