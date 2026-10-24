@@ -1,0 +1,53 @@
+E1B.4 job started: Mon Oct 19 12:00:33 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction)...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}  matched={'k': 20, 'tau': 2.0}  common interpolation alpha=0.25
+Re-deriving DIME clusters (seed=42, deterministic, identical to E1/E1A.2/E1B.2/E1B.3)...
+clustering done in 208.5s
+Precomputing cluster -> member-indices map (one argsort, not per-cluster scans)...
+done in 0.03s
+
+################ CONFIG: matched (raw k=20,tau=2.0 | dime k=20,tau=2.0) ################
+Computing S1 (raw) and S2 (DIME) standalone probabilities...
+  validation: S1/S2 reproduce identically across independent calls -- OK
+  cross-check vs. E1B.2's persisted matched-config DIME coverage: prior=0.762859  this_run=0.762859  match=True
+Computing S3 (query-conditioned, full 77089 queries) -- this is the new, expensive part...
+    sys3 progress: 10000/77089  (393.7 queries/sec, ETA 2.8 min)
+    sys3 progress: 20000/77089  (382.2 queries/sec, ETA 2.5 min)
+    sys3 progress: 30000/77089  (379.7 queries/sec, ETA 2.1 min)
+    sys3 progress: 40000/77089  (380.7 queries/sec, ETA 1.6 min)
+    sys3 progress: 50000/77089  (380.5 queries/sec, ETA 1.2 min)
+    sys3 progress: 60000/77089  (379.3 queries/sec, ETA 0.8 min)
+    sys3 progress: 70000/77089  (377.6 queries/sec, ETA 0.3 min)
+  validation: S3 uses the identical idx_dime_t/d_dime_t as S2 by construction (same arrays, not recomputed)
+  interpolated: mean_S1=3.9388  mean_S2=4.0209  mean_S3=3.9282
+  recovery fraction R=1.128551556941005  (stable)
+  standalone coverage: S1=0.4573  S2=0.7629  S3=0.7629  shared_finite_n=35007
+  [A_both_cover] n=35007 (45.41%)  S2-S1=0.4677  S2-S3=0.2217
+  [B_raw_only] n=244 (0.32%)  S2-S1=1.2176  S2-S3=0.0000
+  [C_dime_only] n=23801 (30.87%)  S2-S1=-0.4345  S2-S3=-0.0261
+  [D_neither] n=18037 (23.40%)  S2-S1=0.0000  S2-S3=0.0000
+
+################ CONFIG: tuned (raw k=300,tau=1.0 | dime k=100,tau=2.0) ################
+Computing S1 (raw) and S2 (DIME) standalone probabilities...
+  validation: S1/S2 reproduce identically across independent calls -- OK
+Computing S3 (query-conditioned, full 77089 queries) -- this is the new, expensive part...
+    sys3 progress: 10000/77089  (76.4 queries/sec, ETA 14.6 min)
+    sys3 progress: 20000/77089  (77.6 queries/sec, ETA 12.3 min)
+    sys3 progress: 30000/77089  (78.4 queries/sec, ETA 10.0 min)
+    sys3 progress: 40000/77089  (78.7 queries/sec, ETA 7.8 min)
+    sys3 progress: 50000/77089  (78.8 queries/sec, ETA 5.7 min)
+    sys3 progress: 60000/77089  (78.7 queries/sec, ETA 3.6 min)
+    sys3 progress: 70000/77089  (78.5 queries/sec, ETA 1.5 min)
+  validation: S3 uses the identical idx_dime_t/d_dime_t as S2 by construction (same arrays, not recomputed)
+  interpolated: mean_S1=3.8825  mean_S2=4.0099  mean_S3=3.9171
+  recovery fraction R=0.7288184177020386  (stable)
+  standalone coverage: S1=0.6532  S2=0.8683  S3=0.8683  shared_finite_n=50333
+  [A_both_cover] n=50333 (65.29%)  S2-S1=0.2800  S2-S3=0.1553
+  [B_raw_only] n=21 (0.03%)  S2-S1=0.3623  S2-S3=0.0000
+  [C_dime_only] n=16607 (21.54%)  S2-S1=-0.2578  S2-S3=-0.0399
+  [D_neither] n=10128 (13.14%)  S2-S1=0.0000  S2-S3=0.0000
+
+All E1B.4 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1b4_nll_recovery
+E1/E1A/E1A.2/E1B.2/E1B.3's existing outputs were not touched.
+E1B.4 job done: Mon Oct 19 12:27:59 PM CDT 2026

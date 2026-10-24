@@ -1,0 +1,34 @@
+E1B.2 job started: Mon Oct 19 10:07:28 AM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction)...
+val=77089  raw_tuned={'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}  dime_tuned={'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}  matched={'k': 20, 'tau': 2.0, 'alpha': 0.25}
+Building raw index, re-deriving DIME clusters (seed=42, deterministic, same as E1/E1A.2)...
+clustering done in 151.8s
+
+################ CONFIG: matched (raw k=20,tau=2.0,alpha=0.25 | dime k=20,tau=2.0,alpha=0.25) ################
+Computing full standalone distributions (JS, entropy, concentration)...
+  [A_both_cover] n=35007 (45.41%)  mean_p_raw=0.35162891335193724  mean_p_dime=0.14809409015832556  mean_js=0.3858097280568217
+  [B_raw_only] n=244 (0.32%)  mean_p_raw=0.14759992375478964  mean_p_dime=0.0  mean_js=0.5633732840066711
+  [C_dime_only] n=23801 (30.87%)  mean_p_raw=0.0  mean_p_dime=0.007364921839843217  mean_js=0.482932279997009
+  [D_neither] n=18037 (23.40%)  mean_p_raw=0.0  mean_p_dime=0.0  mean_js=0.5108282742646113
+  RQ2: n_A=35007  frac_increase=0.120  mean_signed_deltaL=1.5773
+  RQ3: effect_A(coverage gain)=23801  effect_B(prob degradation in A)=30813  controlled-alpha mean_delta_L_interp=0.0821
+  RQ4: mean entropy raw=2.156 dime=4.967  top1_agreement=0.337
+  RQ5 (standalone, finite subset n=35007): js_vs_deltaL spearman=0.6134
+  RQ5 (interpolated, all queries): js_vs_deltaL_interp spearman=-0.1005
+
+################ CONFIG: tuned (raw k=300,tau=1.0,alpha=0.25 | dime k=100,tau=2.0,alpha=0.1) ################
+Computing full standalone distributions (JS, entropy, concentration)...
+  [A_both_cover] n=50333 (65.29%)  mean_p_raw=0.25583031626195135  mean_p_dime=0.10379742090880936  mean_js=0.33591380674916377
+  [B_raw_only] n=21 (0.03%)  mean_p_raw=0.016133493138646558  mean_p_dime=0.0  mean_js=0.4446274076166629
+  [C_dime_only] n=16607 (21.54%)  mean_p_raw=0.0  mean_p_dime=0.0005384319592269581  mean_js=0.39670259838373334
+  [D_neither] n=10128 (13.14%)  mean_p_raw=0.0  mean_p_dime=0.0  mean_js=0.39954486271534134
+  RQ2: n_A=50333  frac_increase=0.301  mean_signed_deltaL=0.7763
+  RQ3: effect_A(coverage gain)=16607  effect_B(prob degradation in A)=35196  controlled-alpha mean_delta_L_interp=0.1274
+  RQ4: mean entropy raw=2.675 dime=5.222  top1_agreement=0.336
+  RQ5 (standalone, finite subset n=50333): js_vs_deltaL spearman=0.2398
+  RQ5 (interpolated, all queries): js_vs_deltaL_interp spearman=-0.0563
+
+All E1B.2 results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e1b2_coverage_concentration
+E1/E1A/E1A.2/E1-followup's existing outputs were not touched.
+E1B.2 job done: Mon Oct 19 10:21:47 AM CDT 2026
