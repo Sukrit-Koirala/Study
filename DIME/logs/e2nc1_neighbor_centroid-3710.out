@@ -1,0 +1,82 @@
+E2-NC1 job started: Mon Oct 26 11:00:14 AM CDT 2026
+Node: Slurm-2-7
+E2-NC1 job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache (datastore/controller_train/val) + TRI1's persisted summary...
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1/E2/TRI1 script)...
+Querying val/controller_train/datastore (matched config, k=20) -- raw+DIME retrieval, c1/c2/c3 assignment...
+  datastore top-1 (fresh query) vs. k-means fit_predict assignment mismatch: 0.033%
+
+Experiment A: building (c1,c2)->y and (c1,c2,c3)->y count tables...
+  (c1,c2) table: 72275 distinct keys, 316674 (key,token) entries
+  (c1,c3) table: 84157 distinct keys
+  (c1,c2,c3) joint table: 235021 distinct keys
+Tuning smoothing lambda on full controller_train (N2-style primary+c2, gamma=1)...
+  lambda=1.0: controller_train mean NLL = 4.0198
+  lambda=10.0: controller_train mean NLL = 4.0130
+  lambda=50.0: controller_train mean NLL = 4.0118
+  lambda=200.0: controller_train mean NLL = 4.0123
+  chosen lambda = 50.0 (CT mean NLL = 4.0118); N5 stronger-smoothing lambda = 500.0
+
+Tuning hybrid-blend gamma on full controller_train (N6)...
+  gamma=0.25: controller_train mean NLL = 4.0123
+  gamma=0.5: controller_train mean NLL = 4.0121
+  gamma=0.75: controller_train mean NLL = 4.0119
+  gamma=1.0: controller_train mean NLL = 4.0118
+  chosen gamma = 1.0 (CT mean NLL = 4.0118)
+
+Experiment D: ablation grid (N2-N6 + shuffle), full val...
+      progress: 20000/77089  (108469.0 q/s, ETA 0.0 min)
+      progress: 40000/77089  (109910.5 q/s, ETA 0.0 min)
+      progress: 60000/77089  (110596.2 q/s, ETA 0.0 min)
+  N2 (primary+c2, gamma=1): val mean NLL = 4.0200
+      progress: 20000/77089  (107193.5 q/s, ETA 0.0 min)
+      progress: 40000/77089  (108683.8 q/s, ETA 0.0 min)
+      progress: 60000/77089  (109545.5 q/s, ETA 0.0 min)
+  N3 (primary+c3 alternative): val mean NLL = 4.0204
+      progress: 20000/77089  (108324.0 q/s, ETA 0.0 min)
+      progress: 40000/77089  (109850.6 q/s, ETA 0.0 min)
+      progress: 60000/77089  (110507.1 q/s, ETA 0.0 min)
+  N4 (primary+c2,c3 joint): val mean NLL = 4.0202
+      progress: 20000/77089  (108090.8 q/s, ETA 0.0 min)
+      progress: 40000/77089  (109585.9 q/s, ETA 0.0 min)
+      progress: 60000/77089  (110374.9 q/s, ETA 0.0 min)
+  N5 (primary+c2, stronger smoothing, lambda=500.0): val mean NLL = 4.0207
+  N6 (primary+c2, hybrid gamma=1.0): val mean NLL = 4.0200
+      progress: 20000/77089  (107291.1 q/s, ETA 0.0 min)
+      progress: 40000/77089  (108704.5 q/s, ETA 0.0 min)
+      progress: 60000/77089  (109469.2 q/s, ETA 0.0 min)
+  shuffled-c2 negative control: val mean NLL = 4.0217 (should sit close to N1_dime if the formula isn't just an artifact of smoothing itself)
+
+Reconstructing E2-TRI1's K=8 config from its persisted hyperparameters, verifying before use...
+  reconstructed TRI1 K=8 mean NLL = 4.012738 vs. persisted = 4.012738 (abs diff = 0.000000)
+
+Experiment C: does c2 identity carry information about y beyond c1?...
+  naive pooled plug-in I(Y;C2|C1) = 1.88567 nats (UPWARD-BIASED -- same data used to fit the table)
+  held-out check: mean log-lik with c2 = -16.9494, c1-only = -16.9498, improvement = 0.00045 nats/token (n_eval=190247)
+
+Distributional metrics (correct-token coverage) for N0/N1/N2...
+  coverage: raw=0.4573, DIME-V1=0.7629, N2=0.7629
+Decoded-token examples where c2 identity changes the preferred token (up to 20)...
+  found 20 preference-reversal examples
+
+Difficult-query tail: worst-1/5/10% val queries by matched delta_L (DIME - raw)...
+  worst-1%: raw=2.3590, dime=7.0754, N2=7.0337, N7(TRI1)=6.9083
+  worst-5%: raw=2.6604, dime=5.2744, N2=5.2534, N7(TRI1)=5.1628
+  worst-10%: raw=2.5713, dime=4.3060, N2=4.2923, N7(TRI1)=4.2255
+
+Experiment F: discrete (N2) vs. continuous (N7/TRI1 K=8) comparison...
+  {'n_improved_by_both': 8866, 'n_improved_by_n2_only': 3778, 'n_improved_by_n7_only': 24564, 'n_improved_by_neither': 39881, 'n_total': 77089, 'jaccard_overlap': 0.23828208987314556}
+  N2 storage: 16005082 bytes vs. TRI1 K=8: 20518162 bytes vs. DIME-V1: 12893490 bytes
+
+Experiment E: storage accounting for all NC1 configs...
+  {'N2_primary_c2': {'centroid_bytes': 11707392, 'token_dist_bytes': 1186098, 'cj_key_bytes': 578200, 'cj_count_bytes': 2533392, 'n_cj_keys': 72275, 'n_cj_token_entries': 316674, 'total_bytes': 16005082}, 'N3_primary_c3': {'centroid_bytes': 11707392, 'token_dist_bytes': 1186098, 'cj_key_bytes': 673256, 'cj_count_bytes': 2607112, 'n_cj_keys': 84157, 'n_cj_token_entries': 325889, 'total_bytes': 16173858}, 'N4_primary_c2_c3_joint': {'centroid_bytes': 11707392, 'token_dist_bytes': 1186098, 'cj_key_bytes': 2820252, 'cj_count_bytes': 2849568, 'n_cj_keys': 235021, 'n_cj_token_entries': 356196, 'total_bytes': 18563310}, 'dime_v1_bytes': 12893490, 'tri1_k8_bytes': 20518162, 'raw_bytes': 1172346652}
+
+Failure mechanism evidence...
+  {'fraction_cj_keys_with_fewer_than_5_observations': 0.64487028709789, 'n2_vs_shuffle_mean_nll_diff': -0.0017149057288348146, 'n2_vs_dime_mean_nll_diff': -0.0008316303383990586, 'note': "a near-zero n2_vs_shuffle_mean_nll_diff would indicate N2's apparent gain over DIME-V1 (if any) is an artifact of the smoothing formula itself, not genuine (c2,y) association information."}
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2nc1_neighbor_centroid
+Total runtime: 7.5 min
+No existing E1/E2/TRI1 outputs were modified.
+E2-NC1 job done: Mon Oct 26 11:08:32 AM CDT 2026
