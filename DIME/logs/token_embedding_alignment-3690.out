@@ -1,0 +1,38 @@
+Token-embedding-alignment job started: Sat Oct 24 02:56:46 PM CDT 2026
+Node: Slurm-2-7
+Loading cache (no extraction) + GPT-2 (for the embedding matrix + tokenizer only, no forward passes)...
+embedding matrix U: (50257, 768), tied to input embeddings: True
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1/E2 script)...
+Querying val (matched config, full scale) -- raw and DIME retrieval...
+Selecting a reproducible sample of centroids across population/entropy/degradation strata...
+Selected 20 unique centroids across 6 strata: {'large_pop_high_entropy': [2, 3, 7, 8], 'large_pop_low_entropy': [0, 10, 11, 18], 'small_pop_high_entropy': [1, 19, 20, 36], 'small_pop_low_entropy': [4, 5, 6, 13], 'most_degraded': [737, 1278], 'least_degraded': [674, 249]}
+
+Experiment A: embedding vs. predictive similarity, per centroid...
+  centroid 1 (21 queries, 15 tokens): embed-vs-pred ranking spearman=0.16491232341915746
+  centroid 2 (40 queries, 15 tokens): embed-vs-pred ranking spearman=0.09297446712739128
+  centroid 3 (38 queries, 15 tokens): embed-vs-pred ranking spearman=0.19449833967981248
+  centroid 7 (20 queries, 15 tokens): embed-vs-pred ranking spearman=0.40817361498075755
+  centroid 8 (39 queries, 15 tokens): embed-vs-pred ranking spearman=0.02199830550774139
+  centroid 10 (22 queries, 15 tokens): embed-vs-pred ranking spearman=0.13656237311255237
+  centroid 11 (48 queries, 15 tokens): embed-vs-pred ranking spearman=0.14191361118346238
+  centroid 18 (22 queries, 15 tokens): embed-vs-pred ranking spearman=0.05623768808917
+  centroid 249 (20 queries, 15 tokens): embed-vs-pred ranking spearman=0.019184946241533194
+  centroid 674 (20 queries, 15 tokens): embed-vs-pred ranking spearman=0.194930498409919
+  centroid 737 (25 queries, 15 tokens): embed-vs-pred ranking spearman=0.3176317957049038
+  centroid 1278 (20 queries, 15 tokens): embed-vs-pred ranking spearman=0.15518325578032513
+
+Experiment B: neighborhood overlap...
+  k=3: mean overlap=0.278  random baseline=0.213
+  k=5: mean overlap=0.420  random baseline=0.357
+
+Experiment C: predictive discrimination failures...
+  found 30 high-embed/low-predictive-similarity pairs across 9 centroids
+
+Experiment D: global vs. centroid-local relationship consistency...
+  20 tokens appear in >=2 selected centroids; 3 had enough common comparison tokens for a cross-region consistency check (mean spearman=0.38809523809523805)
+
+Generating report.md from computed results...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_token_embedding_alignment
+No existing E1/E2 outputs were modified.
+Token-embedding-alignment job done: Sat Oct 24 03:03:19 PM CDT 2026

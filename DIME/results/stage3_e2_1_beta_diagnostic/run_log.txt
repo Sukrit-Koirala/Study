@@ -1,0 +1,117 @@
+E2.1 beta diagnostic  started 2026-10-19 15:53:50  SMOKE=False
+cache=/home/sukrit.koirala/ondemand/upload_me/Research/Study/GPT_Module/cache
+out=/home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2_1_beta_diagnostic
+beta grid=[0.0, 0.1, 0.25, 0.4, 0.5, 0.75, 1.0]  budgets=[0.01, 0.05, 0.1]  matched={'k': 20, 'tau': 2.0, 'alpha': 0.25}  n_clusters=3811
+E2 full-precision references (selective_sensitivity, beta=0.25): {0.01: 4.017676246881969, 0.05: 4.010758021128724, 0.1: 4.006022580850312}
+
+Loading cache...
+datastore=381127  controller_train=90170  val=77089
+Re-deriving DIME clusters (MiniBatchKMeans seed=42, identical to E2)...
+Retrieval + S1/S2 on val...
+Retrieval + S1/S2 on controller_train (sensitivity ranking + beta tuning)...
+S3 (full member-aware) on val via E2's hybrid_standalone_prob(beta=1, all members) -- ~30-40 min...
+      progress: 20000/77089  (347.1 q/s, ETA 2.7 min)
+      progress: 40000/77089  (343.6 q/s, ETA 1.8 min)
+      progress: 60000/77089  (341.1 q/s, ETA 0.8 min)
+  mean L_S1=3.938748  L_S2=4.020862  L_S3=3.928237
+worst groups: worst1=771, worst5=3854, worst10=7709, rest90=69380, all=77089  | severe cutoff (worst-10% boundary L_DIME-L_raw) = 0.5812
+  cross-check worst-10% mean S1 vs E1C.2 persisted: True
+  cross-check worst-10% mean S2 vs E1C.2 persisted: True
+  cross-check worst-10% mean S3 vs E1C.2 persisted: True
+bootstrap: 607 val chunks of 127 positions, 2000 paired draws
+controller_train split: 710 chunks -> half R (ranking) 45085 queries, half T (beta tuning) 45085 queries
+
+Full-distribution sample: 5000 queries (2000 worst-10%, 3000 rest-90%)
+  standalone DIME: {'mean_entropy': 4.993292571279584, 'mean_js_vs_raw': 0.44664977340649054, 'top1_agreement_with_raw': 0.3256999398963103}
+  standalone S3:   {'mean_entropy': 4.400226613242704, 'mean_js_vs_raw': 0.29659633076271763, 'top1_agreement_with_raw': 0.5669001240989853}
+
+################ BUDGET 1pct (~3811 vectors) ################
+  exact E2 set: {'n_retained_vectors': 3811, 'n_clusters_with_retained': 87, 'max_per_cluster_observed': 50, 'sha256_sorted_ids': 'a13d4c2ce65158924888c1062adeb1c29917ec1352076ef50b59a84c34a065ad', 'n_clusters_not_nearest_centroid': 0}
+  affine decomposition on val (records per-cluster pairs for Section 10)...
+      [val 1pct] 20000/77089  (32152 q/s, ETA 0.0 min)
+      [val 1pct] 40000/77089  (31512 q/s, ETA 0.0 min)
+      [val 1pct] 60000/77089  (32230 q/s, ETA 0.0 min)
+  affine decomposition on controller_train...
+      [ct 1pct] 20000/90170  (32619 q/s, ETA 0.0 min)
+      [ct 1pct] 40000/90170  (32897 q/s, ETA 0.0 min)
+      [ct 1pct] 60000/90170  (33516 q/s, ETA 0.0 min)
+      [ct 1pct] 80000/90170  (33878 q/s, ETA 0.0 min)
+  Check 1 (beta=0 == DIME): max|dp|=0.0e+00  max|dL|=0.0e+00
+  affine == E2 direct loop on 2857 queries x 7 betas: max|dp|=3.3e-16
+  Check 2 (beta=0.25 == E2): 4.017676246882 vs 4.017676246882  (|diff|=0.0e+00);  worst-10% repair 0.0180048878 vs 0.0180048878
+  Check 5: p in [0.00e+00, 1.0000], finite=True, full-dist mass change 1.8e-07, no-retained fallback exact=True
+  Check 4: beta=1 is partial -- mean retrieval weight on clusters with retained members = 0.0219
+  controller-selected beta (grid): full=1.0  halfR=1.0  halfT=1.0  | continuous ct optimum=0.996  | EXPLORATORY val optimum=0.988 (grid 1.0)
+  Section 10: 18.30% of queries retrieve >=1 cluster with retained members; mean retained weight all=0.0219 worst10=0.0657
+  selected beta=1.0: NLL=4.014241  vs beta=0.25 diff=-0.003436 [-0.003949, -0.002891]  R_S3=7.15%
+      [val split 1pct] 20000/77089  (32059 q/s, ETA 0.0 min)
+      [val split 1pct] 40000/77089  (31575 q/s, ETA 0.0 min)
+      [val split 1pct] 60000/77089  (31821 q/s, ETA 0.0 min)
+      [ct split 1pct] 20000/90170  (31012 q/s, ETA 0.0 min)
+      [ct split 1pct] 40000/90170  (31195 q/s, ETA 0.0 min)
+      [ct split 1pct] 60000/90170  (31925 q/s, ETA 0.0 min)
+      [ct split 1pct] 80000/90170  (32293 q/s, ETA 0.0 min)
+  SPLIT (reconstructed, ranking on half R, beta tuned on half T): selected beta=1.0 (continuous 0.983)  val NLL=4.015765 (beta=0.25: 4.018370)  member-ID overlap with E2 set=0.6237208081868276
+
+################ BUDGET 5pct (~19056 vectors) ################
+  exact E2 set: {'n_retained_vectors': 19056, 'n_clusters_with_retained': 419, 'max_per_cluster_observed': 50, 'sha256_sorted_ids': '854436774b745b2e6b0a4d523911065cd045dceb9ca22b3ba48fc833f24020f4', 'n_clusters_not_nearest_centroid': 0}
+  affine decomposition on val (records per-cluster pairs for Section 10)...
+      [val 5pct] 20000/77089  (8554 q/s, ETA 0.1 min)
+      [val 5pct] 40000/77089  (8228 q/s, ETA 0.1 min)
+      [val 5pct] 60000/77089  (8249 q/s, ETA 0.0 min)
+  affine decomposition on controller_train...
+      [ct 5pct] 20000/90170  (8062 q/s, ETA 0.1 min)
+      [ct 5pct] 40000/90170  (8124 q/s, ETA 0.1 min)
+      [ct 5pct] 60000/90170  (8276 q/s, ETA 0.1 min)
+      [ct 5pct] 80000/90170  (8364 q/s, ETA 0.0 min)
+  Check 1 (beta=0 == DIME): max|dp|=0.0e+00  max|dL|=0.0e+00
+  affine == E2 direct loop on 2857 queries x 7 betas: max|dp|=4.4e-16
+  Check 2 (beta=0.25 == E2): 4.010758021129 vs 4.010758021129  (|diff|=0.0e+00);  worst-10% repair 0.0552710105 vs 0.0552710105
+  Check 5: p in [0.00e+00, 1.0000], finite=True, full-dist mass change 1.9e-07, no-retained fallback exact=True
+  Check 4: beta=1 is partial -- mean retrieval weight on clusters with retained members = 0.1160
+  controller-selected beta (grid): full=1.0  halfR=1.0  halfT=1.0  | continuous ct optimum=0.959  | EXPLORATORY val optimum=0.983 (grid 1.0)
+  Section 10: 53.09% of queries retrieve >=1 cluster with retained members; mean retained weight all=0.1160 worst10=0.2689
+  selected beta=1.0: NLL=4.000677  vs beta=0.25 diff=-0.010081 [-0.011093, -0.008990]  R_S3=21.79%
+      [val split 5pct] 20000/77089  (8600 q/s, ETA 0.1 min)
+      [val split 5pct] 40000/77089  (8313 q/s, ETA 0.1 min)
+      [val split 5pct] 60000/77089  (8388 q/s, ETA 0.0 min)
+      [ct split 5pct] 20000/90170  (8159 q/s, ETA 0.1 min)
+      [ct split 5pct] 40000/90170  (8152 q/s, ETA 0.1 min)
+      [ct split 5pct] 60000/90170  (8301 q/s, ETA 0.1 min)
+      [ct split 5pct] 80000/90170  (8401 q/s, ETA 0.0 min)
+  SPLIT (reconstructed, ranking on half R, beta tuned on half T): selected beta=1.0 (continuous 0.952)  val NLL=4.002802 (beta=0.25: 4.011756)  member-ID overlap with E2 set=0.7144206549118388
+
+################ BUDGET 10pct (~38112 vectors) ################
+  exact E2 set: {'n_retained_vectors': 38112, 'n_clusters_with_retained': 821, 'max_per_cluster_observed': 50, 'sha256_sorted_ids': '5be9577991b731eb2ce5396cfaa0e498949c67fd9c07f064a8143a674b7f052e', 'n_clusters_not_nearest_centroid': 0}
+  affine decomposition on val (records per-cluster pairs for Section 10)...
+      [val 10pct] 20000/77089  (3935 q/s, ETA 0.2 min)
+      [val 10pct] 40000/77089  (3793 q/s, ETA 0.2 min)
+      [val 10pct] 60000/77089  (3806 q/s, ETA 0.1 min)
+  affine decomposition on controller_train...
+      [ct 10pct] 20000/90170  (3736 q/s, ETA 0.3 min)
+      [ct 10pct] 40000/90170  (3741 q/s, ETA 0.2 min)
+      [ct 10pct] 60000/90170  (3794 q/s, ETA 0.1 min)
+      [ct 10pct] 80000/90170  (3832 q/s, ETA 0.0 min)
+  Check 1 (beta=0 == DIME): max|dp|=0.0e+00  max|dL|=0.0e+00
+  affine == E2 direct loop on 2857 queries x 7 betas: max|dp|=4.4e-16
+  Check 2 (beta=0.25 == E2): 4.006022580850 vs 4.006022580850  (|diff|=0.0e+00);  worst-10% repair 0.0785990989 vs 0.0785990989
+  Check 5: p in [0.00e+00, 1.0000], finite=True, full-dist mass change 1.9e-07, no-retained fallback exact=True
+  Check 4: beta=1 is partial -- mean retrieval weight on clusters with retained members = 0.2284
+  controller-selected beta (grid): full=1.0  halfR=1.0  halfT=1.0  | continuous ct optimum=0.950  | EXPLORATORY val optimum=0.974 (grid 1.0)
+  Section 10: 82.97% of queries retrieve >=1 cluster with retained members; mean retained weight all=0.2284 worst10=0.4272
+  selected beta=1.0: NLL=3.991238  vs beta=0.25 diff=-0.014785 [-0.016212, -0.013360]  R_S3=31.98%
+      [val split 10pct] 20000/77089  (3869 q/s, ETA 0.2 min)
+      [val split 10pct] 40000/77089  (3756 q/s, ETA 0.2 min)
+      [val split 10pct] 60000/77089  (3774 q/s, ETA 0.1 min)
+      [ct split 10pct] 20000/90170  (3684 q/s, ETA 0.3 min)
+      [ct split 10pct] 40000/90170  (3687 q/s, ETA 0.2 min)
+      [ct split 10pct] 60000/90170  (3733 q/s, ETA 0.1 min)
+      [ct split 10pct] 80000/90170  (3772 q/s, ETA 0.0 min)
+  SPLIT (reconstructed, ranking on half R, beta tuned on half T): selected beta=1.0 (continuous 0.939)  val NLL=3.992936 (beta=0.25: 4.006781)  member-ID overlap with E2 set=0.7555100755667506
+
+Mechanical outcome: A   selected beta by budget: [1.0, 1.0, 1.0]
+
+Generating figures...
+
+All E2.1 outputs saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2_1_beta_diagnostic  (16.7 min)
+No E1-series or E2 output was modified.

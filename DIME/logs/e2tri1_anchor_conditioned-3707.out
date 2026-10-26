@@ -1,0 +1,101 @@
+E2-TRI1 job started: Mon Oct 26 10:21:04 AM CDT 2026
+Node: Slurm-2-7
+E2-TRI1 job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1/E2 script)...
+Querying val (matched config, full scale) -- raw and DIME retrieval, A0/A1 baselines...
+Querying controller_train (matched config) -- for hyperparameter tuning only...
+
+Building centroid-centroid distance matrix + verifying feature math...
+  verified linear-shortcut == literal distance-difference formula on 3 clusters (max relative diff < 1e-6)
+
+Experiment A: synthetic Paris/Berlin diagnostic...
+  synthetic Paris/Berlin: radial-only acc=0.51, 2-anchor acc=1.0, passed=True
+Experiment A: real anchor-method comparison (nearest/random/diverse) at K=4 on 15 largest-population clusters...
+  nearest: mean leave-one-out accuracy = 0.009527377347803343
+  random: mean leave-one-out accuracy = 0.007105157713060217
+  diverse: mean leave-one-out accuracy = 0.008593533612951213
+  chosen anchor-selection method for the full grid: 'nearest' (highest leave-one-out accuracy)
+Experiment A: real diagnostic -- separability accuracy vs. K, chosen method...
+  K=1: mean separability accuracy = 0.0038488143841297353
+  K=2: mean separability accuracy = 0.0023352824492465663
+  K=4: mean separability accuracy = 0.009527377347803343
+  K=8: mean separability accuracy = 0.011642465342159673
+  K=16: mean separability accuracy = 0.008441255344637693
+
+Tuning shrinkage N0 and base tau_z on a controller_train subsample (K=4, diff features)...
+  empirical z std (K=4 reference sample): 163.0326
+  N0=1.0, tau_z_factor=0.5 (tau_z=81.5163): CT subsample mean NLL = 4.0691
+  N0=1.0, tau_z_factor=1.0 (tau_z=163.0326): CT subsample mean NLL = 4.0410
+  N0=1.0, tau_z_factor=2.0 (tau_z=326.0653): CT subsample mean NLL = 4.0417
+  N0=5.0, tau_z_factor=0.5 (tau_z=81.5163): CT subsample mean NLL = 4.0424
+  N0=5.0, tau_z_factor=1.0 (tau_z=163.0326): CT subsample mean NLL = 4.0413
+  N0=5.0, tau_z_factor=2.0 (tau_z=326.0653): CT subsample mean NLL = 4.0430
+  N0=20.0, tau_z_factor=0.5 (tau_z=81.5163): CT subsample mean NLL = 4.0382
+  N0=20.0, tau_z_factor=1.0 (tau_z=163.0326): CT subsample mean NLL = 4.0421
+  N0=20.0, tau_z_factor=2.0 (tau_z=326.0653): CT subsample mean NLL = 4.0437
+  chosen: N0=20.0, tau_z_factor=0.5 (CT subsample mean NLL=4.0382)
+
+Experiment D: main ablation grid (A2 radial + A3-A7 anchor-diff, mean-only kernel), full val...
+      progress: 20000/77089  (10182.1 q/s, ETA 0.1 min)
+      progress: 40000/77089  (10177.8 q/s, ETA 0.1 min)
+      progress: 60000/77089  (10221.4 q/s, ETA 0.0 min)
+  A2 (radial): mean NLL = 4.0210
+      progress: 20000/77089  (6863.3 q/s, ETA 0.1 min)
+      progress: 40000/77089  (6868.1 q/s, ETA 0.1 min)
+      progress: 60000/77089  (6901.3 q/s, ETA 0.0 min)
+  A3 (K=1): val mean NLL = 4.0174, CT subsample mean NLL = 4.0420
+      progress: 20000/77089  (5979.2 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5983.1 q/s, ETA 0.1 min)
+      progress: 60000/77089  (6009.5 q/s, ETA 0.0 min)
+  A4 (K=2): val mean NLL = 4.0157, CT subsample mean NLL = 4.0399
+      progress: 20000/77089  (5405.4 q/s, ETA 0.2 min)
+      progress: 40000/77089  (5413.4 q/s, ETA 0.1 min)
+      progress: 60000/77089  (5432.3 q/s, ETA 0.1 min)
+  A5 (K=4): val mean NLL = 4.0141, CT subsample mean NLL = 4.0382
+      progress: 20000/77089  (4578.4 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4584.2 q/s, ETA 0.1 min)
+      progress: 60000/77089  (4601.8 q/s, ETA 0.1 min)
+  A6 (K=8): val mean NLL = 4.0127, CT subsample mean NLL = 4.0374
+      progress: 20000/77089  (3654.7 q/s, ETA 0.3 min)
+      progress: 40000/77089  (3672.5 q/s, ETA 0.2 min)
+      progress: 60000/77089  (3679.7 q/s, ETA 0.1 min)
+  A7 (K=16): val mean NLL = 4.0127, CT subsample mean NLL = 4.0386
+  best K by CT-subsample NLL: K=8
+
+Secondary configs at best K=8: Gaussian (mean+variance) variant + random-projection baseline...
+      progress: 20000/77089  (4272.9 q/s, ETA 0.2 min)
+      progress: 40000/77089  (4281.3 q/s, ETA 0.1 min)
+      progress: 60000/77089  (4309.3 q/s, ETA 0.1 min)
+  Gaussian variant (K=8): val mean NLL = 4.0146
+      progress: 20000/77089  (9241.5 q/s, ETA 0.1 min)
+      progress: 40000/77089  (9269.2 q/s, ETA 0.1 min)
+      progress: 60000/77089  (9315.9 q/s, ETA 0.0 min)
+  random-projection baseline (K=8): val mean NLL = 4.0203
+
+Distributional metrics (JS divergence, entropy, coverage) on a 4000-query val subsample for raw / DIME-V1 / best anchor config (K=8)...
+  mean JS(DIME-V1, raw)=0.4443, mean JS(anchor, raw)=0.4301
+
+Preference-reversal/margin analysis on 15 clusters x top-10 tokens each...
+  recorded 135 token-pair preference comparisons
+
+Difficult-query tail: worst-1/5/10% val queries by matched delta_L (DIME - raw)...
+  worst-1%: raw=2.3590, dime=7.0754, anchor=6.9083
+  worst-5%: raw=2.6604, dime=5.2744, anchor=5.1628
+  worst-10%: raw=2.5713, dime=4.3060, anchor=4.2255
+
+Experiment E: cohesion diagnostic on up to 300 (cluster,token) pairs...
+  cohesion vs. (anchor-minus-DIME) true-token-prob delta: {'spearman_rho': 0.14889091767118978, 'p_value': 0.47750833114233526, 'n': 25}
+
+Compression efficiency accounting...
+  DIME-V1 bytes=12893490, anchor mean-only (K=8) bytes=20518162, raw bytes=1172346652
+
+Failure analysis...
+  {'fraction_cluster_token_pairs_low_support': 0.8338991281124132, 'n_queries_anchor_worse_than_dime_by_0.1nats_or_more': 2453, 'n_queries_total': 77089, 'random_projection_vs_anchor_mean_nll_diff': 0.007593280171814598}
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2tri1_anchor_conditioned
+Total runtime: 10.0 min
+No existing E1/E2/E2.1 outputs were modified.
+E2-TRI1 job done: Mon Oct 26 10:31:27 AM CDT 2026
