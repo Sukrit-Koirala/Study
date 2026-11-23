@@ -1,0 +1,105 @@
+E2-GEOM1 job started: Mon Oct 26 11:18:21 AM CDT 2026
+Node: Slurm-2-7
+E2-GEOM1 job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache + TRI1/E2 persisted summaries...
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1/E2/TRI1/NC1 script)...
+Querying val/controller_train (matched config) -- System A (DIME-V1) + raw baselines...
+
+System B: tuning tau_local on controller_train (full-cluster, raw 768-dim space)...
+  tau_local=0.5: controller_train mean NLL = 3.9304
+  tau_local=1.0: controller_train mean NLL = 3.9110
+  tau_local=2.0: controller_train mean NLL = 3.9227
+  tau_local=4.0: controller_train mean NLL = 3.9578
+  chosen tau_local for System B = 1.0
+System B: full-cluster local retrieval at full val scale...
+      progress: 20000/77089  (534.9 q/s, ETA 1.8 min)
+      progress: 40000/77089  (533.3 q/s, ETA 1.2 min)
+      progress: 60000/77089  (532.2 q/s, ETA 0.5 min)
+  System B mean NLL (val, full scale) = 3.9159
+      progress: 20000/77089  (540.1 q/s, ETA 1.8 min)
+      progress: 40000/77089  (534.6 q/s, ETA 1.2 min)
+      progress: 60000/77089  (531.6 q/s, ETA 0.5 min)
+  CORRECTNESS CHECK: System B at tau_local=2.0 gives mean NLL=3.928237
+    vs. E2's real persisted S3 NLL=3.928237 (abs diff=0.000000)
+
+Resolving TRI1's real anchor-selection method/K for Systems C and D (must match exactly)...
+  using TRI1's real method='nearest', K=8 for both System C and System D
+
+System C: tuning tau_z_local on controller_train (K=8, method=nearest)...
+  empirical z std (K=8 reference sample): 203.8634
+  tau_z_local_factor=0.5 (tau_z_local=101.9317): controller_train mean NLL = 4.0073
+  tau_z_local_factor=1.0 (tau_z_local=203.8634): controller_train mean NLL = 4.0060
+  tau_z_local_factor=2.0 (tau_z_local=407.7268): controller_train mean NLL = 4.0079
+  chosen tau_z_local for System C = 203.8634
+System C: anchor-space full-cluster local retrieval at full val scale...
+      progress: 20000/77089  (1517.3 q/s, ETA 0.6 min)
+      progress: 40000/77089  (1570.2 q/s, ETA 0.4 min)
+      progress: 60000/77089  (1587.3 q/s, ETA 0.2 min)
+  System C mean NLL (val, full scale) = 4.0128
+
+System D: reconstructing E2-TRI1's real K=8 config (same anchors as System C above), verifying before use...
+  reconstructed System D mean NLL = 4.012738 vs. persisted TRI1 = 4.012738 (abs diff = 0.000000)
+
+Main comparison (mean val NLL): {'raw_kNN': 3.938748032996506, 'A_dime_v1': 4.020862277616639, 'B_full_space_local': 3.915858958012809, 'C_anchor_space_local': 4.012753574703457, 'D_tri1_compressed': 4.012738408202927}
+
+Experiment A: spatial-structure diagnostics on 15 largest-population clusters...
+  centroid 647 (pop=368): raw_acc=0.21142857142857144, shuffled_acc=0.12, anchor_acc=0.0, freq_prior=0.17119565217391305, frac_multimodal=0.0
+  centroid 1307 (pop=334): raw_acc=0.11764705882352941, shuffled_acc=0.0196078431372549, anchor_acc=0.00980392156862745, freq_prior=0.041916167664670656, frac_multimodal=0.0
+  centroid 795 (pop=332): raw_acc=0.18556701030927836, shuffled_acc=0.07560137457044673, anchor_acc=0.006872852233676976, freq_prior=0.2469879518072289, frac_multimodal=0.0
+  centroid 2059 (pop=323): raw_acc=0.2620320855614973, shuffled_acc=0.0962566844919786, anchor_acc=0.0053475935828877, freq_prior=0.15170278637770898, frac_multimodal=0.0
+  centroid 965 (pop=320): raw_acc=0.2153846153846154, shuffled_acc=0.06923076923076923, anchor_acc=0.0, freq_prior=0.06875, frac_multimodal=0.0
+  centroid 2161 (pop=317): raw_acc=0.2288135593220339, shuffled_acc=0.059322033898305086, anchor_acc=0.0423728813559322, freq_prior=0.07255520504731862, frac_multimodal=0.0
+  centroid 1598 (pop=316): raw_acc=0.10526315789473684, shuffled_acc=0.0, anchor_acc=0.0, freq_prior=0.015822784810126583, frac_multimodal=None
+  centroid 923 (pop=313): raw_acc=0.34146341463414637, shuffled_acc=0.07317073170731707, anchor_acc=0.024390243902439025, freq_prior=0.09584664536741214, frac_multimodal=0.0
+  centroid 3072 (pop=312): raw_acc=0.1509433962264151, shuffled_acc=0.0, anchor_acc=0.0, freq_prior=0.009615384615384616, frac_multimodal=None
+  centroid 569 (pop=309): raw_acc=0.2159090909090909, shuffled_acc=0.09090909090909091, anchor_acc=0.0, freq_prior=0.032362459546925564, frac_multimodal=0.0
+  centroid 373 (pop=306): raw_acc=0.28, shuffled_acc=0.12, anchor_acc=0.0, freq_prior=0.09477124183006536, frac_multimodal=0.0
+  centroid 3225 (pop=299): raw_acc=0.030303030303030304, shuffled_acc=0.0, anchor_acc=0.015151515151515152, freq_prior=0.013377926421404682, frac_multimodal=None
+  centroid 844 (pop=299): raw_acc=0.21978021978021978, shuffled_acc=0.04395604395604396, anchor_acc=0.03296703296703297, freq_prior=0.046822742474916385, frac_multimodal=0.0
+  centroid 241 (pop=298): raw_acc=0.3114754098360656, shuffled_acc=0.15846994535519127, anchor_acc=0.02185792349726776, freq_prior=0.31208053691275167, frac_multimodal=0.0
+  centroid 497 (pop=296): raw_acc=0.047619047619047616, shuffled_acc=0.0, anchor_acc=0.015873015873015872, freq_prior=0.016891891891891893, frac_multimodal=None
+Experiment A5: PCA visualizations (strongest-purity, weakest-purity, most-multimodal examples)...
+
+Experiment B: query-level enrichment on a 5000-query val subsample...
+  B1 correct-token enrichment: {'mean_enrichment_all': 0.04872560380329565, 'mean_enrichment_given_nonzero_prior': 0.06397794617029366, 'frac_enriched_positive': 0.4778, 'n_subsample': 5000}
+  B2 query-dependent variation (JS local vs. DIME-V1 prior): {'mean_js_local_vs_dime_prior': 0.23105852607445332, 'n_subsample': 5000}
+  B4: shuffled-label control (within-centroid label shuffle, repeated)...
+    shuffle repeat 0: mean NLL = 4.0650
+    shuffle repeat 1: mean NLL = 4.0541
+    shuffle repeat 2: mean NLL = 4.0592
+  B4 shuffled-label control: real=3.8854 vs. shuffled_avg=4.0594
+
+Experiment C: preference-margin comparison across raw/A/B/C/D on sampled clusters...
+  recorded 8 margin comparisons
+
+Experiment D: difficult-query failure attribution (worst-1/5/10% by matched delta_L)...
+  worst-1%: {'n_queries': 770, 'mean_nll_raw': 2.359037662247391, 'mean_nll_A': 7.07537429677336, 'mean_nll_B': 3.855437356631192, 'mean_nll_C': 6.726627351950874, 'mean_nll_D': 6.908331149228892, 'D1_frac_no_retrieval_support': 0.033766233766233764, 'D2_frac_B_recovers_substantially': 0.9558441558441558, 'D3_frac_C_fails_where_B_succeeds': 0.18311688311688312, 'D4_frac_D_fails_where_C_succeeds': 0.20909090909090908}
+  worst-5%: {'n_queries': 3854, 'mean_nll_raw': 2.6604442111976794, 'mean_nll_A': 5.274355841979536, 'mean_nll_B': 3.5970221725584457, 'mean_nll_C': 5.112384670481134, 'mean_nll_D': 5.16276727333016, 'D1_frac_no_retrieval_support': 0.019719771665801765, 'D2_frac_B_recovers_substantially': 0.9566683964711987, 'D3_frac_C_fails_where_B_succeeds': 0.42215879605604567, 'D4_frac_D_fails_where_C_succeeds': 0.16398546964193045}
+  worst-10%: {'n_queries': 7708, 'mean_nll_raw': 2.5712788219387956, 'mean_nll_A': 4.305992131429781, 'mean_nll_B': 3.220396977369608, 'mean_nll_C': 4.202624113438139, 'mean_nll_D': 4.2254523493941685, 'D1_frac_no_retrieval_support': 0.01180591593149974, 'D2_frac_B_recovers_substantially': 0.9513492475350286, 'D3_frac_C_fails_where_B_succeeds': 0.535158277114686, 'D4_frac_D_fails_where_C_succeeds': 0.12013492475350285}
+
+Experiment E: K-sweep for point-level System C on a 3000-query val subsample...
+  method=nearest, K=1: subsample mean NLL = 4.0138
+  method=nearest, K=2: subsample mean NLL = 4.0098
+  method=nearest, K=4: subsample mean NLL = 4.0072
+  method=nearest, K=8: subsample mean NLL = 4.0058
+  method=nearest, K=16: subsample mean NLL = 4.0040
+  method=nearest, K=32: subsample mean NLL = 4.0048
+  method=diverse, K=1: subsample mean NLL = 4.0158
+  method=diverse, K=2: subsample mean NLL = 4.0159
+  method=diverse, K=4: subsample mean NLL = 4.0159
+  method=diverse, K=8: subsample mean NLL = 4.0158
+  method=diverse, K=16: subsample mean NLL = 4.0156
+  method=diverse, K=32: subsample mean NLL = 4.0154
+  method=random_projection, K=1: subsample mean NLL = 4.0141
+  method=random_projection, K=2: subsample mean NLL = 4.0147
+  method=random_projection, K=4: subsample mean NLL = 4.0131
+  method=random_projection, K=8: subsample mean NLL = 4.0139
+  method=random_projection, K=16: subsample mean NLL = 4.0134
+  method=random_projection, K=32: subsample mean NLL = 4.0110
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_e2geom1_within_centroid
+Total runtime: 28.8 min
+No existing E1/E2/TRI1/NC1 outputs were modified.
+E2-GEOM1 job done: Mon Oct 26 11:47:54 AM CDT 2026

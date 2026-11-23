@@ -1,0 +1,821 @@
+{
+  "n_val": 77089,
+  "n_ct": 90170,
+  "n_ds": 381127,
+  "matched_config": {
+    "k": 20,
+    "tau": 2.0,
+    "alpha": 0.25
+  },
+  "n_clusters": 3811,
+  "seed": 42,
+  "smoke": false,
+  "systemA_raw_mean_nll": 3.938748032996506,
+  "systemA_dime_mean_nll": 4.020862277616639,
+  "systemB": {
+    "tau_local_tuning": {
+      "0.5": 3.9304202785880396,
+      "1.0": 3.9110185750106923,
+      "2.0": 3.9227008772302314,
+      "4.0": 3.957762252308954
+    },
+    "chosen_tau_local": 1.0,
+    "mean_nll_val": 3.915858958012809
+  },
+  "systemC": {
+    "K": 8,
+    "z_std_reference": 203.8633946718097,
+    "tau_z_local_tuning": {
+      "0.5": {
+        "tau_z_local": 101.93169733590484,
+        "ct_mean_nll": 4.007304611914748
+      },
+      "1.0": {
+        "tau_z_local": 203.8633946718097,
+        "ct_mean_nll": 4.00597746666812
+      },
+      "2.0": {
+        "tau_z_local": 407.7267893436194,
+        "ct_mean_nll": 4.007912214420014
+      }
+    },
+    "chosen_tau_z_local": 203.8633946718097,
+    "mean_nll_val": 4.012753574703457
+  },
+  "systemD": {
+    "reconstructed_mean_nll_val": 4.012738408202927,
+    "persisted_mean_nll": 4.012738408202927,
+    "reconstruction_abs_diff": 0.0
+  },
+  "main_comparison": {
+    "raw_kNN": 3.938748032996506,
+    "A_dime_v1": 4.020862277616639,
+    "B_full_space_local": 3.915858958012809,
+    "C_anchor_space_local": 4.012753574703457,
+    "D_tri1_compressed": 4.012738408202927
+  },
+  "experiment_A_per_cluster": {
+    "647": {
+      "population": 368,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.043333333333333335,
+          "expected_under_random_mixing": 0.03566576086956522,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.04533333333333334,
+          "expected_under_random_mixing": 0.03566576086956522,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.043166666666666666,
+          "expected_under_random_mixing": 0.03566576086956522,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 21.4572322845459,
+        "mean_shuffled_pair_distance": 21.72325808207194,
+        "n_tokens_eligible": 5
+      },
+      "separability_accuracy_raw": 0.21142857142857144,
+      "separability_accuracy_shuffled": 0.12,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.17119565217391305,
+      "n_tokens_checked_for_multimodality": 3,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "1307": {
+      "population": 334,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.017333333333333333,
+          "expected_under_random_mixing": 0.006131449675499301,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.013000000000000001,
+          "expected_under_random_mixing": 0.006131449675499301,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.008833333333333334,
+          "expected_under_random_mixing": 0.006131449675499301,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 22.445489247639973,
+        "mean_shuffled_pair_distance": 22.499313566419815,
+        "n_tokens_eligible": 3
+      },
+      "separability_accuracy_raw": 0.11764705882352941,
+      "separability_accuracy_shuffled": 0.0196078431372549,
+      "separability_accuracy_anchor_space": 0.00980392156862745,
+      "frequency_prior_accuracy": 0.041916167664670656,
+      "n_tokens_checked_for_multimodality": 1,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "795": {
+      "population": 332,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.12199999999999998,
+          "expected_under_random_mixing": 0.09489766294092031,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.127,
+          "expected_under_random_mixing": 0.09489766294092031,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.11966666666666669,
+          "expected_under_random_mixing": 0.09489766294092031,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.945247513907297,
+        "mean_shuffled_pair_distance": 21.29284295581636,
+        "n_tokens_eligible": 14
+      },
+      "separability_accuracy_raw": 0.18556701030927836,
+      "separability_accuracy_shuffled": 0.07560137457044673,
+      "separability_accuracy_anchor_space": 0.006872852233676976,
+      "frequency_prior_accuracy": 0.2469879518072289,
+      "n_tokens_checked_for_multimodality": 8,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "2059": {
+      "population": 323,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.07933333333333333,
+          "expected_under_random_mixing": 0.047225603619319656,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.07433333333333333,
+          "expected_under_random_mixing": 0.047225603619319656,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.06583333333333333,
+          "expected_under_random_mixing": 0.047225603619319656,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.982602528163365,
+        "mean_shuffled_pair_distance": 21.516226268949964,
+        "n_tokens_eligible": 7
+      },
+      "separability_accuracy_raw": 0.2620320855614973,
+      "separability_accuracy_shuffled": 0.0962566844919786,
+      "separability_accuracy_anchor_space": 0.0053475935828877,
+      "frequency_prior_accuracy": 0.15170278637770898,
+      "n_tokens_checked_for_multimodality": 3,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "965": {
+      "population": 320,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.036000000000000004,
+          "expected_under_random_mixing": 0.012792968750000001,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.02666666666666667,
+          "expected_under_random_mixing": 0.012792968750000001,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.020833333333333332,
+          "expected_under_random_mixing": 0.012792968750000001,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.557198524475098,
+        "mean_shuffled_pair_distance": 21.83650754292806,
+        "n_tokens_eligible": 10
+      },
+      "separability_accuracy_raw": 0.2153846153846154,
+      "separability_accuracy_shuffled": 0.06923076923076923,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.06875,
+      "n_tokens_checked_for_multimodality": 2,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "2161": {
+      "population": 317,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.028666666666666667,
+          "expected_under_random_mixing": 0.011692822099931336,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.024333333333333332,
+          "expected_under_random_mixing": 0.011692822099931336,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.017666666666666667,
+          "expected_under_random_mixing": 0.011692822099931336,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.443695545196533,
+        "mean_shuffled_pair_distance": 22.67630934715271,
+        "n_tokens_eligible": 8
+      },
+      "separability_accuracy_raw": 0.2288135593220339,
+      "separability_accuracy_shuffled": 0.059322033898305086,
+      "separability_accuracy_anchor_space": 0.0423728813559322,
+      "frequency_prior_accuracy": 0.07255520504731862,
+      "n_tokens_checked_for_multimodality": 2,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "1598": {
+      "population": 316,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.01,
+          "expected_under_random_mixing": 0.004586604710783529,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.006333333333333334,
+          "expected_under_random_mixing": 0.004586604710783529,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.004333333333333333,
+          "expected_under_random_mixing": 0.004586604710783529,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.168533325195312,
+        "mean_shuffled_pair_distance": 20.677253087361652,
+        "n_tokens_eligible": 1
+      },
+      "separability_accuracy_raw": 0.10526315789473684,
+      "separability_accuracy_shuffled": 0.0,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.015822784810126583,
+      "n_tokens_checked_for_multimodality": 0,
+      "fraction_multimodal_tokens": null
+    },
+    "923": {
+      "population": 313,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.07333333333333333,
+          "expected_under_random_mixing": 0.019608243423940224,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.056333333333333326,
+          "expected_under_random_mixing": 0.019608243423940224,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.042333333333333334,
+          "expected_under_random_mixing": 0.019608243423940224,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 19.431764602661133,
+        "mean_shuffled_pair_distance": 22.14615929921468,
+        "n_tokens_eligible": 10
+      },
+      "separability_accuracy_raw": 0.34146341463414637,
+      "separability_accuracy_shuffled": 0.07317073170731707,
+      "separability_accuracy_anchor_space": 0.024390243902439025,
+      "frequency_prior_accuracy": 0.09584664536741214,
+      "n_tokens_checked_for_multimodality": 4,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "3072": {
+      "population": 312,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.011333333333333334,
+          "expected_under_random_mixing": 0.0038420447074293223,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.007,
+          "expected_under_random_mixing": 0.0038420447074293223,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.004000000000000001,
+          "expected_under_random_mixing": 0.0038420447074293223,
+          "n_probes": 300
+        }
+      },
+      "cohesion": null,
+      "separability_accuracy_raw": 0.1509433962264151,
+      "separability_accuracy_shuffled": 0.0,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.009615384615384616,
+      "n_tokens_checked_for_multimodality": 0,
+      "fraction_multimodal_tokens": null
+    },
+    "569": {
+      "population": 309,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.021333333333333336,
+          "expected_under_random_mixing": 0.00734177480336402,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.016,
+          "expected_under_random_mixing": 0.00734177480336402,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.0115,
+          "expected_under_random_mixing": 0.00734177480336402,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 21.752446174621582,
+        "mean_shuffled_pair_distance": 23.04438591003418,
+        "n_tokens_eligible": 6
+      },
+      "separability_accuracy_raw": 0.2159090909090909,
+      "separability_accuracy_shuffled": 0.09090909090909091,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.032362459546925564,
+      "n_tokens_checked_for_multimodality": 2,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "373": {
+      "population": 306,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.024666666666666667,
+          "expected_under_random_mixing": 0.015314622581058568,
+          "n_probes": 300
+        },
+        "10": {
+          "observed_mean_match_rate": 0.025,
+          "expected_under_random_mixing": 0.015314622581058568,
+          "n_probes": 300
+        },
+        "20": {
+          "observed_mean_match_rate": 0.02383333333333333,
+          "expected_under_random_mixing": 0.015314622581058568,
+          "n_probes": 300
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.22746213277181,
+        "mean_shuffled_pair_distance": 21.156523174709744,
+        "n_tokens_eligible": 3
+      },
+      "separability_accuracy_raw": 0.28,
+      "separability_accuracy_shuffled": 0.12,
+      "separability_accuracy_anchor_space": 0.0,
+      "frequency_prior_accuracy": 0.09477124183006536,
+      "n_tokens_checked_for_multimodality": 2,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "3225": {
+      "population": 299,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.0033444816053511705,
+          "expected_under_random_mixing": 0.004418295097370276,
+          "n_probes": 299
+        },
+        "10": {
+          "observed_mean_match_rate": 0.0020066889632107026,
+          "expected_under_random_mixing": 0.004418295097370276,
+          "n_probes": 299
+        },
+        "20": {
+          "observed_mean_match_rate": 0.0020066889632107026,
+          "expected_under_random_mixing": 0.004418295097370276,
+          "n_probes": 299
+        }
+      },
+      "cohesion": null,
+      "separability_accuracy_raw": 0.030303030303030304,
+      "separability_accuracy_shuffled": 0.0,
+      "separability_accuracy_anchor_space": 0.015151515151515152,
+      "frequency_prior_accuracy": 0.013377926421404682,
+      "n_tokens_checked_for_multimodality": 0,
+      "fraction_multimodal_tokens": null
+    },
+    "844": {
+      "population": 299,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.05150501672240802,
+          "expected_under_random_mixing": 0.008243755662688337,
+          "n_probes": 299
+        },
+        "10": {
+          "observed_mean_match_rate": 0.04247491638795987,
+          "expected_under_random_mixing": 0.008243755662688337,
+          "n_probes": 299
+        },
+        "20": {
+          "observed_mean_match_rate": 0.0282608695652174,
+          "expected_under_random_mixing": 0.008243755662688337,
+          "n_probes": 299
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 20.403570938110352,
+        "mean_shuffled_pair_distance": 22.68125966389974,
+        "n_tokens_eligible": 5
+      },
+      "separability_accuracy_raw": 0.21978021978021978,
+      "separability_accuracy_shuffled": 0.04395604395604396,
+      "separability_accuracy_anchor_space": 0.03296703296703297,
+      "frequency_prior_accuracy": 0.046822742474916385,
+      "n_tokens_checked_for_multimodality": 1,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "241": {
+      "population": 298,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.12885906040268455,
+          "expected_under_random_mixing": 0.11082834106571776,
+          "n_probes": 298
+        },
+        "10": {
+          "observed_mean_match_rate": 0.13087248322147652,
+          "expected_under_random_mixing": 0.11082834106571776,
+          "n_probes": 298
+        },
+        "20": {
+          "observed_mean_match_rate": 0.12634228187919463,
+          "expected_under_random_mixing": 0.11082834106571776,
+          "n_probes": 298
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 19.201800028483074,
+        "mean_shuffled_pair_distance": 19.55662049187554,
+        "n_tokens_eligible": 6
+      },
+      "separability_accuracy_raw": 0.3114754098360656,
+      "separability_accuracy_shuffled": 0.15846994535519127,
+      "separability_accuracy_anchor_space": 0.02185792349726776,
+      "frequency_prior_accuracy": 0.31208053691275167,
+      "n_tokens_checked_for_multimodality": 2,
+      "fraction_multimodal_tokens": 0.0
+    },
+    "497": {
+      "population": 296,
+      "purity": {
+        "5": {
+          "observed_mean_match_rate": 0.006081081081081082,
+          "expected_under_random_mixing": 0.004405588020452886,
+          "n_probes": 296
+        },
+        "10": {
+          "observed_mean_match_rate": 0.004054054054054054,
+          "expected_under_random_mixing": 0.004405588020452886,
+          "n_probes": 296
+        },
+        "20": {
+          "observed_mean_match_rate": 0.002533783783783784,
+          "expected_under_random_mixing": 0.004405588020452886,
+          "n_probes": 296
+        }
+      },
+      "cohesion": {
+        "mean_real_pair_distance": 19.249784469604492,
+        "mean_shuffled_pair_distance": 19.418638229370117,
+        "n_tokens_eligible": 1
+      },
+      "separability_accuracy_raw": 0.047619047619047616,
+      "separability_accuracy_shuffled": 0.0,
+      "separability_accuracy_anchor_space": 0.015873015873015872,
+      "frequency_prior_accuracy": 0.016891891891891893,
+      "n_tokens_checked_for_multimodality": 0,
+      "fraction_multimodal_tokens": null
+    }
+  },
+  "experiment_A5_pca_examples": [
+    {
+      "label": "highest_purity",
+      "centroid": 241
+    },
+    {
+      "label": "lowest_purity_most_mixed",
+      "centroid": 3225
+    }
+  ],
+  "experiment_B": {
+    "B1_enrichment": {
+      "mean_enrichment_all": 0.04872560380329565,
+      "mean_enrichment_given_nonzero_prior": 0.06397794617029366,
+      "frac_enriched_positive": 0.4778,
+      "n_subsample": 5000
+    },
+    "B2_query_dependent_variation": {
+      "mean_js_local_vs_dime_prior": 0.23105852607445332,
+      "n_subsample": 5000
+    },
+    "B4_shuffled_control": {
+      "real_label_mean_nll_subsample": 3.8854408165353487,
+      "shuffled_label_mean_nll_repeats": [
+        4.0649877879291045,
+        4.054065261275957,
+        4.059167311203694
+      ],
+      "shuffled_label_mean_nll_avg": 4.059406786802918
+    },
+    "B3_predictive_value_full_val_nll": 3.915858958012809
+  },
+  "experiment_C_margins": [
+    {
+      "centroid": 647,
+      "token_a": 262,
+      "decoded_a": " the",
+      "token_b": 257,
+      "decoded_b": " a",
+      "mean_margin_raw": 0.0743595259641122,
+      "mean_margin_A_dime": 0.06743877467501434,
+      "mean_margin_B_local": 0.07836797764098954,
+      "n_queries": 8
+    },
+    {
+      "centroid": 795,
+      "token_a": 764,
+      "decoded_a": " .",
+      "token_b": 837,
+      "decoded_b": " ,",
+      "mean_margin_raw": 0.17681504361352166,
+      "mean_margin_A_dime": 0.06316926177068506,
+      "mean_margin_B_local": 0.12285053748509266,
+      "n_queries": 7
+    },
+    {
+      "centroid": 2059,
+      "token_a": 262,
+      "decoded_a": " the",
+      "token_b": 257,
+      "decoded_b": " a",
+      "mean_margin_raw": 0.11050870052506427,
+      "mean_margin_A_dime": 0.09866747677225436,
+      "mean_margin_B_local": 0.1337757459539571,
+      "n_queries": 6
+    },
+    {
+      "centroid": 2161,
+      "token_a": 837,
+      "decoded_a": " ,",
+      "token_b": 705,
+      "decoded_b": " '",
+      "mean_margin_raw": 0.011045342019018998,
+      "mean_margin_A_dime": 0.02670689532872521,
+      "mean_margin_B_local": 0.01974923803588802,
+      "n_queries": 5
+    },
+    {
+      "centroid": 1598,
+      "token_a": 262,
+      "decoded_a": " the",
+      "token_b": 3517,
+      "decoded_b": " British",
+      "mean_margin_raw": 0.011917305630029518,
+      "mean_margin_A_dime": 0.027013820106747178,
+      "mean_margin_B_local": 0.013920513504622875,
+      "n_queries": 6
+    },
+    {
+      "centroid": 923,
+      "token_a": 837,
+      "decoded_a": " ,",
+      "token_b": 2488,
+      "decoded_b": " @",
+      "mean_margin_raw": 0.03269555285833187,
+      "mean_margin_A_dime": 0.01124842747539471,
+      "mean_margin_B_local": 0.04232100848738888,
+      "n_queries": 6
+    },
+    {
+      "centroid": 3072,
+      "token_a": 366,
+      "decoded_a": " \"",
+      "token_b": 16713,
+      "decoded_b": " archae",
+      "mean_margin_raw": 0.0,
+      "mean_margin_A_dime": 0.004925791943341464,
+      "mean_margin_B_local": 0.001752683259952759,
+      "n_queries": 5
+    },
+    {
+      "centroid": 844,
+      "token_a": 82,
+      "decoded_a": "s",
+      "token_b": 837,
+      "decoded_b": " ,",
+      "mean_margin_raw": 0.09311443046423158,
+      "mean_margin_A_dime": 4.873926441740251e-05,
+      "mean_margin_B_local": 0.024366876042003063,
+      "n_queries": 6
+    }
+  ],
+  "experiment_D_failure_attribution": {
+    "1": {
+      "n_queries": 770,
+      "mean_nll_raw": 2.359037662247391,
+      "mean_nll_A": 7.07537429677336,
+      "mean_nll_B": 3.855437356631192,
+      "mean_nll_C": 6.726627351950874,
+      "mean_nll_D": 6.908331149228892,
+      "D1_frac_no_retrieval_support": 0.033766233766233764,
+      "D2_frac_B_recovers_substantially": 0.9558441558441558,
+      "D3_frac_C_fails_where_B_succeeds": 0.18311688311688312,
+      "D4_frac_D_fails_where_C_succeeds": 0.20909090909090908
+    },
+    "5": {
+      "n_queries": 3854,
+      "mean_nll_raw": 2.6604442111976794,
+      "mean_nll_A": 5.274355841979536,
+      "mean_nll_B": 3.5970221725584457,
+      "mean_nll_C": 5.112384670481134,
+      "mean_nll_D": 5.16276727333016,
+      "D1_frac_no_retrieval_support": 0.019719771665801765,
+      "D2_frac_B_recovers_substantially": 0.9566683964711987,
+      "D3_frac_C_fails_where_B_succeeds": 0.42215879605604567,
+      "D4_frac_D_fails_where_C_succeeds": 0.16398546964193045
+    },
+    "10": {
+      "n_queries": 7708,
+      "mean_nll_raw": 2.5712788219387956,
+      "mean_nll_A": 4.305992131429781,
+      "mean_nll_B": 3.220396977369608,
+      "mean_nll_C": 4.202624113438139,
+      "mean_nll_D": 4.2254523493941685,
+      "D1_frac_no_retrieval_support": 0.01180591593149974,
+      "D2_frac_B_recovers_substantially": 0.9513492475350286,
+      "D3_frac_C_fails_where_B_succeeds": 0.535158277114686,
+      "D4_frac_D_fails_where_C_succeeds": 0.12013492475350285
+    }
+  },
+  "experiment_D5_representative_cases": [
+    {
+      "query_index": 20071,
+      "true_token": 6582,
+      "decoded_true_token": "rum",
+      "nll_raw": 4.352487412705156,
+      "nll_A": 14.423189199114297,
+      "nll_B": 14.423189199114297,
+      "nll_C": 14.423189199114297,
+      "nll_D": 14.423189199114297
+    },
+    {
+      "query_index": 58822,
+      "true_token": 45409,
+      "decoded_true_token": " Bore",
+      "nll_raw": 3.1460705531821254,
+      "nll_A": 12.353607391843921,
+      "nll_B": 12.353607391843921,
+      "nll_C": 12.353607391843921,
+      "nll_D": 12.353607391843921
+    },
+    {
+      "query_index": 26140,
+      "true_token": 5869,
+      "decoded_true_token": " Bus",
+      "nll_raw": 3.1045401569150504,
+      "nll_A": 11.737895006286443,
+      "nll_B": 11.737895006286443,
+      "nll_C": 11.737895006286443,
+      "nll_D": 11.737895006286443
+    },
+    {
+      "query_index": 75706,
+      "true_token": 35754,
+      "decoded_true_token": " Ned",
+      "nll_raw": 1.6161173008728202,
+      "nll_A": 9.83019213854699,
+      "nll_B": 4.391274450965693,
+      "nll_C": 9.022800552896493,
+      "nll_D": 9.471661562351123
+    },
+    {
+      "query_index": 34502,
+      "true_token": 15954,
+      "decoded_true_token": " Chap",
+      "nll_raw": 2.6767181089232874,
+      "nll_A": 10.53711083442448,
+      "nll_B": 5.281894684991165,
+      "nll_C": 10.179706292128543,
+      "nll_D": 10.446752997524602
+    },
+    {
+      "query_index": 26148,
+      "true_token": 28818,
+      "decoded_true_token": " Ig",
+      "nll_raw": 2.5202011614275284,
+      "nll_A": 10.283067031540618,
+      "nll_B": 5.109324811900912,
+      "nll_C": 10.117065830671034,
+      "nll_D": 10.227455101634396
+    },
+    {
+      "query_index": 60192,
+      "true_token": 3719,
+      "decoded_true_token": " Bre",
+      "nll_raw": 1.783768211764637,
+      "nll_A": 9.540456777571984,
+      "nll_B": 4.641872726827362,
+      "nll_C": 8.455559801073495,
+      "nll_D": 9.141502348647649
+    },
+    {
+      "query_index": 22388,
+      "true_token": 22648,
+      "decoded_true_token": "Music",
+      "nll_raw": 3.932975050431824,
+      "nll_A": 11.60990709763672,
+      "nll_B": 11.60990709763672,
+      "nll_C": 11.60990709763672,
+      "nll_D": 11.60990709763672
+    },
+    {
+      "query_index": 3025,
+      "true_token": 11853,
+      "decoded_true_token": " Got",
+      "nll_raw": 1.57333458098439,
+      "nll_A": 8.968158437257221,
+      "nll_B": 4.0334134312819625,
+      "nll_C": 8.414451154822125,
+      "nll_D": 8.792501124246913
+    },
+    {
+      "query_index": 47724,
+      "true_token": 4715,
+      "decoded_true_token": "uzz",
+      "nll_raw": 1.5996315171933877,
+      "nll_A": 8.688757118350601,
+      "nll_B": 3.65615167038933,
+      "nll_C": 8.189680792808174,
+      "nll_D": 8.470105083957499
+    }
+  ],
+  "experiment_E_k_sweep": {
+    "n_subsample": 3000,
+    "results": {
+      "nearest": {
+        "1": 4.01384307407857,
+        "2": 4.009790729773778,
+        "4": 4.007217064642637,
+        "8": 4.005811889392748,
+        "16": 4.004008727934892,
+        "32": 4.0047836089030175
+      },
+      "diverse": {
+        "1": 4.015831963940846,
+        "2": 4.01593468468487,
+        "4": 4.015880134841831,
+        "8": 4.01578953912025,
+        "16": 4.0156270702305985,
+        "32": 4.015373636111473
+      },
+      "random_projection": {
+        "1": 4.014051564464249,
+        "2": 4.014741038048418,
+        "4": 4.0130558970854,
+        "8": 4.013859155821921,
+        "16": 4.01344157901711,
+        "32": 4.010984697740119
+      }
+    }
+  },
+  "sections_completed": [
+    "systemA",
+    "systemB",
+    "systemC",
+    "systemD",
+    "main_comparison",
+    "experiment_A",
+    "experiment_B",
+    "experiment_C_margins",
+    "experiment_D",
+    "experiment_E",
+    "report.md"
+  ],
+  "total_runtime_seconds": 1728.7466998328455
+}

@@ -1,0 +1,94 @@
+CRISP-R6 job started: Sat Nov 21 12:07:32 AM CST 2026
+Node: Slurm-2-7
+CRISP-R6 job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache (datastore/controller_train/val)...
+  p_lm_true sanity: min=2.005e-11, all strictly positive (confirmed, no epsilon needed for alpha<1)
+Re-deriving DIME clusters (seed=42, identical to every prior script in this series)...
+
+Phase 1: baseline reproduction...
+  GPT-2 alone (M0): {'measured_mean_nll': 4.360986526219364, 'historical_mean_nll': 4.360981464385986, 'abs_diff': 5.061833377340008e-06}
+  Tuned-config reproduction check: {'raw_tuned_config': {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}, 'measured_mean_nll_raw_tuned': 3.8825455682102463, 'historical_mean_nll_raw_tuned': 3.880601986461873, 'dime_tuned_config': {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}, 'measured_mean_nll_dime_tuned': 4.011042556580091, 'historical_mean_nll_dime_tuned': 4.003112141600259, 'raw_abs_diff': 0.0019435817483732798, 'dime_abs_diff': 0.007930414979831824}
+
+Phase 2: fitting CRISP-R4 B4 (rank=8) for all 3811 clusters (R5's exact procedure)...
+  fitted 381/3811 (fitted=337, fallback=44, empty/tiny=0)
+  fitted 762/3811 (fitted=677, fallback=85, empty/tiny=0)
+  fitted 1143/3811 (fitted=997, fallback=146, empty/tiny=0)
+  fitted 1524/3811 (fitted=1321, fallback=203, empty/tiny=0)
+  fitted 1905/3811 (fitted=1644, fallback=261, empty/tiny=0)
+  fitted 2286/3811 (fitted=1968, fallback=318, empty/tiny=0)
+  fitted 2667/3811 (fitted=2283, fallback=384, empty/tiny=0)
+  fitted 3048/3811 (fitted=2594, fallback=454, empty/tiny=0)
+  fitted 3429/3811 (fitted=2917, fallback=512, empty/tiny=0)
+  fitted 3810/3811 (fitted=3236, fallback=574, empty/tiny=0)
+  Global fitting done in 27.8s. fitted=3236 (84.9%), fallback=575 (15.1%), empty/tiny=0
+
+Phase 3: matched-interpolation sanity checks...
+  sanity checks (expected all pass): {'alpha0_matches_gpt2': '50/50', 'identical_retrieval_gives_identical_nll': '50/50', 'mixture_finite_and_valid': '50/50'}
+
+Phase 4: main evaluation loop over ALL 77089 val queries (M3-M6 true-token probabilities)...
+  evaluated 3854/77089 queries (5%)
+  evaluated 7708/77089 queries (10%)
+  evaluated 11562/77089 queries (15%)
+  evaluated 15416/77089 queries (20%)
+  evaluated 19270/77089 queries (25%)
+  evaluated 23124/77089 queries (30%)
+  evaluated 26978/77089 queries (35%)
+  evaluated 30832/77089 queries (40%)
+  evaluated 34686/77089 queries (45%)
+  evaluated 38540/77089 queries (50%)
+  evaluated 42394/77089 queries (55%)
+  evaluated 46248/77089 queries (60%)
+  evaluated 50102/77089 queries (65%)
+  evaluated 53956/77089 queries (70%)
+  evaluated 57810/77089 queries (75%)
+  evaluated 61664/77089 queries (80%)
+  evaluated 65518/77089 queries (85%)
+  evaluated 69372/77089 queries (90%)
+  evaluated 73226/77089 queries (95%)
+  evaluated 77080/77089 queries (100%)
+  Phase 4 main loop done in 465.9s (6.04 ms/query)
+
+Computing interpolated NLL for all systems at alpha=0.25 (Experiment A)...
+  M2 (DIME): {'n_queries': 77089, 'mean_nll': 4.020867610346561, 'median_nll': 3.3089851946227298, 'ppl': 55.74945365303015, 'mean_p_true': 0.14652164600193646, 'median_p_true': 0.036553249372309776, 'delta_nll_vs_gpt2': -0.34011891587280285, 'delta_nll_vs_dime': 0.0, 'frac_improves_vs_gpt2': 0.24514522175667086, 'frac_improves_vs_dime': 0.0}
+  M3 (CRISP): {'n_queries': 77089, 'mean_nll': 4.00564062571821, 'median_nll': 3.2748705536079212, 'ppl': 54.90698796312439, 'mean_p_true': 0.14892360968064952, 'median_p_true': 0.03782176480345689, 'delta_nll_vs_gpt2': -0.35534590050115344, 'delta_nll_vs_dime': -0.015226984628350593, 'frac_improves_vs_gpt2': 0.24951679227905407, 'frac_improves_vs_dime': 0.3850614225116424}
+  Central success criterion -- NLL_CRISP < NLL_DIME: True (4.00564 vs 4.02087)
+
+R5-style JS-decile-stratified 8000-query diagnostic (paired, reusing already-computed values)...
+  R5-sample diagnostic (6400 queries): M2=3.37631, M3=3.36212
+
+Experiment B: alpha sensitivity sweep, alpha in [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]...
+  alpha=0 recovers GPT-2 NLL exactly for every method (verified).
+  alpha=1 (retrieval-only, explicit zero-probability accounting, NOT a floored result): {'M1': {'n_zero_prob_positions': 41840, 'frac_zero_prob': 0.5427492897819404, 'mean_nll_over_nonzero_only': 1.5973839177625608, 'nll_undefined_on_zero_positions': True}, 'M2': {'n_zero_prob_positions': 18281, 'frac_zero_prob': 0.23714148581509684, 'mean_nll_over_nonzero_only': 4.520128668563836, 'nll_undefined_on_zero_positions': True}, 'M3': {'n_zero_prob_positions': 18301, 'frac_zero_prob': 0.2374009262021819, 'mean_nll_over_nonzero_only': 4.705735590812064, 'nll_undefined_on_zero_positions': True}, 'M4': {'n_zero_prob_positions': 18281, 'frac_zero_prob': 0.23714148581509684, 'mean_nll_over_nonzero_only': 4.101532469753836, 'nll_undefined_on_zero_positions': True}, 'M5': {'n_zero_prob_positions': 18281, 'frac_zero_prob': 0.23714148581509684, 'mean_nll_over_nonzero_only': 3.9537270201313506, 'nll_undefined_on_zero_positions': True}, 'M6': {'n_zero_prob_positions': 42469, 'frac_zero_prob': 0.5509086899557654, 'mean_nll_over_nonzero_only': 1.5893971006056704, 'nll_undefined_on_zero_positions': True}}
+  Exploratory best-alpha-on-val (NOT independently validated): {'M1': {'best_alpha_on_this_val_set': 0.2, 'mean_nll_at_best_alpha': 3.9321388893322067, 'mean_nll_at_primary_alpha': 3.938754836851387, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}, 'M2': {'best_alpha_on_this_val_set': 0.15, 'mean_nll_at_best_alpha': 4.008315117782137, 'mean_nll_at_primary_alpha': 4.020867610346561, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}, 'M3': {'best_alpha_on_this_val_set': 0.15, 'mean_nll_at_best_alpha': 3.994866326048297, 'mean_nll_at_primary_alpha': 4.00564062571821, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}, 'M4': {'best_alpha_on_this_val_set': 0.2, 'mean_nll_at_best_alpha': 3.9254733200957728, 'mean_nll_at_primary_alpha': 3.9282427012649386, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}, 'M5': {'best_alpha_on_this_val_set': 0.2, 'mean_nll_at_best_alpha': 3.904588513365139, 'mean_nll_at_primary_alpha': 3.905347814601184, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}}
+
+Experiment C: delta-NLL analysis, GPT-2 confidence groups, retrieval-support groups...
+  {'mean_delta_crisp_minus_dime': -0.015226984628350957, 'median_delta_crisp_minus_dime': 0.0, 'frac_improved': 0.3850614225116424, 'best_delta': -4.29614050691478, 'worst_delta': 6.6885814205490135, 'contribution_of_worst_1pct': 0.15416734090213136, 'contribution_of_worst_5pct': 0.3076103018047789, 'contribution_of_worst_10pct': 0.36585370401624473, 'frac_high_confidence_gpt2_overruled_by_crisp': 0.2380624991892488, 'n_high_confidence_gpt2_overruled_by_crisp': 18352}
+  confidence groups: {'very_low': {'n': 19272, 'mean_delta_nll_raw_vs_gpt2': -1.3044891905624059, 'mean_delta_nll_dime_vs_gpt2': -1.4142147952070314, 'mean_delta_nll_crisp_vs_gpt2': -1.4170125346564124, 'mean_delta_nll_crisp_vs_dime': -0.0027977394493809}, 'low': {'n': 19272, 'mean_delta_nll_raw_vs_gpt2': -0.4635016959285053, 'mean_delta_nll_dime_vs_gpt2': -0.26454016813452225, 'mean_delta_nll_crisp_vs_gpt2': -0.2967395997293694, 'mean_delta_nll_crisp_vs_dime': -0.032199431594847186}, 'moderate': {'n': 19272, 'mean_delta_nll_raw_vs_gpt2': -0.05296775855711221, 'mean_delta_nll_dime_vs_gpt2': 0.0921884227384831, 'mean_delta_nll_crisp_vs_gpt2': 0.07562510837085765, 'mean_delta_nll_crisp_vs_dime': -0.01656331436762546}, 'high': {'n': 19273, 'mean_delta_nll_raw_vs_gpt2': 0.1320031290238971, 'mean_delta_nll_dime_vs_gpt2': 0.22606149871757894, 'mean_delta_nll_crisp_vs_gpt2': 0.21671374055031364, 'mean_delta_nll_crisp_vs_dime': -0.009347758167265359}}
+  support groups: {'raw_top20_support': {'n': 35249, 'frac_of_total': 0.45725071021805963, 'mean_nll_raw': 1.8084655221427408, 'mean_nll_dime': 2.281425074482882, 'mean_nll_crisp': 2.2226726763985027}, 'dime_crisp_support': {'n': 58808, 'frac_of_total': 0.7628585141849031, 'mean_nll_raw': 3.076643946960644, 'mean_nll_dime': 3.1792301174386712, 'mean_nll_crisp': 3.1592696865786705}, 'neither_support': {'n': 18037, 'frac_of_total': 0.23397631309265912, 'mean_nll_raw': 6.774235397777095, 'mean_nll_dime': 6.774235397777095, 'mean_nll_crisp': 6.774235397777095}, 'both_support': {'n': 35005, 'frac_of_total': 0.4540855374956219, 'mean_nll_raw': 1.8063159741334065, 'mean_nll_dime': 2.274084783673187, 'mean_nll_crisp': 2.2149228559463965}}
+
+Experiment D: predictive value of local corrections...
+  {'exact_oracle_vs_dime': {'nll_m4': 3.9282427012649386, 'nll_m2': 4.020867610346561, 'm4_beats_m2': True}, 'crisp_fraction_of_oracle_headroom_recovered': 0.16439405748762875, 'mass_aware_vs_centroid_softmax': {'nll_m5': 3.905347814601184, 'nll_m4': 3.9282427012649386, 'm5_beats_m4': True}, 'remaining_gap_oracle_to_raw': -0.01051213558644859, 'aggregation_imposes_major_limitation': False}
+
+Experiment F: storage versus predictive quality (real measured bytes, all clusters)...
+  {'storage_rows': [{'system': 'GPT-2 alone', 'bytes': 'N/A (GPT-2 weights shared across all systems, excluded from retrieval-datastore comparison)', 'compression_ratio': 'N/A', 'nll': 4.360986526219364, 'delta_nll_vs_gpt2': 0.0}, {'system': 'Raw kNN', 'bytes': 1172346652, 'compression_ratio': 1.0, 'nll': 3.938754836851387, 'delta_nll_vs_gpt2': -0.4222316893679765}, {'system': 'DIME-V1', 'bytes': 13552584, 'compression_ratio': 86.50355179499348, 'nll': 4.020867610346561, 'delta_nll_vs_gpt2': -0.34011891587280285}, {'system': 'CRISP rank8', 'bytes': 20732360, 'compression_ratio': 56.54670534372353, 'nll': 4.00564062571821, 'delta_nll_vs_gpt2': -0.35534590050115344}], 'crisp_expansion_over_dime_bytes': 7179776, 'crisp_expansion_over_dime_ratio': 1.529771739470495, 'crisp_nll_improvement_over_dime': 0.015226984628350593, 'verdict': "CRISP's extra memory purchases a real NLL improvement over DIME"}
+
+Writing nll_results.csv and token_level_nll.csv...
+
+Experiment G: error analysis / failure cases...
+
+Statistical reliability (paired bootstrap, i.i.d. over query positions)...
+  {'mean_delta_crisp_minus_dime': -0.015226984628350957, 'median_delta': 0.0, 'ci_95_low': -0.016949871636894057, 'ci_95_high': -0.013398254316568886, 'frac_improved': 0.3850614225116424, 'significant': True, 'n_queries': 77089, 'bootstrap_type': 'i.i.d. over query positions, NOT sequence/block-aware (same scope simplification R5 made, stated explicitly, not silently repeated).'}
+
+Generating plots...
+Writing mathematical_observations.md and research_questions.md...
+
+Computing final verdict (Q1-Q10)...
+  Verdict: Partial evidence: CRISP improves on DIME but remains substantially behind raw kNN
+  {'Q1': {'crisp_beats_gpt2_alone': True, 'nll_crisp': 4.00564062571821, 'nll_gpt2': 4.360986526219364}, 'Q2': {'crisp_beats_dime_at_alpha025': True, 'nll_crisp': 4.00564062571821, 'nll_dime': 4.020867610346561, 'significant': True}, 'Q3': {'nll_crisp': 4.00564062571821, 'nll_raw': 3.938754836851387, 'gap_to_raw': 0.06688578886682306}, 'Q4': {'best_alpha_on_this_val_set': 0.15, 'mean_nll_at_best_alpha': 3.994866326048297, 'mean_nll_at_primary_alpha': 4.00564062571821, 'EXPLORATORY_WARNING': 'selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists.'}, 'Q5': {'frac_tokens_improved': 0.3850614225116424, 'contribution_of_worst_10pct_regressions': 0.36585370401624473}, 'Q6': {'n_high_confidence_overruled': 18352, 'frac_high_confidence_overruled': 0.2380624991892488}, 'Q7': {'exact_oracle_beats_dime': True, 'magnitude': 0.09262490908162224}, 'Q8': {'mass_aware_beats_centroid_softmax': True, 'magnitude': 0.022894886663754388}, 'Q9': {'crisp_nll_improvement_over_dime': 0.015226984628350593, 'crisp_extra_bytes_over_dime': 7179776, 'worth_it': True}, 'Q10': 'Remaining gap oracle-to-raw: -0.01051 -- local-function approximation quality remains the dominant lever, not routing/aggregation.', 'final_classification': 'Partial evidence: CRISP improves on DIME but remains substantially behind raw kNN'}
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_r6_gpt2_interpolation
+Total runtime: 17.5 min
+No existing E1/E2/TRI1/NC1/GEOM1/KM1/R1/R2/R3/R4/R5 outputs were modified.
+CRISP-R6 job done: Sat Nov 21 12:25:45 AM CST 2026

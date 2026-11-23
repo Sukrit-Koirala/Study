@@ -1,0 +1,62 @@
+CRISP-R3 job started: Fri Nov 20 06:59:37 PM CST 2026
+Node: Slurm-2-7
+CRISP-R3 job started. SMOKE=False, N_CLUSTERS=3811, FAILING_CLUSTERS=[923, 1465]
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to R1/R2 and every prior script)...
+
+Reproducing R1/R2's base-20 cluster-sampling rule and checking the fit/tune/test sufficiency filter...
+  base-20 sample: 20 clusters (population>=30); 11 pass the fit>=5/tune>=3/test>=3 sufficiency filter R2's Experiment D used
+
+Ensuring the required failing clusters [923, 1465] are usable, then selecting 2 successful clusters by lowest rank-8 CRISP-vs-exact TV among the base-20 sample (predetermined rule)...
+  successful clusters chosen (lowest test TV): [795, 2059] (TVs: [0.13547, 0.20317])
+  final 4-cluster diagnostic set: [795, 923, 1465, 2059]
+
+Part A: basis diagnostics (singular values, condition number, anchor-variant comparison)...
+  cluster 795 (successful): nearest_centroid test_tv@r=8 = 0.13251, cond@r=8 = 108.95864823615142
+  cluster 923 (failing): nearest_centroid test_tv@r=8 = 0.46221, cond@r=8 = 56.81512589737083
+  cluster 1465 (failing): nearest_centroid test_tv@r=8 = 0.64800, cond@r=8 = 113.49496678290207
+  cluster 2059 (successful): nearest_centroid test_tv@r=8 = 0.20380, cond@r=8 = 116.85275554469517
+
+Part B: fitting diagnostics (original ridge, lstsq/SVD, logspace ridge, standardized ridge)...
+  cluster 795 (successful) @ r=8: {'original_ridge': 0.13546860019508924, 'lstsq_svd': 0.1355371062264779, 'logspace_ridge_scaled': 0.13325427326867875, 'standardized_ridge': 0.5487840245228396}
+  cluster 923 (failing) @ r=8: {'original_ridge': 0.4980451095353853, 'lstsq_svd': 0.4980502083317786, 'logspace_ridge_scaled': 0.49077435307490147, 'standardized_ridge': 0.6543599901691983}
+  cluster 1465 (failing) @ r=8: {'original_ridge': 0.6685506322061229, 'lstsq_svd': 0.6685509217825073, 'logspace_ridge_scaled': 0.6781361454530209, 'standardized_ridge': 0.7593859465490217}
+  cluster 2059 (successful) @ r=8: {'original_ridge': 0.20317025323827126, 'lstsq_svd': 0.2031856885480463, 'logspace_ridge_scaled': 0.20145753568042035, 'standardized_ridge': 0.48520120804538136}
+
+Part C: alternative objectives (A=raw evidence [current method], B=normalized distribution, C=B+query-change penalty)...
+  cluster 795 (successful): {'role': 'successful', 'objective_A_raw_evidence_current': {'test_tv': 0.13546860019508924, 'test_e_delta': 0.4008463689880984, 'chosen_lambda': 10.0}, 'objective_B_normalized_distribution': {'test_tv': 0.12654180890487474, 'test_e_delta': 0.3885444930177249, 'chosen_lambda': 10.0}, 'objective_C_distribution_plus_change_penalty': {'test_tv': 0.12662960145926186, 'test_e_delta': 0.3749029022867349, 'chosen_config': (0.1, 0.1)}}
+  cluster 923 (failing): {'role': 'failing', 'objective_A_raw_evidence_current': {'test_tv': 0.4980451095353853, 'test_e_delta': 1.2160832675103752, 'chosen_lambda': 10.0}, 'objective_B_normalized_distribution': {'test_tv': 0.30216735220060675, 'test_e_delta': 0.9637124090775981, 'chosen_lambda': 10.0}, 'objective_C_distribution_plus_change_penalty': {'test_tv': 0.30509363639109616, 'test_e_delta': 0.897656763533723, 'chosen_config': (0.1, 1.0)}}
+  cluster 1465 (failing): {'role': 'failing', 'objective_A_raw_evidence_current': {'test_tv': 0.6685506322061229, 'test_e_delta': 1.891329897093939, 'chosen_lambda': 0.01}, 'objective_B_normalized_distribution': {'test_tv': 0.5050338203635156, 'test_e_delta': 1.5282299926553393, 'chosen_lambda': 10.0}, 'objective_C_distribution_plus_change_penalty': {'test_tv': 0.5052746503261074, 'test_e_delta': 1.3560362190407576, 'chosen_config': (10.0, 0.1)}}
+  cluster 2059 (successful): {'role': 'successful', 'objective_A_raw_evidence_current': {'test_tv': 0.20317025323827126, 'test_e_delta': 0.5883488141338886, 'chosen_lambda': 10.0}, 'objective_B_normalized_distribution': {'test_tv': 0.1931847138212009, 'test_e_delta': 0.5378298145566717, 'chosen_lambda': 10.0}, 'objective_C_distribution_plus_change_penalty': {'test_tv': 0.19264685347467492, 'test_e_delta': 0.5614247455394882, 'chosen_config': (10.0, 0.1)}}
+
+Part D: normalization diagnosis (evidence vs. distribution error, bound check) at tau=2.0 and a light secondary check at tau=5.0...
+  tau=2.0: {795: {'role': 'successful', 'fraction_evidence_mass_clipped': 0.009000838877840657, 'mean_evidence_l1_error': 0.008027921874019026, 'mean_distribution_tv_error': 0.13546860019508924, 'mean_mass_relative_error': 0.5329066386631567, 'normalization_bound_check': {'n_checked': 62, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.31329083811816316}}, 923: {'role': 'failing', 'fraction_evidence_mass_clipped': 0.08755328003865094, 'mean_evidence_l1_error': 0.03455171708566698, 'mean_distribution_tv_error': 0.4980451095353853, 'mean_mass_relative_error': 2.9201996733847277, 'normalization_bound_check': {'n_checked': 64, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.2869221793841073}}, 1465: {'role': 'failing', 'fraction_evidence_mass_clipped': 0.5083180918614496, 'mean_evidence_l1_error': 0.003998073494661245, 'mean_distribution_tv_error': 0.6685506322061229, 'mean_mass_relative_error': 3.1617744016877234, 'normalization_bound_check': {'n_checked': 7, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.3493685146640123}}, 2059: {'role': 'successful', 'fraction_evidence_mass_clipped': 0.016905711203878643, 'mean_evidence_l1_error': 0.007976486471209847, 'mean_distribution_tv_error': 0.20317025323827126, 'mean_mass_relative_error': 0.7312210017224864, 'normalization_bound_check': {'n_checked': 53, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.3537956254266942}}}
+  tau=5.0: {795: {'role': 'successful', 'fraction_evidence_mass_clipped': 1.723448194363357e-05, 'mean_evidence_l1_error': 0.9446572767885573, 'mean_distribution_tv_error': 0.03731778785033204, 'mean_mass_relative_error': 0.16108089415588916, 'normalization_bound_check': {'n_checked': 62, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.27090954274683904}}, 923: {'role': 'failing', 'fraction_evidence_mass_clipped': 0.0005471085208317738, 'mean_evidence_l1_error': 1.431202007429853, 'mean_distribution_tv_error': 0.08114332761869703, 'mean_mass_relative_error': 0.3123446226240304, 'normalization_bound_check': {'n_checked': 64, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.2946585114414059}}, 1465: {'role': 'failing', 'fraction_evidence_mass_clipped': 0.1660699598558289, 'mean_evidence_l1_error': 0.2766146601255829, 'mean_distribution_tv_error': 0.2543021605312909, 'mean_mass_relative_error': 0.5834589747955601, 'normalization_bound_check': {'n_checked': 7, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.3648372043195257}}, 2059: {'role': 'successful', 'fraction_evidence_mass_clipped': 1.4445609735883674e-05, 'mean_evidence_l1_error': 1.101115732609801, 'mean_distribution_tv_error': 0.0575587828216204, 'mean_mass_relative_error': 0.21604314544123734, 'normalization_bound_check': {'n_checked': 53, 'n_violations': 0, 'mean_lhs_over_rhs_ratio': 0.3068950089900972}}}
+
+Part E: histogram-plus-correction baseline vs. original CRISP...
+  cluster 795 (successful): {'role': 'successful', 'histogram_plus_correction_test_tv': 0.12257627478249146, 'original_crisp_test_tv': 0.13546860019508924, 'histogram_plus_correction_better': True}
+  cluster 923 (failing): {'role': 'failing', 'histogram_plus_correction_test_tv': 0.302050943478647, 'original_crisp_test_tv': 0.4980451095353853, 'histogram_plus_correction_better': True}
+  cluster 1465 (failing): {'role': 'failing', 'histogram_plus_correction_test_tv': 0.5064764150930866, 'original_crisp_test_tv': 0.6685506322061229, 'histogram_plus_correction_better': True}
+  cluster 2059 (successful): {'role': 'successful', 'histogram_plus_correction_test_tv': 0.1919469442180925, 'original_crisp_test_tv': 0.20317025323827126, 'histogram_plus_correction_better': True}
+
+Part F: empirical functional rank (SVD of exact response matrix, held-out projection quality)...
+  cluster 795 (successful): projection_quality_by_rank = {2: {'relative_reconstruction_error_held_out': 0.7892736595320591}, 4: {'relative_reconstruction_error_held_out': 0.6559443807474502}, 8: {'relative_reconstruction_error_held_out': 0.5601252154962941}, 16: {'relative_reconstruction_error_held_out': 0.39976568106136706}, 32: {'relative_reconstruction_error_held_out': 0.1972953429889893}}
+  cluster 923 (failing): projection_quality_by_rank = {2: {'relative_reconstruction_error_held_out': 0.8797441783416119}, 4: {'relative_reconstruction_error_held_out': 0.8781168065122859}, 8: {'relative_reconstruction_error_held_out': 0.7774712063868764}, 16: {'relative_reconstruction_error_held_out': 0.732422228284}, 32: {'relative_reconstruction_error_held_out': 0.6818768688141129}}
+  cluster 1465 (failing): projection_quality_by_rank = {2: {'relative_reconstruction_error_held_out': 0.9495562163231971}, 4: {'relative_reconstruction_error_held_out': 0.9006154481790517}, 8: {'relative_reconstruction_error_held_out': 0.8487600564731083}, 16: {'relative_reconstruction_error_held_out': 0.8487600564731083}, 32: {'relative_reconstruction_error_held_out': 0.8487600564731083}}
+  cluster 2059 (successful): projection_quality_by_rank = {2: {'relative_reconstruction_error_held_out': 0.7672186224574422}, 4: {'relative_reconstruction_error_held_out': 0.6991859461445769}, 8: {'relative_reconstruction_error_held_out': 0.6067012282666384}, 16: {'relative_reconstruction_error_held_out': 0.5137529021696741}, 32: {'relative_reconstruction_error_held_out': 0.42425669737726457}}
+
+Decoded per-token change examples for failing clusters...
+  {923: [{'token': 318, 'decoded': ' is', 'exact_change': -0.049947427093721436, 'crisp_change': -0.010967367270037519}, {'token': 837, 'decoded': ' ,', 'exact_change': -0.04094258306045895, 'crisp_change': -0.07829995439207}, {'token': 329, 'decoded': ' for', 'exact_change': 0.03557677051559851, 'crisp_change': 0.005241644105589393}, {'token': 360, 'decoded': ' D', 'exact_change': 0.033668662243198644, 'crisp_change': 0.003776156620847266}, {'token': 764, 'decoded': ' .', 'exact_change': 0.030722998920830878, 'crisp_change': -0.011840935395436965}], 1465: [{'token': 34097, 'decoded': ' Weird', 'exact_change': -0.3402478606987783, 'crisp_change': -0.20165643057737265}, {'token': 3806, 'decoded': ' Out', 'exact_change': 0.15302397902932025, 'crisp_change': 0.12512365519642285}, {'token': 22695, 'decoded': ' Helen', 'exact_change': 0.054367576142367396, 'crisp_change': 0.0}, {'token': 1951, 'decoded': ' Christ', 'exact_change': 0.05328881655904925, 'crisp_change': 0.01694965992391812}, {'token': 6046, 'decoded': ' Middle', 'exact_change': 0.05068662640715104, 'crisp_change': 0.06629506379367825}]}
+
+Generating plots...
+
+Determining verdict...
+  findings: {'basis_limitation': True, 'fitting_instability': True, 'objective_mismatch': True, 'normalization_problem': True}
+  Verdict: Multiple interacting causes
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_r3_failure_diagnosis
+Total runtime: 3.6 min
+No existing E1/E2/TRI1/NC1/GEOM1/KM1/R1/R2 outputs were modified.
+CRISP-R3 job done: Fri Nov 20 07:03:59 PM CST 2026

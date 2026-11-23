@@ -1,0 +1,59 @@
+CRISP-R2 job started: Fri Nov 20 06:40:17 PM CST 2026
+Node: Slurm-2-7
+CRISP-R2 job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to R1 and every prior script)...
+
+Selecting R1's exact 20-cluster sample (10 largest-population + 10 smaller/rarer-label)...
+  base sample: 20 clusters
+
+Screening cluster sensitivity at the realistic temperature tau=2.0 (TUNE split)...
+  base sample: 4 clusters classify as high-sensitivity (threshold=0.3852)
+
+Classifying clusters into low/moderate/high sensitivity (TEST split, frozen thresholds)...
+  classification counts: {'high': 7, 'moderate': 2, 'low': 2}
+
+Experiment A: temperature grid [1.0, 2.0, 5.0, 10.0, 21.4592, 40.0] (refit at rank=8; full rank curve at tau=2.0 and tau=21.4592)...
+  tau=1.0: {'mean_exact_query_pair_variation': 0.6856762029821003, 'median_exact_query_pair_variation': 0.7095650040281701, 'mean_tv_dime_vs_exact': 0.5861836400803306, 'mean_js_dime_vs_exact': 0.2713100135708552, 'mean_tv_crisp_r8_vs_exact': 0.7057798380116179, 'mean_js_crisp_r8_vs_exact': 0.3783860570488618}
+  tau=2.0: {'mean_exact_query_pair_variation': 0.3998284636822851, 'median_exact_query_pair_variation': 0.40542557966615433, 'mean_tv_dime_vs_exact': 0.3273316413924384, 'mean_js_dime_vs_exact': 0.09631520773461807, 'mean_tv_crisp_r8_vs_exact': 0.29043707903787663, 'mean_js_crisp_r8_vs_exact': 0.09044987628185315}
+  tau=5.0: {'mean_exact_query_pair_variation': 0.15552927658390867, 'median_exact_query_pair_variation': 0.14796908614835447, 'mean_tv_dime_vs_exact': 0.1322567201267275, 'mean_js_dime_vs_exact': 0.016514788842258463, 'mean_tv_crisp_r8_vs_exact': 0.07537077097902838, 'mean_js_crisp_r8_vs_exact': 0.006962383268386252}
+  tau=10.0: {'mean_exact_query_pair_variation': 0.07471299413242183, 'median_exact_query_pair_variation': 0.07307724948863648, 'mean_tv_dime_vs_exact': 0.06628587811642431, 'mean_js_dime_vs_exact': 0.004137885336657398, 'mean_tv_crisp_r8_vs_exact': 0.033560425597755204, 'mean_js_crisp_r8_vs_exact': 0.0013354921135426325}
+  tau=21.4592: {'mean_exact_query_pair_variation': 0.034129650821659314, 'median_exact_query_pair_variation': 0.03224463936690454, 'mean_tv_dime_vs_exact': 0.031001766546475202, 'mean_js_dime_vs_exact': 0.0009027315245201032, 'mean_tv_crisp_r8_vs_exact': 0.01491937806554088, 'mean_js_crisp_r8_vs_exact': 0.00024211683579109235}
+  tau=40.0: {'mean_exact_query_pair_variation': 0.018723529846339057, 'median_exact_query_pair_variation': 0.017788656668433756, 'mean_tv_dime_vs_exact': 0.01666210524742975, 'mean_js_dime_vs_exact': 0.00026037712143802896, 'mean_tv_crisp_r8_vs_exact': 0.007884708517613297, 'mean_js_crisp_r8_vs_exact': 6.624085917299823e-05}
+
+Transfer check (fit once at R1's tau, evaluate without refitting against other temperatures)...
+  transfer (model fit at tau=21.4592, evaluated elsewhere without refit): {1.0: 0.5723169302870342, 2.0: 0.30668203274841366, 5.0: 0.10862115043847383, 10.0: 0.043389596634949235, 40.0: 0.016410597981314484}
+
+Experiment C: Property 1/2 at the realistic temperature tau=2.0...
+  Property 1 (fidelity) by rank: {1: {'mean_tv': 0.3123767760764154, 'mean_js': 0.09485309742763544}, 2: {'mean_tv': 0.3205545724657703, 'mean_js': 0.10002044006892365}, 4: {'mean_tv': 0.3140336826928191, 'mean_js': 0.09807295172546993}, 8: {'mean_tv': 0.29043707903787663, 'mean_js': 0.09044987628185315}, 16: {'mean_tv': 0.31226749133932263, 'mean_js': 0.10928506190256611}, 32: {'mean_tv': 0.37968793756419766, 'mean_js': 0.14980238597983822}}
+  Property 2 (query-change fidelity): {'n_pairs': 421, 'mean_e_delta': 0.8486176332728692, 'mean_exact_magnitude': 0.7471253056106038, 'mean_crisp_magnitude': 0.695400325493446, 'variation_retention_ratio': 0.9307679987162469, 'per_pair_ratio_mean_unstable_diagnostic_only': 0.9490025975941389, 'correlation_magnitudes': 0.541973901525328, 'calibration_slope_crisp_on_exact': 0.674875741485345, 'mean_top_change_token_overlap': 0.1789390340459224, 'interpretation': 'variation_retention_ratio is sum(crisp_mags)/sum(exact_mags) (ratio of means, stable); near 1.0 together with calibration_slope near 1.0 indicates genuine magnitude preservation. per_pair_ratio_mean_unstable_diagnostic_only is the naive mean-of-ratios statistic kept only to show how unstable it is relative to the two numbers above -- it is NOT the primary retention metric.'}
+
+Experiment D: sensitivity-stratified table (realistic tau, rank=8)...
+  low: {'n_clusters': 2, 'clusters': [795, 2059], 'mean_exact_variation': 0.2483442196837637, 'dime_tv_vs_exact': {'mean': 0.21644479506208303, 'ci_95_low': 0.1691866311454642, 'ci_95_high': 0.26370295897870183, 'n_clusters': 2}, 'crisp_tv_vs_exact': {'mean': 0.16931942671668027, 'ci_95_low': 0.13546860019508924, 'ci_95_high': 0.20317025323827126, 'n_clusters': 2}, 'dime_js_vs_exact': {'mean': 0.049176082496582695, 'ci_95_low': 0.032660167211186336, 'ci_95_high': 0.06569199778197905, 'n_clusters': 2}, 'crisp_js_vs_exact': {'mean': 0.033700228023061475, 'ci_95_low': 0.024074387458004304, 'ci_95_high': 0.043326068588118646, 'n_clusters': 2}, 'relative_improvement_tv': 0.21772465506452007, 'n_clusters_crisp_worse_than_dime': 0}
+  moderate: {'n_clusters': 2, 'clusters': [647, 1598], 'mean_exact_variation': 0.3630987709515836, 'dime_tv_vs_exact': {'mean': 0.31116309192976344, 'ci_95_low': 0.28282322340624866, 'ci_95_high': 0.33950296045327827, 'n_clusters': 2}, 'crisp_tv_vs_exact': {'mean': 0.23792742127029343, 'ci_95_low': 0.23540437331948993, 'ci_95_high': 0.24045046922109692, 'n_clusters': 2}, 'dime_js_vs_exact': {'mean': 0.08334527863806654, 'ci_95_low': 0.0750350604871459, 'ci_95_high': 0.09165549678898717, 'n_clusters': 2}, 'crisp_js_vs_exact': {'mean': 0.05561235634069539, 'ci_95_low': 0.05390701777607599, 'ci_95_high': 0.057317694905314784, 'n_clusters': 2}, 'relative_improvement_tv': 0.23536104557027915, 'n_clusters_crisp_worse_than_dime': 0}
+  high: {'n_clusters': 7, 'clusters': [569, 923, 965, 1307, 1465, 2161, 3072], 'mean_exact_variation': 0.4352551605497645, 'dime_tv_vs_exact': {'mean': 0.3985627161665124, 'ci_95_low': 0.3558931884993879, 'ci_95_high': 0.4702099392702883, 'n_clusters': 7}, 'crisp_tv_vs_exact': {'mean': 0.38514586853709487, 'ci_95_low': 0.29625480822626, 'ci_95_high': 0.4988334780905932, 'n_clusters': 7}, 'dime_js_vs_exact': {'mean': 0.13439942595980228, 'ci_95_low': 0.10416930130164372, 'ci_95_high': 0.18265999900716692, 'n_clusters': 7}, 'crisp_js_vs_exact': {'mean': 0.14664287175892962, 'ci_95_low': 0.08641760349176976, 'ci_95_high': 0.225443686799442, 'n_clusters': 7}, 'relative_improvement_tv': 0.033663077566473146, 'n_clusters_crisp_worse_than_dime': 2}
+
+Experiment E: numerical explanation of temperature effects...
+  {1.0: {'example_cluster': 569, 'mean_within_cluster_distance_spread_p90_minus_p10': 5.711857818563551, 'mean_adjacent_neighbor_weight_ratio': 0.46870424297092567, 'mean_evidence_mass': 7.389993054311846e-07, 'exact_query_pair_variation': 0.6856762029821003}, 2.0: {'example_cluster': 569, 'mean_within_cluster_distance_spread_p90_minus_p10': 5.711857818563551, 'mean_adjacent_neighbor_weight_ratio': 0.6371036731120504, 'mean_evidence_mass': 0.006145019888939542, 'exact_query_pair_variation': 0.3998284636822851}, 21.4592: {'example_cluster': 569, 'mean_within_cluster_distance_spread_p90_minus_p10': 5.711857818563551, 'mean_adjacent_neighbor_weight_ratio': 0.9511229438421245, 'mean_evidence_mass': 106.19338836217541, 'exact_query_pair_variation': 0.034129650821659314}, 40.0: {'example_cluster': 569, 'mean_within_cluster_distance_spread_p90_minus_p10': 5.711857818563551, 'mean_adjacent_neighbor_weight_ratio': 0.9732460915128783, 'mean_evidence_mass': 173.97489415047025, 'exact_query_pair_variation': 0.018723529846339057}}
+
+Experiment F: storage-matched representative-vector baseline, by sensitivity group (realistic tau)...
+  CRISP r=8 average bytes/cluster = 6391.3 -> memory-matched M = 2 representative(s)
+  low: {'n_clusters': 2, 'm_representatives': 2, 'crisp_bytes_per_cluster_avg': 6391.272727272727, 'b4_bytes_per_cluster': 6152, 'mean_tv_crisp_vs_exact': 0.1666702315975992, 'mean_tv_b4_vs_exact': 0.9205852508918967}
+  moderate: {'n_clusters': 2, 'm_representatives': 2, 'crisp_bytes_per_cluster_avg': 6391.272727272727, 'b4_bytes_per_cluster': 6152, 'mean_tv_crisp_vs_exact': 0.23782513554255816, 'mean_tv_b4_vs_exact': 0.9974978077601061}
+  high: {'n_clusters': 7, 'm_representatives': 2, 'crisp_bytes_per_cluster_avg': 6391.272727272727, 'b4_bytes_per_cluster': 6152, 'mean_tv_crisp_vs_exact': 0.35160306540715175, 'mean_tv_b4_vs_exact': 0.990743800308686}
+
+Identifying failure cases (CRISP worse than DIME at realistic tau, rank=8)...
+  2 failure cases found: [{'cluster': 923, 'classification': 'high', 'mean_tv_dime': 0.36974541493374924, 'mean_tv_crisp': 0.4980451095353853, 'population': 313, 'top_tokens_decoded': [' ,', ' @', ' =', ' .', " '"]}, {'cluster': 1465, 'classification': 'high', 'mean_tv_dime': 0.6025235560807823, 'mean_tv_crisp': 0.6685506322061229, 'population': 30, 'top_tokens_decoded': [' "', ' ,', ' Four', ' Christ', ' After']}]
+
+Generating plots...
+
+Determining verdict...
+  Verdict: Inconclusive. CRISP shows some improvement in high-sensitivity clusters, but the variation-retention ratio indicates it may be systematically underestimating the true magnitude of query-dependent change rather than genuinely tracking it.
+  Temperature mattered substantially (realistic variation > 2x R1's): True
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_r2_query_sensitivity
+Total runtime: 3.6 min
+No existing E1/E2/TRI1/NC1/GEOM1/KM1/R1 outputs were modified.
+CRISP-R2 job done: Fri Nov 20 06:44:42 PM CST 2026

@@ -1,0 +1,65 @@
+CRISP job started: Fri Nov 20 06:14:51 PM CST 2026
+Node: Slurm-2-7
+CRISP job started. SMOKE=False, N_CLUSTERS=3811
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, deterministic, identical to every prior E1/E2/TRI1/NC1/GEOM1/KM1 script)...
+
+Probing empirical within-cluster distance scale (300 queries)...
+  tau_local = 21.4592 (median empirical local distance, n=41979)
+
+E1: synthetic mathematical sanity tests...
+  synthetic[separated]: DIME-vs-exact TV=0.3085, CRISP TV by rank={1: 0.06936450059342567, 2: 0.06849855340443159, 4: 0.06848975727145745, 8: 0.06821495070131875}
+  synthetic[overlapping_different_distance]: DIME-vs-exact TV=0.0464, CRISP TV by rank={1: 0.015597203866855164, 2: 0.015605565591883652, 4: 0.015609458633333895, 8: 0.014977142044976816}
+  synthetic[imbalanced]: DIME-vs-exact TV=0.0277, CRISP TV by rank={1: 0.023438140567216263, 2: 0.023438131815871573, 4: 0.02342693185966068, 8: 0.02177671909060897}
+  reversal check: {'top_label_near_a': 0, 'top_label_near_b': 1, 'reversal_detected': True}
+
+Selecting a sample of 20 clusters (10 largest-population + 10 smaller/rarer-label)...
+  sampled 20 clusters, populations: [30, 309, 368, 332, 30, 313, 320, 30, 334, 30, 316, 30, 30, 30, 323, 317, 30, 312, 30, 30]
+
+E2: within-cluster functional approximation error vs. rank...
+  cluster 569 (pop=309, n_tok=245): rbf test_tv@r=8 = 0.01730939622722386, linear test_tv@r=8 = 0.016946868690797628
+  cluster 647 (pop=368, n_tok=229): rbf test_tv@r=8 = 0.014491913034680965, linear test_tv@r=8 = 0.01360856379256425
+  cluster 795 (pop=332, n_tok=68): rbf test_tv@r=8 = 0.008483958361043622, linear test_tv@r=8 = 0.008099195861536514
+  cluster 923 (pop=313, n_tok=184): rbf test_tv@r=8 = 0.014877795001345537, linear test_tv@r=8 = 0.01473179576442972
+  cluster 965 (pop=320, n_tok=218): rbf test_tv@r=8 = 0.014726339868859841, linear test_tv@r=8 = 0.014206203019043614
+  cluster 1307 (pop=334, n_tok=267): rbf test_tv@r=8 = 0.018612082255594183, linear test_tv@r=8 = 0.01899032865456678
+  cluster 1465 (pop=30, n_tok=28): rbf test_tv@r=8 = 0.03940265763599338, linear test_tv@r=8 = 0.08084412146309199
+  cluster 1598 (pop=316, n_tok=269): rbf test_tv@r=8 = 0.01600942194274256, linear test_tv@r=8 = 0.015400739235777627
+  cluster 2059 (pop=323, n_tok=165): rbf test_tv@r=8 = 0.012510000382777773, linear test_tv@r=8 = 0.01168604679408738
+  cluster 2161 (pop=317, n_tok=229): rbf test_tv@r=8 = 0.0178581739867275, linear test_tv@r=8 = 0.017500984055698637
+  cluster 3072 (pop=312, n_tok=284): rbf test_tv@r=8 = 0.016560695297958342, linear test_tv@r=8 = 0.01611143022356337
+
+E3: per-cluster standalone distributional comparison (DIME, CRISP-A, exact oracle)...
+  best-performing basis at r=8 (by mean held-out TV): rbf_anchor
+  r=1: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.0004864346611873322, 'mean_tv_crispA_vs_exact': 0.022429362574428634, 'mean_top1_agreement_crispA_vs_exact': 0.9325842696629213, 'mean_topk_overlap_crispA_vs_exact': 0.9463884430176566, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.85182453072598, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+  r=2: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.0004526913114883223, 'mean_tv_crispA_vs_exact': 0.021634887661494552, 'mean_top1_agreement_crispA_vs_exact': 0.9614767255216693, 'mean_topk_overlap_crispA_vs_exact': 0.9489566613162119, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.851861167559517, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+  r=4: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.00039112018897819313, 'mean_tv_crispA_vs_exact': 0.02002974724747717, 'mean_top1_agreement_crispA_vs_exact': 0.9598715890850722, 'mean_topk_overlap_crispA_vs_exact': 0.9502407704654896, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.8514080920298275, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+  r=8: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.00024436488572860993, 'mean_tv_crispA_vs_exact': 0.015381817194197171, 'mean_top1_agreement_crispA_vs_exact': 0.9678972712680578, 'mean_topk_overlap_crispA_vs_exact': 0.9579454253611557, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.850464594856032, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+  r=16: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.00016050829154425083, 'mean_tv_crispA_vs_exact': 0.01219458596422143, 'mean_top1_agreement_crispA_vs_exact': 0.9743178170144462, 'mean_topk_overlap_crispA_vs_exact': 0.967255216693419, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.850359421644332, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+  r=32: {'n_query_cluster_pairs': 623, 'mean_js_crispA_vs_exact': 0.00013536549017735826, 'mean_tv_crispA_vs_exact': 0.010984018394633359, 'mean_top1_agreement_crispA_vs_exact': 0.9727126805778491, 'mean_topk_overlap_crispA_vs_exact': 0.971749598715891, 'mean_entropy_dime': 4.85919681384247, 'mean_entropy_crispA': 4.85028386928301, 'mean_js_dime_vs_exact': 0.0009027344714875225}
+
+CRISP-B: evidence-mass-aware aggregation, illustrative comparison against CRISP-A on sampled clusters...
+  evidence-mass reconstruction quality across 11 clusters recorded
+
+E4: query-dependence preservation (||F(q1)-F(q2)|| vs. ||F~(q1)-F~(q2)||)...
+  E4 summary: {'n_pairs': 316, 'mean_exact_diff': 0.008031781253740196, 'mean_recon_diff': 0.005892472253152343, 'correlation': 0.9596631770287996}
+
+E5: storage and computation accounting...
+  {'dime_v1_bytes': 12893490, 'raw_kNN_bytes': 1172346652, 'crisp_storage_by_rank_extrapolated': {1: {'extrapolated_total_bytes': 15938132.545454545, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}, 2: {'extrapolated_total_bytes': 18982775.09090909, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}, 4: {'extrapolated_total_bytes': 25072060.18181818, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}, 8: {'extrapolated_total_bytes': 37250630.36363636, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}, 16: {'extrapolated_total_bytes': 61607770.72727273, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}, 32: {'extrapolated_total_bytes': 110322051.45454545, 'note': "coefficient bytes extrapolated from the 20 sampled clusters' average tokens/cluster to all 3,811 -- not a full-scale measurement (Phase 4)."}}, 'b4_representative_storage_by_m_extrapolated': {1: {'extrapolated_total_bytes': 23430028.0}, 2: {'extrapolated_total_bytes': 35152664.0}, 4: {'extrapolated_total_bytes': 58597936.0}, 8: {'extrapolated_total_bytes': 105488480.0}}, 'single_cluster_crisp_reconstruction_seconds': 0.0005614394322037697, 'single_cluster_oracle_exact_seconds': 0.048027148470282555, 'n_test_queries_timed': 50}
+
+E6: generalization and failure analysis (grouped by population/homogeneity)...
+  large_clusters: n=10, mean test_tv@r=8 = 0.015143977635895419
+  small_clusters: n=1, mean test_tv@r=8 = 0.03940265763599338
+
+Recording representative successful/failed cluster examples...
+  {'best_approximated': {'centroid': 795, 'test_tv_at_r8': 0.008483958361043622, 'population': 332, 'top_tokens_decoded': [' .', ' ,', ' in', ' and', ' to']}, 'worst_approximated': {'centroid': 1465, 'test_tv_at_r8': 0.03940265763599338, 'population': 30, 'top_tokens_decoded': [' "', ' ,', ' Four', ' Christ', ' After']}}
+
+Determining verdict...
+  Verdict: Partially supported. CRISP's reconstructed distributions are meaningfully closer to the exact within-cluster evidence than DIME-V1's static histogram at r=8, within a storage budget well below raw kNN -- but this delivery only covers 20 sampled clusters and bounded query samples (Phase 1-3), so full-scale storage/fidelity at all 3,811 clusters remains unverified.
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_subspace_projection
+Total runtime: 3.4 min
+No existing E1/E2/TRI1/NC1/GEOM1/KM1 outputs were modified.
+CRISP job done: Fri Nov 20 06:18:58 PM CST 2026

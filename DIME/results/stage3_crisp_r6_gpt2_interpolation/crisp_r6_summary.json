@@ -1,0 +1,512 @@
+{
+  "n_ds": 381127,
+  "n_ct": 90170,
+  "n_val": 77089,
+  "n_clusters": 3811,
+  "seed": 42,
+  "smoke": false,
+  "outer_k": 20,
+  "tau": 2.0,
+  "crisp_rank": 8,
+  "primary_alpha": 0.25,
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.4,
+    0.5
+  ],
+  "reproduction_note": "R5's real persisted results were not available locally; this script reproduces R5's CRISP-fitting procedure fresh via direct function import. See module docstring.",
+  "phase1_baseline": {
+    "gpt_only_check": {
+      "measured_mean_nll": 4.360986526219364,
+      "historical_mean_nll": 4.360981464385986,
+      "abs_diff": 5.061833377340008e-06
+    },
+    "matched_mean_nll_raw": 3.938754836851387,
+    "matched_mean_nll_dime": 4.020867610346561,
+    "tuned_config_reproduction_check": {
+      "raw_tuned_config": {
+        "k": 300,
+        "tau": 1.0,
+        "alpha": 0.25,
+        "mean_nll": 3.880601986461873
+      },
+      "measured_mean_nll_raw_tuned": 3.8825455682102463,
+      "historical_mean_nll_raw_tuned": 3.880601986461873,
+      "dime_tuned_config": {
+        "k": 100,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 4.003112141600259
+      },
+      "measured_mean_nll_dime_tuned": 4.011042556580091,
+      "historical_mean_nll_dime_tuned": 4.003112141600259,
+      "raw_abs_diff": 0.0019435817483732798,
+      "dime_abs_diff": 0.007930414979831824
+    }
+  },
+  "crisp_fitting_coverage": {
+    "n_fitted": 3236,
+    "n_fallback": 575,
+    "n_empty_or_tiny": 0,
+    "global_fit_wall_clock_seconds": 27.80185212008655
+  },
+  "phase3_sanity_checks": {
+    "alpha0_matches_gpt2": "50/50",
+    "identical_retrieval_gives_identical_nll": "50/50",
+    "mixture_finite_and_valid": "50/50"
+  },
+  "phase4_loop_wall_clock_seconds": 465.88947831466794,
+  "experiment_A_matched_nll": {
+    "M0": {
+      "n_queries": 77089,
+      "mean_nll": 4.360986526219364,
+      "median_nll": 3.714259503510922,
+      "ppl": 78.33437523182195,
+      "mean_p_true": 0.17218715319791264,
+      "median_p_true": 0.024373482912778854,
+      "delta_nll_vs_gpt2": 0.0,
+      "delta_nll_vs_dime": 0.34011891587280285,
+      "frac_improves_vs_gpt2": 0.0,
+      "frac_improves_vs_dime": 0.7548547782433291
+    },
+    "M1": {
+      "n_queries": 77089,
+      "mean_nll": 3.938754836851387,
+      "median_nll": 2.993507458825892,
+      "ppl": 51.35461659699873,
+      "mean_p_true": 0.1691747356677112,
+      "median_p_true": 0.05011136457324028,
+      "delta_nll_vs_gpt2": -0.4222316893679765,
+      "delta_nll_vs_dime": -0.08211277349517365,
+      "frac_improves_vs_gpt2": 0.2801567019937994,
+      "frac_improves_vs_dime": 0.4029498372011571
+    },
+    "M2": {
+      "n_queries": 77089,
+      "mean_nll": 4.020867610346561,
+      "median_nll": 3.3089851946227298,
+      "ppl": 55.74945365303015,
+      "mean_p_true": 0.14652164600193646,
+      "median_p_true": 0.036553249372309776,
+      "delta_nll_vs_gpt2": -0.34011891587280285,
+      "delta_nll_vs_dime": 0.0,
+      "frac_improves_vs_gpt2": 0.24514522175667086,
+      "frac_improves_vs_dime": 0.0
+    },
+    "M3": {
+      "n_queries": 77089,
+      "mean_nll": 4.00564062571821,
+      "median_nll": 3.2748705536079212,
+      "ppl": 54.90698796312439,
+      "mean_p_true": 0.14892360968064952,
+      "median_p_true": 0.03782176480345689,
+      "delta_nll_vs_gpt2": -0.35534590050115344,
+      "delta_nll_vs_dime": -0.015226984628350593,
+      "frac_improves_vs_gpt2": 0.24951679227905407,
+      "frac_improves_vs_dime": 0.3850614225116424
+    },
+    "M4": {
+      "n_queries": 77089,
+      "mean_nll": 3.9282427012649386,
+      "median_nll": 3.155364226384705,
+      "ppl": 50.8175974586043,
+      "mean_p_true": 0.15486891839183356,
+      "median_p_true": 0.042622873789889965,
+      "delta_nll_vs_gpt2": -0.4327438249544251,
+      "delta_nll_vs_dime": -0.09262490908162224,
+      "frac_improves_vs_gpt2": 0.28402236376136675,
+      "frac_improves_vs_dime": 0.5425936255496894
+    },
+    "M5": {
+      "n_queries": 77089,
+      "mean_nll": 3.905347814601184,
+      "median_nll": 3.119439458415896,
+      "ppl": 49.66735193847791,
+      "mean_p_true": 0.15801812996360962,
+      "median_p_true": 0.04418192728736754,
+      "delta_nll_vs_gpt2": -0.4556387116181795,
+      "delta_nll_vs_dime": -0.11551979574537663,
+      "frac_improves_vs_gpt2": 0.2960863417608219,
+      "frac_improves_vs_dime": 0.5555267288458794
+    },
+    "M6": {
+      "n_queries": 77089,
+      "mean_nll": 3.9480710835800332,
+      "median_nll": 2.999565843065118,
+      "ppl": 51.835284409315236,
+      "mean_p_true": 0.16869555314736354,
+      "median_p_true": 0.04980868846178055,
+      "delta_nll_vs_gpt2": -0.41291544263933044,
+      "delta_nll_vs_dime": -0.07279652676652759,
+      "frac_improves_vs_gpt2": 0.2759667397423757,
+      "frac_improves_vs_dime": 0.3942715562531619
+    }
+  },
+  "r5_sample_diagnostic": {
+    "M0": {
+      "n_queries": 6400,
+      "mean_nll": 3.87188397235863
+    },
+    "M1": {
+      "n_queries": 6400,
+      "mean_nll": 3.2745155156952306
+    },
+    "M2": {
+      "n_queries": 6400,
+      "mean_nll": 3.3763085540973954
+    },
+    "M3": {
+      "n_queries": 6400,
+      "mean_nll": 3.36211987307867
+    },
+    "M4": {
+      "n_queries": 6400,
+      "mean_nll": 3.2630826068748
+    },
+    "M5": {
+      "n_queries": 6400,
+      "mean_nll": 3.239778855458311
+    },
+    "M6": {
+      "n_queries": 6400,
+      "mean_nll": 3.2861761259659086
+    }
+  },
+  "experiment_B_alpha_sensitivity": {
+    "nll_by_method_alpha": {
+      "M1": {
+        "0.0": 4.360986526219364,
+        "0.05": 4.002009440351877,
+        "0.1": 3.953721790164424,
+        "0.15": 3.935445736004775,
+        "0.2": 3.9321388893322067,
+        "0.25": 3.938754836851387,
+        "0.3": 3.953079085197497,
+        "0.4": 4.001335271412834,
+        "0.5": 4.075010945300838
+      },
+      "M2": {
+        "0.0": 4.360986526219364,
+        "0.05": 4.055437189444367,
+        "0.1": 4.01919947476566,
+        "0.15": 4.008315117782137,
+        "0.2": 4.010275531369883,
+        "0.25": 4.020867610346561,
+        "0.3": 4.03824278905715,
+        "0.4": 4.090432701830837,
+        "0.5": 4.165357565211142
+      },
+      "M3": {
+        "0.0": 4.360986526219364,
+        "0.05": 4.045728219236409,
+        "0.1": 4.007168889414493,
+        "0.15": 3.994866326048297,
+        "0.2": 3.995816021684069,
+        "0.25": 4.00564062571821,
+        "0.3": 4.022417966536852,
+        "0.4": 4.0737899675353795,
+        "0.5": 4.14832707029232
+      },
+      "M4": {
+        "0.0": 4.360986526219364,
+        "0.05": 4.003825835521984,
+        "0.1": 3.9534244121771582,
+        "0.15": 3.932205445400817,
+        "0.2": 3.9254733200957728,
+        "0.25": 3.9282427012649386,
+        "0.3": 3.938283105113683,
+        "0.4": 3.976414075405847,
+        "0.5": 4.037152604696328
+      },
+      "M5": {
+        "0.0": 4.360986526219364,
+        "0.05": 3.9911180765851877,
+        "0.1": 3.937294063316089,
+        "0.15": 3.913516642673656,
+        "0.2": 3.904588513365139,
+        "0.25": 3.905347814601184,
+        "0.3": 3.9134762557825646,
+        "0.4": 3.947877937321881,
+        "0.5": 4.004784617289346
+      }
+    },
+    "alpha1_explicit_handling": {
+      "M1": {
+        "n_zero_prob_positions": 41840,
+        "frac_zero_prob": 0.5427492897819404,
+        "mean_nll_over_nonzero_only": 1.5973839177625608,
+        "nll_undefined_on_zero_positions": true
+      },
+      "M2": {
+        "n_zero_prob_positions": 18281,
+        "frac_zero_prob": 0.23714148581509684,
+        "mean_nll_over_nonzero_only": 4.520128668563836,
+        "nll_undefined_on_zero_positions": true
+      },
+      "M3": {
+        "n_zero_prob_positions": 18301,
+        "frac_zero_prob": 0.2374009262021819,
+        "mean_nll_over_nonzero_only": 4.705735590812064,
+        "nll_undefined_on_zero_positions": true
+      },
+      "M4": {
+        "n_zero_prob_positions": 18281,
+        "frac_zero_prob": 0.23714148581509684,
+        "mean_nll_over_nonzero_only": 4.101532469753836,
+        "nll_undefined_on_zero_positions": true
+      },
+      "M5": {
+        "n_zero_prob_positions": 18281,
+        "frac_zero_prob": 0.23714148581509684,
+        "mean_nll_over_nonzero_only": 3.9537270201313506,
+        "nll_undefined_on_zero_positions": true
+      },
+      "M6": {
+        "n_zero_prob_positions": 42469,
+        "frac_zero_prob": 0.5509086899557654,
+        "mean_nll_over_nonzero_only": 1.5893971006056704,
+        "nll_undefined_on_zero_positions": true
+      }
+    },
+    "exploratory_best_alpha_same_val_set": {
+      "M1": {
+        "best_alpha_on_this_val_set": 0.2,
+        "mean_nll_at_best_alpha": 3.9321388893322067,
+        "mean_nll_at_primary_alpha": 3.938754836851387,
+        "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+      },
+      "M2": {
+        "best_alpha_on_this_val_set": 0.15,
+        "mean_nll_at_best_alpha": 4.008315117782137,
+        "mean_nll_at_primary_alpha": 4.020867610346561,
+        "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+      },
+      "M3": {
+        "best_alpha_on_this_val_set": 0.15,
+        "mean_nll_at_best_alpha": 3.994866326048297,
+        "mean_nll_at_primary_alpha": 4.00564062571821,
+        "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+      },
+      "M4": {
+        "best_alpha_on_this_val_set": 0.2,
+        "mean_nll_at_best_alpha": 3.9254733200957728,
+        "mean_nll_at_primary_alpha": 3.9282427012649386,
+        "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+      },
+      "M5": {
+        "best_alpha_on_this_val_set": 0.2,
+        "mean_nll_at_best_alpha": 3.904588513365139,
+        "mean_nll_at_primary_alpha": 3.905347814601184,
+        "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+      }
+    }
+  },
+  "experiment_C_delta_analysis": {
+    "core": {
+      "mean_delta_crisp_minus_dime": -0.015226984628350957,
+      "median_delta_crisp_minus_dime": 0.0,
+      "frac_improved": 0.3850614225116424,
+      "best_delta": -4.29614050691478,
+      "worst_delta": 6.6885814205490135,
+      "contribution_of_worst_1pct": 0.15416734090213136,
+      "contribution_of_worst_5pct": 0.3076103018047789,
+      "contribution_of_worst_10pct": 0.36585370401624473,
+      "frac_high_confidence_gpt2_overruled_by_crisp": 0.2380624991892488,
+      "n_high_confidence_gpt2_overruled_by_crisp": 18352
+    },
+    "confidence_groups": {
+      "very_low": {
+        "n": 19272,
+        "mean_delta_nll_raw_vs_gpt2": -1.3044891905624059,
+        "mean_delta_nll_dime_vs_gpt2": -1.4142147952070314,
+        "mean_delta_nll_crisp_vs_gpt2": -1.4170125346564124,
+        "mean_delta_nll_crisp_vs_dime": -0.0027977394493809
+      },
+      "low": {
+        "n": 19272,
+        "mean_delta_nll_raw_vs_gpt2": -0.4635016959285053,
+        "mean_delta_nll_dime_vs_gpt2": -0.26454016813452225,
+        "mean_delta_nll_crisp_vs_gpt2": -0.2967395997293694,
+        "mean_delta_nll_crisp_vs_dime": -0.032199431594847186
+      },
+      "moderate": {
+        "n": 19272,
+        "mean_delta_nll_raw_vs_gpt2": -0.05296775855711221,
+        "mean_delta_nll_dime_vs_gpt2": 0.0921884227384831,
+        "mean_delta_nll_crisp_vs_gpt2": 0.07562510837085765,
+        "mean_delta_nll_crisp_vs_dime": -0.01656331436762546
+      },
+      "high": {
+        "n": 19273,
+        "mean_delta_nll_raw_vs_gpt2": 0.1320031290238971,
+        "mean_delta_nll_dime_vs_gpt2": 0.22606149871757894,
+        "mean_delta_nll_crisp_vs_gpt2": 0.21671374055031364,
+        "mean_delta_nll_crisp_vs_dime": -0.009347758167265359
+      }
+    },
+    "support_groups": {
+      "raw_top20_support": {
+        "n": 35249,
+        "frac_of_total": 0.45725071021805963,
+        "mean_nll_raw": 1.8084655221427408,
+        "mean_nll_dime": 2.281425074482882,
+        "mean_nll_crisp": 2.2226726763985027
+      },
+      "dime_crisp_support": {
+        "n": 58808,
+        "frac_of_total": 0.7628585141849031,
+        "mean_nll_raw": 3.076643946960644,
+        "mean_nll_dime": 3.1792301174386712,
+        "mean_nll_crisp": 3.1592696865786705
+      },
+      "neither_support": {
+        "n": 18037,
+        "frac_of_total": 0.23397631309265912,
+        "mean_nll_raw": 6.774235397777095,
+        "mean_nll_dime": 6.774235397777095,
+        "mean_nll_crisp": 6.774235397777095
+      },
+      "both_support": {
+        "n": 35005,
+        "frac_of_total": 0.4540855374956219,
+        "mean_nll_raw": 1.8063159741334065,
+        "mean_nll_dime": 2.274084783673187,
+        "mean_nll_crisp": 2.2149228559463965
+      }
+    }
+  },
+  "experiment_D_predictive_value_of_local_corrections": {
+    "exact_oracle_vs_dime": {
+      "nll_m4": 3.9282427012649386,
+      "nll_m2": 4.020867610346561,
+      "m4_beats_m2": true
+    },
+    "crisp_fraction_of_oracle_headroom_recovered": 0.16439405748762875,
+    "mass_aware_vs_centroid_softmax": {
+      "nll_m5": 3.905347814601184,
+      "nll_m4": 3.9282427012649386,
+      "m5_beats_m4": true
+    },
+    "remaining_gap_oracle_to_raw": -0.01051213558644859,
+    "aggregation_imposes_major_limitation": false
+  },
+  "experiment_F_storage_vs_nll": {
+    "storage_rows": [
+      {
+        "system": "GPT-2 alone",
+        "bytes": "N/A (GPT-2 weights shared across all systems, excluded from retrieval-datastore comparison)",
+        "compression_ratio": "N/A",
+        "nll": 4.360986526219364,
+        "delta_nll_vs_gpt2": 0.0
+      },
+      {
+        "system": "Raw kNN",
+        "bytes": 1172346652,
+        "compression_ratio": 1.0,
+        "nll": 3.938754836851387,
+        "delta_nll_vs_gpt2": -0.4222316893679765
+      },
+      {
+        "system": "DIME-V1",
+        "bytes": 13552584,
+        "compression_ratio": 86.50355179499348,
+        "nll": 4.020867610346561,
+        "delta_nll_vs_gpt2": -0.34011891587280285
+      },
+      {
+        "system": "CRISP rank8",
+        "bytes": 20732360,
+        "compression_ratio": 56.54670534372353,
+        "nll": 4.00564062571821,
+        "delta_nll_vs_gpt2": -0.35534590050115344
+      }
+    ],
+    "crisp_expansion_over_dime_bytes": 7179776,
+    "crisp_expansion_over_dime_ratio": 1.529771739470495,
+    "crisp_nll_improvement_over_dime": 0.015226984628350593,
+    "verdict": "CRISP's extra memory purchases a real NLL improvement over DIME"
+  },
+  "statistical_reliability": {
+    "mean_delta_crisp_minus_dime": -0.015226984628350957,
+    "median_delta": 0.0,
+    "ci_95_low": -0.016949871636894057,
+    "ci_95_high": -0.013398254316568886,
+    "frac_improved": 0.3850614225116424,
+    "significant": true,
+    "n_queries": 77089,
+    "bootstrap_type": "i.i.d. over query positions, NOT sequence/block-aware (same scope simplification R5 made, stated explicitly, not silently repeated)."
+  },
+  "final_verdict": {
+    "Q1": {
+      "crisp_beats_gpt2_alone": true,
+      "nll_crisp": 4.00564062571821,
+      "nll_gpt2": 4.360986526219364
+    },
+    "Q2": {
+      "crisp_beats_dime_at_alpha025": true,
+      "nll_crisp": 4.00564062571821,
+      "nll_dime": 4.020867610346561,
+      "significant": true
+    },
+    "Q3": {
+      "nll_crisp": 4.00564062571821,
+      "nll_raw": 3.938754836851387,
+      "gap_to_raw": 0.06688578886682306
+    },
+    "Q4": {
+      "best_alpha_on_this_val_set": 0.15,
+      "mean_nll_at_best_alpha": 3.994866326048297,
+      "mean_nll_at_primary_alpha": 4.00564062571821,
+      "EXPLORATORY_WARNING": "selected and evaluated on the SAME val queries -- NOT an independent generalization estimate; no untouched third split exists."
+    },
+    "Q5": {
+      "frac_tokens_improved": 0.3850614225116424,
+      "contribution_of_worst_10pct_regressions": 0.36585370401624473
+    },
+    "Q6": {
+      "n_high_confidence_overruled": 18352,
+      "frac_high_confidence_overruled": 0.2380624991892488
+    },
+    "Q7": {
+      "exact_oracle_beats_dime": true,
+      "magnitude": 0.09262490908162224
+    },
+    "Q8": {
+      "mass_aware_beats_centroid_softmax": true,
+      "magnitude": 0.022894886663754388
+    },
+    "Q9": {
+      "crisp_nll_improvement_over_dime": 0.015226984628350593,
+      "crisp_extra_bytes_over_dime": 7179776,
+      "worth_it": true
+    },
+    "Q10": "Remaining gap oracle-to-raw: -0.01051 -- local-function approximation quality remains the dominant lever, not routing/aggregation.",
+    "final_classification": "Partial evidence: CRISP improves on DIME but remains substantially behind raw kNN"
+  },
+  "sections_completed": [
+    "phase1_baseline",
+    "crisp_fitting_coverage",
+    "phase3_sanity_checks",
+    "phase4_main_loop",
+    "experiment_A_matched_nll",
+    "r5_sample_diagnostic",
+    "experiment_B_alpha_sensitivity",
+    "experiment_C_delta_analysis",
+    "experiment_D_predictive_value_of_local_corrections",
+    "experiment_F_storage_vs_nll",
+    "statistical_reliability",
+    "error_analysis.md",
+    "mathematical_observations.md",
+    "research_questions.md",
+    "final_verdict",
+    "report.md",
+    "plots"
+  ],
+  "total_runtime_seconds": 1049.169506474398
+}

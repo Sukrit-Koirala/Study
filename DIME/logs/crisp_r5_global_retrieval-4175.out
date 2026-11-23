@@ -1,0 +1,82 @@
+CRISP-R5 job started: Fri Nov 20 11:40:05 PM CST 2026
+Node: Slurm-2-7
+CRISP-R5 job started. SMOKE=False, N_CLUSTERS=3811, N_EVAL=8000
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to every prior script in this series)...
+
+Phase 1: full-scale (77089 queries) raw/DIME baseline reproduction...
+  tier1.json found (real, secondary/tuned-config reference, NOT re-run here): {'gpt_only_mean_nll': 4.360981464385986, 'raw_knn_tuned': {'k': 300, 'tau': 1.0, 'alpha': 0.25, 'mean_nll': 3.880601986461873}, 'dime_tuned': {'k': 100, 'tau': 2.0, 'alpha': 0.1, 'mean_nll': 4.003112141600259}}
+
+Routing-overlap diagnostic (full val scale, cheap -- assignment lookups only)...
+  {'mean_frac_neighbor_overlap': 0.9741026605611697, 'mean_frac_mass_overlap': 0.9775848544632382, 'frac_queries_with_full_top20_recall': 0.7034726095811334}
+
+Phase 3: fitting CRISP-R4 B4 (rank=8) for all 3811 clusters...
+  fitted 381/3811 clusters (fitted=337, fallback=44, empty/tiny=0)
+  fitted 762/3811 clusters (fitted=677, fallback=85, empty/tiny=0)
+  fitted 1143/3811 clusters (fitted=997, fallback=146, empty/tiny=0)
+  fitted 1524/3811 clusters (fitted=1321, fallback=203, empty/tiny=0)
+  fitted 1905/3811 clusters (fitted=1644, fallback=261, empty/tiny=0)
+  fitted 2286/3811 clusters (fitted=1968, fallback=318, empty/tiny=0)
+  fitted 2667/3811 clusters (fitted=2283, fallback=384, empty/tiny=0)
+  fitted 3048/3811 clusters (fitted=2594, fallback=454, empty/tiny=0)
+  fitted 3429/3811 clusters (fitted=2917, fallback=512, empty/tiny=0)
+  fitted 3810/3811 clusters (fitted=3236, fallback=574, empty/tiny=0)
+  Global fitting done in 25.4s. fitted=3236 (84.9%), fallback=575 (15.1%), empty/tiny=0 (0.0%)
+  Routing-frequency-weighted coverage: {'frac_selected_centroid_slots_fitted': 0.9419813462361686, 'frac_selected_centroid_slots_fallback_or_empty': 0.05801865376383142, 'note': 'fraction of (query, selected-centroid) pairs across ALL 77,089 val queries x top-20 selections that land on a FITTED cluster -- this, not the raw cluster count, is what matters for end-to-end fidelity.'}
+
+Phase 2: sanity-checking S2/S3 definitions on a small real-data probe...
+  S3's reconstructed distribution sums to 1 (within 1e-6) on 50/50 probe queries
+  S2's candidate-restricted top-20 distances match S0's global top-20 distances exactly on 36/36 full-recall probe queries (expected: all, per the spec's own 'verify S2 equals original kNN whenever its candidate set contains every original top-k neighbor' check)
+
+Selecting the N_EVAL=8000 stratified evaluation sample (JS deciles, reusing E1B.3's method)...
+  evaluation sample: 8000 queries (800 target per JS decile)
+
+Phase 4: main evaluation loop over 8000 queries (S2-S6 + diagnostics)...
+  evaluated 800/8000 queries
+  evaluated 1600/8000 queries
+  evaluated 2400/8000 queries
+  evaluated 3200/8000 queries
+  evaluated 4000/8000 queries
+  evaluated 4800/8000 queries
+  evaluated 5600/8000 queries
+  evaluated 6400/8000 queries
+  evaluated 7200/8000 queries
+  evaluated 8000/8000 queries
+
+Experiment A: global retrieval fidelity (TV/JS/top-k/entropy/support vs. S0)...
+  S1 vs S0: {'mean_tv': 0.7559885257968517, 'median_tv': 0.8067543431930178, 'p90_tv': 0.9570912824954676, 'p99_tv': 0.9825520150942773, 'mean_js': 0.44567162167429153, 'median_js': 0.4735563399502378, 'top1_agreement_with_S0': 0.33275, 'top5_overlap_with_S0': 0.30485, 'top10_overlap_with_S0': 0.27954999999999997, 'mean_entropy_diff_vs_S0': 2.807830586429694, 'mean_s0_support_mass_recovered': 0.28120150903450597, 'mean_p_true': 0.06781679953713445, 'median_p_true': 0.003461706990753262, 'coverage': 0.756}
+  S4 vs S0: {'mean_tv': 0.6896031946365049, 'median_tv': 0.7334565337344368, 'p90_tv': 0.9138769868341571, 'p99_tv': 0.9675862053480031, 'mean_js': 0.38496351694705366, 'median_js': 0.4038900897933481, 'top1_agreement_with_S0': 0.35425, 'top5_overlap_with_S0': 0.36052500000000004, 'top10_overlap_with_S0': 0.3612625, 'mean_entropy_diff_vs_S0': 2.3269287031305335, 'mean_s0_support_mass_recovered': 0.36352194352939066, 'mean_p_true': 0.0764026301597861, 'median_p_true': 0.003437738444470012, 'coverage': 0.755625}
+
+Experiment B: error attribution (aggregate pairwise TV, no additive decomposition claimed)...
+  mean pairwise errors: {'tv_S0_S1': 0.7559885257968517, 'tv_S0_S2': 0.022436980212404506, 'tv_S0_S3': 0.5812743900096673, 'tv_S0_S4': 0.6896031946365049, 'tv_S0_S5': 0.5703836834244471, 'tv_S2_S3': 0.5791018211647173, 'tv_S3_S4': 0.24108741833272873, 'tv_S3_S5': 0.157150074476348, 'tv_S5_S6': 0.24296794459261878}
+  correlation of each component with final tv_S0_S4: {'tv_S0_S2': 0.24079203028972476, 'tv_S2_S3': 0.8532536517556072, 'tv_S3_S4': 0.4860548689501691}
+
+Experiment C: relative improvement R_D (CRISP vs. DIME) and oracle opportunity (S3 vs. DIME)...
+  {'TV': {'dime': 0.7559885257968517, 'crisp': 0.6896031946365049, 's3_oracle': 0.5812743900096673, 'R_D_crisp_vs_dime': 0.08781261738116092, 'R_D_oracle_s3_vs_dime': 0.23110686184426743}, 'JS': {'dime': 0.44567162167429153, 'crisp': 0.38496351694705366, 's3_oracle': 0.29568689356664507, 'R_D_crisp_vs_dime': 0.13621711990359783, 'R_D_oracle_s3_vs_dime': 0.3365364111454671}}
+
+Experiment D: correct-token behavior (coverage, probability, retrieval-only NLL with documented floor)...
+  {'S0': {'coverage': 0.4485, 'mean_p_true': 0.1566559748642592, 'median_p_true': 0.0, 'mean_retrieval_only_nll_with_floor': 8.329135573751289, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 1.3099877306725316}, 'S1': {'coverage': 0.756, 'mean_p_true': 0.06781679953713445, 'median_p_true': 0.003461706990753262, 'mean_retrieval_only_nll_with_floor': 6.809474697184584, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': None}, 'S2': {'coverage': 0.439, 'mean_p_true': 0.15466454557484746, 'median_p_true': 0.0, 'mean_retrieval_only_nll_with_floor': 8.43900729512962, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 1.280622893301796}, 'S3': {'coverage': 0.756, 'mean_p_true': 0.09977836973332979, 'median_p_true': 0.006973583757218198, 'mean_retrieval_only_nll_with_floor': 6.492215141584486, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 0.47129281261192735}, 'S4': {'coverage': 0.755625, 'mean_p_true': 0.0764026301597861, 'median_p_true': 0.003437738444470012, 'mean_retrieval_only_nll_with_floor': 6.936539377524437, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 0.12660330008570092}, 'S5': {'coverage': 0.756, 'mean_p_true': 0.11209546026251734, 'median_p_true': 0.007692145247797204, 'mean_retrieval_only_nll_with_floor': 6.388869995293274, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 0.6529158118282657}, 'S6': {'coverage': 0.755625, 'mean_p_true': 0.07709313840336034, 'median_p_true': 0.003807600068449106, 'mean_retrieval_only_nll_with_floor': 6.849493093989431, 'epsilon_floor': 1e-06, 'relative_improvement_in_p_true_vs_dime': 0.13678526455891576}}
+
+Experiment F: full storage accounting (measured, all clusters, not extrapolated)...
+  {'raw_kNN_datastore_bytes': 1172346652, 'dime_v1_bytes': {'centroid_bytes': 11707392, 'histogram_bytes': 1845192, 'total': 13552584}, 'crisp_r5_rank8_bytes': {'centroid_bytes': 11707392, 'histogram_bytes': 1845192, 'coefficient_bytes': 7076224, 'anchor_bytes': 103552, 'total': 20732360}, 's5_s6_storage': 'N/A -- diagnostic-only, require raw vectors at inference time, not deployable compressed systems.', 'compression_ratio_dime_v1': 86.50355179499348, 'compression_ratio_crisp': 56.54670534372353, 'crisp_expansion_over_dime_v1': 1.529771739470495}
+
+Experiment G (light, in-loop timing -- NOT an isolated deployment benchmark): {'S0': {'total_seconds': 0.007282394915819168, 'mean_seconds_per_query': 9.10299364477396e-07}, 'S1': {'total_seconds': 0.005368764512240887, 'mean_seconds_per_query': 6.710955640301109e-07}, 'S2': {'total_seconds': 0.6500020325183868, 'mean_seconds_per_query': 8.125025406479836e-05}, 'S3': {'total_seconds': 60.0478488849476, 'mean_seconds_per_query': 0.007505981110618449}, 'S4': {'total_seconds': 0.0013850964605808258, 'mean_seconds_per_query': 1.7313705757260324e-07}, 'S5': {'total_seconds': 0.6128183826804161, 'mean_seconds_per_query': 7.660229783505201e-05}, 'S6': {'total_seconds': 0.521692062728107, 'mean_seconds_per_query': 6.521150784101338e-05}}
+
+Writing global_results.csv, routing_diagnostics.csv, error_attribution.csv...
+Writing query_level_results.csv (bounded sparse sample)...
+
+Experiment H: failure analysis...
+
+Generating plots...
+Writing mathematical_observations.md and research_questions.md...
+
+Computing final verdict (Q1-Q10)...
+  Verdict: Partial evidence; global improvement with important limitations
+  {'Q1_dime_distance_from_raw': {'metric': 'TV/JS of S1 vs S0', 'tv': 0.7559885257968517, 'js': 0.44567162167429153}, 'Q2_crisp_distance_from_raw': {'metric': 'TV/JS of S4 vs S0', 'tv': 0.6896031946365049, 'js': 0.38496351694705366}, 'Q3_relative_change_vs_dime': {'R_D_tv': 0.08781261738116092, 'R_D_js': 0.13621711990359783}, 'Q4_correct_token_behavior': {'p_true_relative_improvement': 0.12660330008570092, 'coverage_s4': 0.755625, 'coverage_s1': 0.756}, 'Q5_crisp_vs_s3_oracle_gap': {'tv_S3_S4_mean_compression_gap': 0.24108741833272873}, 'Q6_routing_and_aggregation_discrepancy': {'tv_S0_S2_routing': 0.022436980212404506, 'tv_S2_S3_aggregation': 0.5791018211647173}, 'Q7_mass_aware_aggregation_effect': {'tv_S3_S5_mass_effect': 0.157150074476348, 's7_justified': True}, 'Q8_compressed_size_and_cost': {'compression_ratio_crisp': 56.54670534372353, 'crisp_mean_latency_s': 1.7313705757260324e-07}, 'Q9_significance_and_reliability': {'mean_tv_improvement_dime_minus_crisp': 0.06638533116034694, 'ci_95_low': 0.0647342282385858, 'ci_95_high': 0.06799753519101605, 'frac_queries_crisp_improves_over_dime': 0.917, 'significant': True}, 'Q10_limiting_mathematical_problem': 'See research_questions.md; the most load-bearing single question is how approximation capacity should be allocated given both within-cluster difficulty AND global selection frequency jointly (neither alone, per Observation 1).', 'final_classification': 'Partial evidence; global improvement with important limitations'}
+
+Generating report.md...
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_r5_global_retrieval
+Total runtime: 9.3 min
+No existing E1/E2/TRI1/NC1/GEOM1/KM1/R1/R2/R3/R4 outputs were modified.
+CRISP-R5 job done: Fri Nov 20 11:50:05 PM CST 2026

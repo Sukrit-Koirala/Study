@@ -1,0 +1,8 @@
+component,bytes,method
+raw_kNN_datastore,1172346652,raw
+centroids,11707392,dime_v1_and_crisp_shared
+histograms,1845192,dime_v1_and_crisp_shared
+crisp_coefficients,7076224,crisp
+crisp_anchor_indices,103552,crisp
+dime_v1_total,13552584,dime_v1
+crisp_total,20732360,crisp

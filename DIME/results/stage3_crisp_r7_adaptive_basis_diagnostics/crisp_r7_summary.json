@@ -1,0 +1,234 @@
+{
+  "synthetic_correctness_checks": {
+    "recovers_true_generating_columns": true,
+    "residual_monotonic_non_increasing": true,
+    "no_candidate_selected_twice": true,
+    "score_matches_direct_refit_reduction": true,
+    "gauge_shift_invariance_exact": true,
+    "all_passed": true
+  },
+  "cluster_sampling": {
+    "n_final_sample": 66,
+    "sample_clusters": [
+      10,
+      77,
+      85,
+      224,
+      271,
+      373,
+      569,
+      604,
+      623,
+      647,
+      707,
+      780,
+      795,
+      923,
+      935,
+      965,
+      1232,
+      1239,
+      1307,
+      1312,
+      1320,
+      1382,
+      1465,
+      1497,
+      1556,
+      1598,
+      1634,
+      1654,
+      1848,
+      1849,
+      1914,
+      1959,
+      1988,
+      2031,
+      2059,
+      2132,
+      2161,
+      2166,
+      2169,
+      2190,
+      2191,
+      2261,
+      2482,
+      2532,
+      2535,
+      2553,
+      2669,
+      2798,
+      2827,
+      2886,
+      2921,
+      3009,
+      3016,
+      3072,
+      3167,
+      3257,
+      3298,
+      3332,
+      3414,
+      3421,
+      3433,
+      3446,
+      3465,
+      3552,
+      3776,
+      3801
+    ],
+    "n_excluded_single_label": 0
+  },
+  "memory_matched_comparison": [
+    {
+      "rank": 2,
+      "B0_bytes": 740,
+      "B3_bytes": 740,
+      "B0_mean_tv": 0.348057,
+      "B3_mean_tv": 0.333497,
+      "memory_matched": true
+    },
+    {
+      "rank": 4,
+      "B0_bytes": 1236,
+      "B3_bytes": 1236,
+      "B0_mean_tv": 0.325861,
+      "B3_mean_tv": 0.304134,
+      "memory_matched": true
+    },
+    {
+      "rank": 8,
+      "B0_bytes": 2228,
+      "B3_bytes": 2228,
+      "B0_mean_tv": 0.279975,
+      "B3_mean_tv": 0.27464,
+      "memory_matched": true
+    },
+    {
+      "rank": 16,
+      "B0_bytes": 4212,
+      "B3_bytes": 4212,
+      "B0_mean_tv": 0.276081,
+      "B3_mean_tv": 0.275439,
+      "memory_matched": true
+    },
+    {
+      "rank": 32,
+      "B0_bytes": 8180,
+      "B3_bytes": 8180,
+      "B0_mean_tv": 0.268219,
+      "B3_mean_tv": 0.269879,
+      "memory_matched": true
+    }
+  ],
+  "main_comparison_B0_vs_B3_at_primary_rank": {
+    "B0_mean_tv": 0.27997518453630355,
+    "B3_mean_tv": 0.2746404377274678,
+    "B4_mean_tv": 0.28447607584455853,
+    "B1_mean_tv": 0.4126084612780412,
+    "B2_mean_tv": 0.4062603188615689,
+    "frac_clusters_B3_beats_B0": 0.696969696969697,
+    "mean_paired_diff_B3_minus_B0": -0.005334787878787878,
+    "ci_95_low": -0.013651617803030303,
+    "ci_95_high": 0.0034327818181818025,
+    "significant_different_from_zero": false,
+    "significantly_better": false
+  },
+  "output_space_vs_query_feature_gap": {
+    "oracle_output_space_rel_error": 0.6722628204920447,
+    "achievable_rel_error_using_predicted_coords": 1.230025782220389,
+    "coord_prediction_rel_error": 1.4545838710803138
+  },
+  "query_change_summary": {
+    "B0": {
+      "n_pairs": 2532,
+      "mean_e_delta": 0.8704500513428121,
+      "mean_dime_zero_change_error": 0.9215704482622432
+    },
+    "B1": {
+      "n_pairs": 2532,
+      "mean_e_delta": 0.9851188803317534,
+      "mean_dime_zero_change_error": 0.9215704482622432
+    },
+    "B2": {
+      "n_pairs": 2532,
+      "mean_e_delta": 0.9578973597946288,
+      "mean_dime_zero_change_error": 0.9215704482622432
+    },
+    "B3": {
+      "n_pairs": 2532,
+      "mean_e_delta": 0.8460258578199051,
+      "mean_dime_zero_change_error": 0.9215704482622432
+    },
+    "B4": {
+      "n_pairs": 2532,
+      "mean_e_delta": 0.8752018858609795,
+      "mean_dime_zero_change_error": 0.9215704482622432
+    }
+  },
+  "final_verdict": {
+    "Q1": "R3's Part F measures OUTPUT-SUBSPACE approximation (oracle projection using the true held-out response), not query-feature prediction. See r3_r4_method_audit.md.",
+    "Q2": "R4's basis is V_r = span of r anchor-difference features to the r NEAREST other centroids, affine in q, NESTED across rank, cluster-specific. See r3_r4_method_audit.md.",
+    "Q3_basis_expanded_effective_space": false,
+    "Q4_high_rank_redundant": true,
+    "Q5_empirical_improves": true,
+    "Q6_generalizes_held_out": true,
+    "Q7_improves_fidelity_under_B4_objective": false,
+    "Q8_query_change_preservation": {
+      "B0": {
+        "n_pairs": 2532,
+        "mean_e_delta": 0.8704500513428121,
+        "mean_dime_zero_change_error": 0.9215704482622432
+      },
+      "B1": {
+        "n_pairs": 2532,
+        "mean_e_delta": 0.9851188803317534,
+        "mean_dime_zero_change_error": 0.9215704482622432
+      },
+      "B2": {
+        "n_pairs": 2532,
+        "mean_e_delta": 0.9578973597946288,
+        "mean_dime_zero_change_error": 0.9215704482622432
+      },
+      "B3": {
+        "n_pairs": 2532,
+        "mean_e_delta": 0.8460258578199051,
+        "mean_dime_zero_change_error": 0.9215704482622432
+      },
+      "B4": {
+        "n_pairs": 2532,
+        "mean_e_delta": 0.8752018858609795,
+        "mean_dime_zero_change_error": 0.9215704482622432
+      }
+    },
+    "Q9_holds_memory_matched": true,
+    "Q10_rank_plateau_implication": 0.5577629617283444,
+    "findings": {
+      "basis_selection_mismatch": false,
+      "fitting_or_generalization_limitation": false,
+      "insufficient_representational_capacity": false
+    },
+    "final_classification": "Inconclusive"
+  },
+  "sections_completed": [
+    "synthetic_correctness_checks",
+    "cluster_sampling",
+    "main_experiment",
+    "rank_results.csv",
+    "cluster_results.csv",
+    "basis_results.csv",
+    "memory_results.csv",
+    "query_pair_results.csv",
+    "main_comparison",
+    "output_space_vs_query_feature_gap",
+    "query_change_summary",
+    "r3_r4_method_audit.md",
+    "mathematical_analysis.md",
+    "research_questions.md",
+    "failure_cases.md",
+    "final_verdict",
+    "report.md",
+    "plots"
+  ],
+  "total_runtime_seconds": 181.38845571037382
+}

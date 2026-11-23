@@ -1,0 +1,397 @@
+{
+  "n_ds": 381127,
+  "n_ct": 90170,
+  "n_val": 77089,
+  "n_clusters": 3811,
+  "seed": 42,
+  "smoke": false,
+  "outer_k": 20,
+  "tau": 2.0,
+  "crisp_rank": 8,
+  "n_eval_target": 8000,
+  "reproduction_note": "R1-R4's real persisted results were not available locally (checked directly); this script reproduces R4's B4 methodology fresh via direct import, and reuses E1B.3's real, present System-3 pattern for the S3 oracle. See module docstring.",
+  "phase1_baseline": {
+    "matched_raw_mean_p_true": 0.16013748307710696,
+    "matched_dime_mean_p_true": 0.0695251244140079,
+    "matched_raw_coverage": 0.45725071021805963,
+    "matched_dime_coverage": 0.7628585141849031,
+    "mean_js_raw_vs_dime_full_val": 0.4456488444762084,
+    "tier1_tuned_reference": {
+      "gpt_only_mean_nll": 4.360981464385986,
+      "raw_knn_tuned": {
+        "k": 300,
+        "tau": 1.0,
+        "alpha": 0.25,
+        "mean_nll": 3.880601986461873
+      },
+      "dime_tuned": {
+        "k": 100,
+        "tau": 2.0,
+        "alpha": 0.1,
+        "mean_nll": 4.003112141600259
+      }
+    }
+  },
+  "routing_overlap_full_scale": {
+    "mean_frac_neighbor_overlap": 0.9741026605611697,
+    "mean_frac_mass_overlap": 0.9775848544632382,
+    "frac_queries_with_full_top20_recall": 0.7034726095811334
+  },
+  "crisp_fitting_coverage": {
+    "by_cluster_count": {
+      "n_fitted": 3236,
+      "n_fallback": 575,
+      "n_empty_or_tiny": 0,
+      "frac_fitted": 0.84912096562582
+    },
+    "by_held_out_query_routing_frequency_full_val": {
+      "frac_selected_centroid_slots_fitted": 0.9419813462361686,
+      "frac_selected_centroid_slots_fallback_or_empty": 0.05801865376383142,
+      "note": "fraction of (query, selected-centroid) pairs across ALL 77,089 val queries x top-20 selections that land on a FITTED cluster -- this, not the raw cluster count, is what matters for end-to-end fidelity."
+    },
+    "global_fit_wall_clock_seconds": 25.432170066982508
+  },
+  "phase2_sanity_checks": {
+    "n_probed": 50,
+    "n_full_recall_in_probe": 36,
+    "frac_s2_matches_s0_on_full_recall_subset": 1.0,
+    "frac_s3_sums_to_one": 1.0
+  },
+  "evaluation_sample": {
+    "n_eval": 8000,
+    "selection_rule": "stratified across JS(raw,DIME) deciles at matched config, same method as E1B.3's Experiments B/C"
+  },
+  "error_attribution_schema": {
+    "tv_S0_S1": "DIME's total global error vs. raw kNN.",
+    "tv_S0_S2": "Routing error -- how much centroid-candidate-set restriction alone costs.",
+    "tv_S0_S3": "Routing + aggregation error with exact local functions (no compression yet).",
+    "tv_S0_S4": "CRISP's total global error vs. raw kNN.",
+    "tv_S0_S5": "Error of the mass-aware exact-oracle variant vs. raw kNN.",
+    "tv_S2_S3": "Aggregation gap -- candidate-restricted raw retrieval vs. exact query-conditioned cluster aggregation.",
+    "tv_S3_S4": "Compression approximation gap -- CRISP's local approximation error, isolated from routing/aggregation.",
+    "tv_S3_S5": "Effect of centroid-softmax weights vs. real evidence masses, holding exact local functions fixed.",
+    "tv_S5_S6": "Effect of replacing exact local functions with CRISP's, holding real evidence masses fixed.",
+    "note": "These are PAIRWISE errors, not an additive decomposition -- TV obeys the triangle inequality but components can cancel or interact; no claim of tv_S0_S2 + tv_S2_S3 + tv_S3_S4 == tv_S0_S4 is made."
+  },
+  "experiment_A_global_fidelity": {
+    "S0": {
+      "mean_tv": 0.0,
+      "median_tv": 0.0,
+      "p90_tv": 0.0,
+      "p99_tv": 0.0,
+      "mean_js": 0.0,
+      "median_js": 0.0,
+      "top1_agreement_with_S0": 1.0,
+      "top5_overlap_with_S0": 1.0,
+      "top10_overlap_with_S0": 1.0,
+      "mean_entropy_diff_vs_S0": 0.0,
+      "mean_s0_support_mass_recovered": 1.0,
+      "mean_p_true": 0.1566559748642592,
+      "median_p_true": 0.0,
+      "coverage": 0.4485
+    },
+    "S1": {
+      "mean_tv": 0.7559885257968517,
+      "median_tv": 0.8067543431930178,
+      "p90_tv": 0.9570912824954676,
+      "p99_tv": 0.9825520150942773,
+      "mean_js": 0.44567162167429153,
+      "median_js": 0.4735563399502378,
+      "top1_agreement_with_S0": 0.33275,
+      "top5_overlap_with_S0": 0.30485,
+      "top10_overlap_with_S0": 0.27954999999999997,
+      "mean_entropy_diff_vs_S0": 2.807830586429694,
+      "mean_s0_support_mass_recovered": 0.28120150903450597,
+      "mean_p_true": 0.06781679953713445,
+      "median_p_true": 0.003461706990753262,
+      "coverage": 0.756
+    },
+    "S2": {
+      "mean_tv": 0.022436980212404506,
+      "median_tv": 5.09059374514953e-13,
+      "p90_tv": 0.07478136559614953,
+      "p99_tv": 0.23462026855628182,
+      "mean_js": 0.010692125945931424,
+      "median_js": 1.5061473983987014e-17,
+      "top1_agreement_with_S0": 0.970875,
+      "top5_overlap_with_S0": 0.9744229166666667,
+      "top10_overlap_with_S0": 0.9759121031746033,
+      "mean_entropy_diff_vs_S0": 0.0036958329731990557,
+      "mean_s0_support_mass_recovered": 0.9880780292722693,
+      "mean_p_true": 0.15466454557484746,
+      "median_p_true": 0.0,
+      "coverage": 0.439
+    },
+    "S3": {
+      "mean_tv": 0.5812743900096673,
+      "median_tv": 0.6121425702624326,
+      "p90_tv": 0.8334314366897729,
+      "p99_tv": 0.9187618537070765,
+      "mean_js": 0.29568689356664507,
+      "median_js": 0.30140805450869607,
+      "top1_agreement_with_S0": 0.573875,
+      "top5_overlap_with_S0": 0.542275,
+      "top10_overlap_with_S0": 0.520575,
+      "mean_entropy_diff_vs_S0": 2.2157526334516957,
+      "mean_s0_support_mass_recovered": 0.45676358514712295,
+      "mean_p_true": 0.09977836973332979,
+      "median_p_true": 0.006973583757218198,
+      "coverage": 0.756
+    },
+    "S4": {
+      "mean_tv": 0.6896031946365049,
+      "median_tv": 0.7334565337344368,
+      "p90_tv": 0.9138769868341571,
+      "p99_tv": 0.9675862053480031,
+      "mean_js": 0.38496351694705366,
+      "median_js": 0.4038900897933481,
+      "top1_agreement_with_S0": 0.35425,
+      "top5_overlap_with_S0": 0.36052500000000004,
+      "top10_overlap_with_S0": 0.3612625,
+      "mean_entropy_diff_vs_S0": 2.3269287031305335,
+      "mean_s0_support_mass_recovered": 0.36352194352939066,
+      "mean_p_true": 0.0764026301597861,
+      "median_p_true": 0.003437738444470012,
+      "coverage": 0.755625
+    },
+    "S5": {
+      "mean_tv": 0.5703836834244471,
+      "median_tv": 0.6075649041323248,
+      "p90_tv": 0.8411441322552812,
+      "p99_tv": 0.9208090946887645,
+      "mean_js": 0.2883014950830929,
+      "median_js": 0.29460318448297934,
+      "top1_agreement_with_S0": 0.614,
+      "top5_overlap_with_S0": 0.5619500000000001,
+      "top10_overlap_with_S0": 0.5368999999999999,
+      "mean_entropy_diff_vs_S0": 2.249388339515092,
+      "mean_s0_support_mass_recovered": 0.4577295413072436,
+      "mean_p_true": 0.11209546026251734,
+      "median_p_true": 0.007692145247797204,
+      "coverage": 0.756
+    },
+    "S6": {
+      "mean_tv": 0.6944473223265725,
+      "median_tv": 0.7374526765026427,
+      "p90_tv": 0.9165378297799819,
+      "p99_tv": 0.9643912796011588,
+      "mean_js": 0.38725378544370403,
+      "median_js": 0.4054990433462494,
+      "top1_agreement_with_S0": 0.3675,
+      "top5_overlap_with_S0": 0.366725,
+      "top10_overlap_with_S0": 0.36158750000000006,
+      "mean_entropy_diff_vs_S0": 2.443844444611851,
+      "mean_s0_support_mass_recovered": 0.3530441596610919,
+      "mean_p_true": 0.07709313840336034,
+      "median_p_true": 0.003807600068449106,
+      "coverage": 0.755625
+    }
+  },
+  "experiment_B_error_attribution": {
+    "mean_pairwise_errors": {
+      "tv_S0_S1": 0.7559885257968517,
+      "tv_S0_S2": 0.022436980212404506,
+      "tv_S0_S3": 0.5812743900096673,
+      "tv_S0_S4": 0.6896031946365049,
+      "tv_S0_S5": 0.5703836834244471,
+      "tv_S2_S3": 0.5791018211647173,
+      "tv_S3_S4": 0.24108741833272873,
+      "tv_S3_S5": 0.157150074476348,
+      "tv_S5_S6": 0.24296794459261878
+    },
+    "component_correlation_with_final_error": {
+      "tv_S0_S2": 0.24079203028972476,
+      "tv_S2_S3": 0.8532536517556072,
+      "tv_S3_S4": 0.4860548689501691
+    }
+  },
+  "experiment_C_relative_improvement": {
+    "TV": {
+      "dime": 0.7559885257968517,
+      "crisp": 0.6896031946365049,
+      "s3_oracle": 0.5812743900096673,
+      "R_D_crisp_vs_dime": 0.08781261738116092,
+      "R_D_oracle_s3_vs_dime": 0.23110686184426743
+    },
+    "JS": {
+      "dime": 0.44567162167429153,
+      "crisp": 0.38496351694705366,
+      "s3_oracle": 0.29568689356664507,
+      "R_D_crisp_vs_dime": 0.13621711990359783,
+      "R_D_oracle_s3_vs_dime": 0.3365364111454671
+    }
+  },
+  "experiment_D_correct_token": {
+    "S0": {
+      "coverage": 0.4485,
+      "mean_p_true": 0.1566559748642592,
+      "median_p_true": 0.0,
+      "mean_retrieval_only_nll_with_floor": 8.329135573751289,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 1.3099877306725316
+    },
+    "S1": {
+      "coverage": 0.756,
+      "mean_p_true": 0.06781679953713445,
+      "median_p_true": 0.003461706990753262,
+      "mean_retrieval_only_nll_with_floor": 6.809474697184584,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": null
+    },
+    "S2": {
+      "coverage": 0.439,
+      "mean_p_true": 0.15466454557484746,
+      "median_p_true": 0.0,
+      "mean_retrieval_only_nll_with_floor": 8.43900729512962,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 1.280622893301796
+    },
+    "S3": {
+      "coverage": 0.756,
+      "mean_p_true": 0.09977836973332979,
+      "median_p_true": 0.006973583757218198,
+      "mean_retrieval_only_nll_with_floor": 6.492215141584486,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 0.47129281261192735
+    },
+    "S4": {
+      "coverage": 0.755625,
+      "mean_p_true": 0.0764026301597861,
+      "median_p_true": 0.003437738444470012,
+      "mean_retrieval_only_nll_with_floor": 6.936539377524437,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 0.12660330008570092
+    },
+    "S5": {
+      "coverage": 0.756,
+      "mean_p_true": 0.11209546026251734,
+      "median_p_true": 0.007692145247797204,
+      "mean_retrieval_only_nll_with_floor": 6.388869995293274,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 0.6529158118282657
+    },
+    "S6": {
+      "coverage": 0.755625,
+      "mean_p_true": 0.07709313840336034,
+      "median_p_true": 0.003807600068449106,
+      "mean_retrieval_only_nll_with_floor": 6.849493093989431,
+      "epsilon_floor": 1e-06,
+      "relative_improvement_in_p_true_vs_dime": 0.13678526455891576
+    }
+  },
+  "experiment_F_storage": {
+    "raw_kNN_datastore_bytes": 1172346652,
+    "dime_v1_bytes": {
+      "centroid_bytes": 11707392,
+      "histogram_bytes": 1845192,
+      "total": 13552584
+    },
+    "crisp_r5_rank8_bytes": {
+      "centroid_bytes": 11707392,
+      "histogram_bytes": 1845192,
+      "coefficient_bytes": 7076224,
+      "anchor_bytes": 103552,
+      "total": 20732360
+    },
+    "s5_s6_storage": "N/A -- diagnostic-only, require raw vectors at inference time, not deployable compressed systems.",
+    "compression_ratio_dime_v1": 86.50355179499348,
+    "compression_ratio_crisp": 56.54670534372353,
+    "crisp_expansion_over_dime_v1": 1.529771739470495
+  },
+  "experiment_G_latency_light": {
+    "S0": {
+      "total_seconds": 0.007282394915819168,
+      "mean_seconds_per_query": 9.10299364477396e-07
+    },
+    "S1": {
+      "total_seconds": 0.005368764512240887,
+      "mean_seconds_per_query": 6.710955640301109e-07
+    },
+    "S2": {
+      "total_seconds": 0.6500020325183868,
+      "mean_seconds_per_query": 8.125025406479836e-05
+    },
+    "S3": {
+      "total_seconds": 60.0478488849476,
+      "mean_seconds_per_query": 0.007505981110618449
+    },
+    "S4": {
+      "total_seconds": 0.0013850964605808258,
+      "mean_seconds_per_query": 1.7313705757260324e-07
+    },
+    "S5": {
+      "total_seconds": 0.6128183826804161,
+      "mean_seconds_per_query": 7.660229783505201e-05
+    },
+    "S6": {
+      "total_seconds": 0.521692062728107,
+      "mean_seconds_per_query": 6.521150784101338e-05
+    }
+  },
+  "final_verdict": {
+    "Q1_dime_distance_from_raw": {
+      "metric": "TV/JS of S1 vs S0",
+      "tv": 0.7559885257968517,
+      "js": 0.44567162167429153
+    },
+    "Q2_crisp_distance_from_raw": {
+      "metric": "TV/JS of S4 vs S0",
+      "tv": 0.6896031946365049,
+      "js": 0.38496351694705366
+    },
+    "Q3_relative_change_vs_dime": {
+      "R_D_tv": 0.08781261738116092,
+      "R_D_js": 0.13621711990359783
+    },
+    "Q4_correct_token_behavior": {
+      "p_true_relative_improvement": 0.12660330008570092,
+      "coverage_s4": 0.755625,
+      "coverage_s1": 0.756
+    },
+    "Q5_crisp_vs_s3_oracle_gap": {
+      "tv_S3_S4_mean_compression_gap": 0.24108741833272873
+    },
+    "Q6_routing_and_aggregation_discrepancy": {
+      "tv_S0_S2_routing": 0.022436980212404506,
+      "tv_S2_S3_aggregation": 0.5791018211647173
+    },
+    "Q7_mass_aware_aggregation_effect": {
+      "tv_S3_S5_mass_effect": 0.157150074476348,
+      "s7_justified": true
+    },
+    "Q8_compressed_size_and_cost": {
+      "compression_ratio_crisp": 56.54670534372353,
+      "crisp_mean_latency_s": 1.7313705757260324e-07
+    },
+    "Q9_significance_and_reliability": {
+      "mean_tv_improvement_dime_minus_crisp": 0.06638533116034694,
+      "ci_95_low": 0.0647342282385858,
+      "ci_95_high": 0.06799753519101605,
+      "frac_queries_crisp_improves_over_dime": 0.917,
+      "significant": true
+    },
+    "Q10_limiting_mathematical_problem": "See research_questions.md; the most load-bearing single question is how approximation capacity should be allocated given both within-cluster difficulty AND global selection frequency jointly (neither alone, per Observation 1).",
+    "final_classification": "Partial evidence; global improvement with important limitations"
+  },
+  "sections_completed": [
+    "phase1_baseline",
+    "routing_overlap_full_scale",
+    "phase3_global_fitting",
+    "phase2_sanity_checks",
+    "evaluation_sample",
+    "phase4_main_loop",
+    "experiment_A_global_fidelity",
+    "experiment_B_error_attribution",
+    "experiment_C_relative_improvement",
+    "experiment_D_correct_token",
+    "experiment_F_storage",
+    "experiment_G_latency_light",
+    "failure_cases.md",
+    "mathematical_observations.md",
+    "research_questions.md",
+    "final_verdict",
+    "report.md",
+    "plots"
+  ],
+  "total_runtime_seconds": 555.872039466165
+}

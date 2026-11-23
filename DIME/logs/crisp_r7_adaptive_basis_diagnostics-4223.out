@@ -1,0 +1,47 @@
+CRISP-R7 job started: Mon Nov 23 12:47:55 AM CST 2026
+Node: Slurm-2-7
+CRISP-R7 job started. SMOKE=False, N_CLUSTERS=3811
+
+Synthetic correctness checks (known-optimal-basis construction)...
+  Check: greedy recovers the 3 true generating columns within its first 3 picks: True (selected order: [7, 0, 3, 5, 9])
+  Check: residual Frobenius norm is non-increasing across greedy steps (nested spans): True
+  Check: no candidate (including an exact duplicate column) is ever selected twice: True
+  Check: greedy score matches direct refit SSE reduction (step 3): predicted=0.627742, direct=0.627742, match=True
+  Check: softmax(delta*) == softmax(gauge-fixed t) exactly (shift-invariance): True
+  ALL synthetic correctness checks passed: True
+
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to every prior script in this series)...
+
+Reproducing R4's exact cluster-sampling procedure (base-20 + stratified expansion + sensitivity enrichment)...
+  FINAL sample: 66 clusters (0 single-label clusters excluded)
+
+Main experiment: 66 clusters x 5 ranks x 5 methods...
+  processed 6/66 clusters
+  processed 12/66 clusters
+  processed 18/66 clusters
+  processed 24/66 clusters
+  processed 30/66 clusters
+  processed 36/66 clusters
+  processed 42/66 clusters
+  processed 48/66 clusters
+  processed 54/66 clusters
+  processed 60/66 clusters
+  processed 66/66 clusters
+
+Aggregating rank sweep and comparisons...
+  Main comparison (rank=8): {'B0_mean_tv': 0.27997518453630355, 'B3_mean_tv': 0.2746404377274678, 'B4_mean_tv': 0.28447607584455853, 'B1_mean_tv': 0.4126084612780412, 'B2_mean_tv': 0.4062603188615689, 'frac_clusters_B3_beats_B0': 0.696969696969697, 'mean_paired_diff_B3_minus_B0': -0.005334787878787878, 'ci_95_low': -0.013651617803030303, 'ci_95_high': 0.0034327818181818025, 'significant_different_from_zero': False, 'significantly_better': False}
+  Output-space vs. query-feature-space gap (rank=8): {'oracle_output_space_rel_error': 0.6722628204920447, 'achievable_rel_error_using_predicted_coords': 1.230025782220389, 'coord_prediction_rel_error': 1.4545838710803138}
+  Query-change preservation: {'B0': {'n_pairs': 2532, 'mean_e_delta': 0.8704500513428121, 'mean_dime_zero_change_error': 0.9215704482622432}, 'B1': {'n_pairs': 2532, 'mean_e_delta': 0.9851188803317534, 'mean_dime_zero_change_error': 0.9215704482622432}, 'B2': {'n_pairs': 2532, 'mean_e_delta': 0.9578973597946288, 'mean_dime_zero_change_error': 0.9215704482622432}, 'B3': {'n_pairs': 2532, 'mean_e_delta': 0.8460258578199051, 'mean_dime_zero_change_error': 0.9215704482622432}, 'B4': {'n_pairs': 2532, 'mean_e_delta': 0.8752018858609795, 'mean_dime_zero_change_error': 0.9215704482622432}}
+
+Generating plots...
+
+Selecting failure cases...
+
+Computing final verdict (Q1-Q10)...
+  Verdict: Inconclusive
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_crisp_r7_adaptive_basis_diagnostics
+Total runtime: 3.0 min
+No existing E1/E2/TRI1/.../R1-R6/Y1 outputs were modified. R8/Y1 not started, per the spec's instruction.
+CRISP-R7 job done: Mon Nov 23 12:51:44 AM CST 2026
