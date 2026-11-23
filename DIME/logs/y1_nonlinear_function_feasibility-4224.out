@@ -1,0 +1,46 @@
+Y1 (nonlinear) job started: Mon Nov 23 01:30:01 AM CST 2026
+Node: Slurm-2-7
+Y1 (nonlinear) job started. SMOKE=False, N_CLUSTERS=3811
+
+Required mathematical sanity checks (Section 11), run before any real cache is touched...
+  Check 1 (m>=population == exact all-member target): True
+  Check 2 (m=1 is exactly one-hot on the nearest observation's label): True
+  Check 3 (finite, nonnegative, normalized): True
+  Check 4 (RBF expresses a non-affine XOR boundary; affine cannot): affine_acc=0.525, rbf_acc=0.978, pass=True
+  Check 5 (genuine jump discontinuity at the label-switch boundary, q=0): True
+  Check 6 (softmax(log p + z) == softmax(log p + z + c*1) for arbitrary common shift c): True
+  ALL required sanity checks passed: True
+
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to every prior script in this series)...
+
+Phase E: auditing query availability across up to 150 eligible clusters (population >= 50), stricter thresholds (fit>=30/tune>=15/test>=20)...
+  86/150 candidates meet the stricter sufficiency bar; selected the top 15 by total routed-query count: [50, 647, 373, 873, 603, 923, 965, 1598, 795, 2059, 2622, 374, 1733, 3620, 497]
+
+Main experiment: 15 clusters x m=8 (primary) x rank grid [4, 8, 16, 32] x 4 models...
+  processed 3/15 clusters
+  processed 6/15 clusters
+  processed 9/15 clusters
+  processed 12/15 clusters
+  processed 15/15 clusters
+
+Aggregating results...
+  Main comparison (m=8, rank=8): {'D0_mean_tv': 0.8862244695091417, 'A0_mean_tv': 0.8293137830440375, 'N1_mean_tv': 0.8510248326864196, 'N2_mean_tv': 0.8301009233339381, 'frac_clusters_N2_beats_A0': 0.5333333333333333, 'mean_paired_diff_N2_minus_A0': 0.0007872000000000028, 'ci_95_low': -0.009228274999999992, 'ci_95_high': 0.011830479999999984, 'significant_different_from_zero': False, 'significantly_better': False}
+  Query-change summary: {'D0': {'n_pairs': 600, 'mean_e_delta': 1.7650600366666667, 'mean_dime_zero_change_error': 1.7650600366666667}, 'A0': {'n_pairs': 600, 'mean_e_delta': 2.7990559466666665, 'mean_dime_zero_change_error': 1.7650600366666667}, 'N1': {'n_pairs': 600, 'mean_e_delta': 2.0707178999999996, 'mean_dime_zero_change_error': 1.7650600366666667}, 'N2': {'n_pairs': 600, 'mean_e_delta': 2.4054777766666664, 'mean_dime_zero_change_error': 1.7650600366666667}}
+  Margin-quantile diagnostic: {0: {'n': 246, 'mean_margin': 0.016587652392478697, 'mean_A0_tv': 0.8469716483866109, 'mean_N2_tv': 0.8452530856939053}, 1: {'n': 246, 'mean_margin': 0.05486787693771136, 'mean_A0_tv': 0.8258402993154338, 'mean_N2_tv': 0.8269126485942053}, 2: {'n': 246, 'mean_margin': 0.11014649629214372, 'mean_A0_tv': 0.8087878477828838, 'mean_N2_tv': 0.820672614082454}, 3: {'n': 247, 'mean_margin': 0.3174675694828578, 'mean_A0_tv': 0.838655602545167, 'mean_N2_tv': 0.8330742713502757}}
+  Learning curve (N2, rank=8): {40: 0.8381643333333334, 10: 0.8681314, 45: 0.801422, 47: 0.897349, 48: 0.883873, 49: 0.873971, 51: 0.845924, 20: 0.8532841999999999, 54: 0.825857, 55: 0.681592, 57: 0.838128, 59: 0.8187045, 60: 0.874939, 62: 0.860001, 63: 0.8148135}
+
+m-sweep at rank=8: [1, 4, 8, 20]...
+  m-sweep summary: {1: {'dime_tv': 0.9772225333333332, 'A0_tv': 0.8871671999999999, 'N2_tv': 0.9056116000000001}, 4: {'dime_tv': 0.9292747333333333, 'A0_tv': 0.8365791999999999, 'N2_tv': 0.8397564666666667}, 8: {'dime_tv': 0.8862242666666665, 'A0_tv': 0.8293137333333332, 'N2_tv': 0.8302144666666665}, 20: {'dime_tv': 0.8050389333333333, 'A0_tv': 0.8372809333333335, 'N2_tv': 0.8383142}}
+
+Generating plots...
+
+Selecting failure cases...
+
+Computing final verdict (Y1-Q1 - Y1-Q10)...
+  Verdict: Promising but insufficient evidence
+
+All results saved under /home/sukrit.koirala/ondemand/upload_me/Research/Study/DIME/results/stage3_y1_nonlinear_function_feasibility
+Total runtime: 3.1 min
+R-extra (results/stage3_y1_per_cluster_function/) and every R-series output were left untouched.
+Y1 (nonlinear) job done: Mon Nov 23 01:34:00 AM CST 2026

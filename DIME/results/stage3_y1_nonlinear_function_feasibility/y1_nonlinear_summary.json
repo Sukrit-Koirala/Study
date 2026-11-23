@@ -1,0 +1,496 @@
+{
+  "synthetic_correctness_checks": {
+    "check1_exact_target_consistency": true,
+    "check2_nearest_one_onehot": true,
+    "check3_probability_validity": true,
+    "check4_non_affine_expressivity": true,
+    "check4_affine_accuracy": 0.525,
+    "check4_rbf_accuracy": 0.9775,
+    "check5_discontinuity_behavior": true,
+    "check6_gauge_invariance": true,
+    "check7_storage_accounting_by_construction": true,
+    "all_passed": true
+  },
+  "m_primary": 8,
+  "tau": 2.0,
+  "rank_grid": [
+    4,
+    8,
+    16,
+    32
+  ],
+  "query_availability_audit": {
+    "n_candidates_scanned": 150,
+    "n_sufficient": 86,
+    "n_selected": 15,
+    "sample_clusters": [
+      50,
+      647,
+      373,
+      873,
+      603,
+      923,
+      965,
+      1598,
+      795,
+      2059,
+      2622,
+      374,
+      1733,
+      3620,
+      497
+    ],
+    "per_cluster_counts": [
+      {
+        "cluster": 647,
+        "n_fit": 59,
+        "n_tune": 20,
+        "n_test": 77,
+        "total": 156
+      },
+      {
+        "cluster": 795,
+        "n_fit": 55,
+        "n_tune": 19,
+        "n_test": 62,
+        "total": 136
+      },
+      {
+        "cluster": 2059,
+        "n_fit": 59,
+        "n_tune": 20,
+        "n_test": 53,
+        "total": 132
+      },
+      {
+        "cluster": 965,
+        "n_fit": 54,
+        "n_tune": 19,
+        "n_test": 65,
+        "total": 138
+      },
+      {
+        "cluster": 1598,
+        "n_fit": 49,
+        "n_tune": 17,
+        "n_test": 71,
+        "total": 137
+      },
+      {
+        "cluster": 923,
+        "n_fit": 57,
+        "n_tune": 19,
+        "n_test": 64,
+        "total": 140
+      },
+      {
+        "cluster": 373,
+        "n_fit": 63,
+        "n_tune": 22,
+        "n_test": 63,
+        "total": 148
+      },
+      {
+        "cluster": 497,
+        "n_fit": 60,
+        "n_tune": 20,
+        "n_test": 49,
+        "total": 129
+      },
+      {
+        "cluster": 50,
+        "n_fit": 62,
+        "n_tune": 21,
+        "n_test": 74,
+        "total": 157
+      },
+      {
+        "cluster": 873,
+        "n_fit": 63,
+        "n_tune": 21,
+        "n_test": 58,
+        "total": 142
+      },
+      {
+        "cluster": 2622,
+        "n_fit": 48,
+        "n_tune": 17,
+        "n_test": 67,
+        "total": 132
+      },
+      {
+        "cluster": 374,
+        "n_fit": 51,
+        "n_tune": 17,
+        "n_test": 64,
+        "total": 132
+      },
+      {
+        "cluster": 603,
+        "n_fit": 47,
+        "n_tune": 16,
+        "n_test": 78,
+        "total": 141
+      },
+      {
+        "cluster": 1733,
+        "n_fit": 45,
+        "n_tune": 15,
+        "n_test": 70,
+        "total": 130
+      },
+      {
+        "cluster": 3620,
+        "n_fit": 45,
+        "n_tune": 15,
+        "n_test": 70,
+        "total": 130
+      }
+    ]
+  },
+  "main_comparison_A0_vs_N2": {
+    "D0_mean_tv": 0.8862244695091417,
+    "A0_mean_tv": 0.8293137830440375,
+    "N1_mean_tv": 0.8510248326864196,
+    "N2_mean_tv": 0.8301009233339381,
+    "frac_clusters_N2_beats_A0": 0.5333333333333333,
+    "mean_paired_diff_N2_minus_A0": 0.0007872000000000028,
+    "ci_95_low": -0.009228274999999992,
+    "ci_95_high": 0.011830479999999984,
+    "significant_different_from_zero": false,
+    "significantly_better": false
+  },
+  "query_change_summary": {
+    "D0": {
+      "n_pairs": 600,
+      "mean_e_delta": 1.7650600366666667,
+      "mean_dime_zero_change_error": 1.7650600366666667
+    },
+    "A0": {
+      "n_pairs": 600,
+      "mean_e_delta": 2.7990559466666665,
+      "mean_dime_zero_change_error": 1.7650600366666667
+    },
+    "N1": {
+      "n_pairs": 600,
+      "mean_e_delta": 2.0707178999999996,
+      "mean_dime_zero_change_error": 1.7650600366666667
+    },
+    "N2": {
+      "n_pairs": 600,
+      "mean_e_delta": 2.4054777766666664,
+      "mean_dime_zero_change_error": 1.7650600366666667
+    }
+  },
+  "margin_diagnostic": {
+    "0": {
+      "n": 246,
+      "mean_margin": 0.016587652392478697,
+      "mean_A0_tv": 0.8469716483866109,
+      "mean_N2_tv": 0.8452530856939053
+    },
+    "1": {
+      "n": 246,
+      "mean_margin": 0.05486787693771136,
+      "mean_A0_tv": 0.8258402993154338,
+      "mean_N2_tv": 0.8269126485942053
+    },
+    "2": {
+      "n": 246,
+      "mean_margin": 0.11014649629214372,
+      "mean_A0_tv": 0.8087878477828838,
+      "mean_N2_tv": 0.820672614082454
+    },
+    "3": {
+      "n": 247,
+      "mean_margin": 0.3174675694828578,
+      "mean_A0_tv": 0.838655602545167,
+      "mean_N2_tv": 0.8330742713502757
+    }
+  },
+  "learning_curve": {
+    "40": 0.8381643333333334,
+    "10": 0.8681314,
+    "45": 0.801422,
+    "47": 0.897349,
+    "48": 0.883873,
+    "49": 0.873971,
+    "51": 0.845924,
+    "20": 0.8532841999999999,
+    "54": 0.825857,
+    "55": 0.681592,
+    "57": 0.838128,
+    "59": 0.8187045,
+    "60": 0.874939,
+    "62": 0.860001,
+    "63": 0.8148135
+  },
+  "m_sweep": {
+    "1": {
+      "dime_tv": 0.9772225333333332,
+      "A0_tv": 0.8871671999999999,
+      "N2_tv": 0.9056116000000001
+    },
+    "4": {
+      "dime_tv": 0.9292747333333333,
+      "A0_tv": 0.8365791999999999,
+      "N2_tv": 0.8397564666666667
+    },
+    "8": {
+      "dime_tv": 0.8862242666666665,
+      "A0_tv": 0.8293137333333332,
+      "N2_tv": 0.8302144666666665
+    },
+    "20": {
+      "dime_tv": 0.8050389333333333,
+      "A0_tv": 0.8372809333333335,
+      "N2_tv": 0.8383142
+    }
+  },
+  "final_verdict": {
+    "Y1_Q1": "F_C^(m) is piecewise real-analytic on convex order-m Voronoi cells, bounded hence always in L^2(Q_C). See mathematical_analysis.md.",
+    "Y1_Q2": "Discontinuous only across DIFFERENT-label neighbor exchanges (a measure-zero hyperplane); same-label exchanges and interior weight changes are continuous/smooth. See mathematical_analysis.md A2.",
+    "Y1_Q3": "Nonlinear dependence, spatial localization, multi-region-per-label capacity, boundary flexibility, compactness, finite-sample stability (candidate properties, not requirements). See mathematical_analysis.md's required conclusion.",
+    "Y1_Q4": {
+      "affine_accuracy_on_xor": 0.525,
+      "rbf_accuracy_on_xor": 0.9775,
+      "demonstrated": true
+    },
+    "Y1_Q5": {
+      "D0_mean_tv": 0.8862244695091417,
+      "A0_mean_tv": 0.8293137830440375,
+      "N1_mean_tv": 0.8510248326864196,
+      "N2_mean_tv": 0.8301009233339381,
+      "frac_clusters_N2_beats_A0": 0.5333333333333333,
+      "mean_paired_diff_N2_minus_A0": 0.0007872000000000028,
+      "ci_95_low": -0.009228274999999992,
+      "ci_95_high": 0.011830479999999984,
+      "significant_different_from_zero": false,
+      "significantly_better": false
+    },
+    "Y1_Q6": {
+      "D0": {
+        "n_pairs": 600,
+        "mean_e_delta": 1.7650600366666667,
+        "mean_dime_zero_change_error": 1.7650600366666667
+      },
+      "A0": {
+        "n_pairs": 600,
+        "mean_e_delta": 2.7990559466666665,
+        "mean_dime_zero_change_error": 1.7650600366666667
+      },
+      "N1": {
+        "n_pairs": 600,
+        "mean_e_delta": 2.0707178999999996,
+        "mean_dime_zero_change_error": 1.7650600366666667
+      },
+      "N2": {
+        "n_pairs": 600,
+        "mean_e_delta": 2.4054777766666664,
+        "mean_dime_zero_change_error": 1.7650600366666667
+      }
+    },
+    "Y1_Q7": {
+      "m_sweep": {
+        "1": {
+          "dime_tv": 0.9772225333333332,
+          "A0_tv": 0.8871671999999999,
+          "N2_tv": 0.9056116000000001
+        },
+        "4": {
+          "dime_tv": 0.9292747333333333,
+          "A0_tv": 0.8365791999999999,
+          "N2_tv": 0.8397564666666667
+        },
+        "8": {
+          "dime_tv": 0.8862242666666665,
+          "A0_tv": 0.8293137333333332,
+          "N2_tv": 0.8302144666666665
+        },
+        "20": {
+          "dime_tv": 0.8050389333333333,
+          "A0_tv": 0.8372809333333335,
+          "N2_tv": 0.8383142
+        }
+      },
+      "rank_sweep": [
+        {
+          "model": "D0",
+          "rank": 4,
+          "n_clusters": 15,
+          "mean_test_tv": 0.886224,
+          "median_test_tv": 0.907428
+        },
+        {
+          "model": "D0",
+          "rank": 8,
+          "n_clusters": 15,
+          "mean_test_tv": 0.886224,
+          "median_test_tv": 0.907428
+        },
+        {
+          "model": "D0",
+          "rank": 16,
+          "n_clusters": 15,
+          "mean_test_tv": 0.886224,
+          "median_test_tv": 0.907428
+        },
+        {
+          "model": "D0",
+          "rank": 32,
+          "n_clusters": 15,
+          "mean_test_tv": 0.886224,
+          "median_test_tv": 0.907428
+        },
+        {
+          "model": "A0",
+          "rank": 4,
+          "n_clusters": 15,
+          "mean_test_tv": 0.849526,
+          "median_test_tv": 0.863723
+        },
+        {
+          "model": "A0",
+          "rank": 8,
+          "n_clusters": 15,
+          "mean_test_tv": 0.829314,
+          "median_test_tv": 0.824835
+        },
+        {
+          "model": "A0",
+          "rank": 16,
+          "n_clusters": 15,
+          "mean_test_tv": 0.824114,
+          "median_test_tv": 0.821674
+        },
+        {
+          "model": "A0",
+          "rank": 32,
+          "n_clusters": 15,
+          "mean_test_tv": 0.856859,
+          "median_test_tv": 0.847869
+        },
+        {
+          "model": "N1",
+          "rank": 4,
+          "n_clusters": 15,
+          "mean_test_tv": 0.858454,
+          "median_test_tv": 0.885067
+        },
+        {
+          "model": "N1",
+          "rank": 8,
+          "n_clusters": 15,
+          "mean_test_tv": 0.851025,
+          "median_test_tv": 0.878345
+        },
+        {
+          "model": "N1",
+          "rank": 16,
+          "n_clusters": 15,
+          "mean_test_tv": 0.843897,
+          "median_test_tv": 0.869665
+        },
+        {
+          "model": "N1",
+          "rank": 32,
+          "n_clusters": 15,
+          "mean_test_tv": 0.839754,
+          "median_test_tv": 0.850562
+        },
+        {
+          "model": "N2",
+          "rank": 4,
+          "n_clusters": 15,
+          "mean_test_tv": 0.841406,
+          "median_test_tv": 0.849947
+        },
+        {
+          "model": "N2",
+          "rank": 8,
+          "n_clusters": 15,
+          "mean_test_tv": 0.830101,
+          "median_test_tv": 0.838128
+        },
+        {
+          "model": "N2",
+          "rank": 16,
+          "n_clusters": 15,
+          "mean_test_tv": 0.812128,
+          "median_test_tv": 0.818453
+        },
+        {
+          "model": "N2",
+          "rank": 32,
+          "n_clusters": 15,
+          "mean_test_tv": 0.8003,
+          "median_test_tv": 0.808246
+        }
+      ],
+      "margin": {
+        "0": {
+          "n": 246,
+          "mean_margin": 0.016587652392478697,
+          "mean_A0_tv": 0.8469716483866109,
+          "mean_N2_tv": 0.8452530856939053
+        },
+        "1": {
+          "n": 246,
+          "mean_margin": 0.05486787693771136,
+          "mean_A0_tv": 0.8258402993154338,
+          "mean_N2_tv": 0.8269126485942053
+        },
+        "2": {
+          "n": 246,
+          "mean_margin": 0.11014649629214372,
+          "mean_A0_tv": 0.8087878477828838,
+          "mean_N2_tv": 0.820672614082454
+        },
+        "3": {
+          "n": 247,
+          "mean_margin": 0.3174675694828578,
+          "mean_A0_tv": 0.838655602545167,
+          "mean_N2_tv": 0.8330742713502757
+        }
+      }
+    },
+    "Y1_Q8": {
+      "A0_bytes": 7364,
+      "N2_bytes": 31936,
+      "N1_marginal_bytes": 7360,
+      "N1_shared_overhead_total": 98304,
+      "N2_requires_full_768d_anchors_per_cluster": true,
+      "A0_anchors_are_free_centroid_indices": true
+    },
+    "Y1_Q9": {
+      "expressivity_demonstrated_on_synthetic": true,
+      "learnability_on_real_clusters": false,
+      "learning_curve_improves_with_more_data": true
+    },
+    "Y1_Q10": false,
+    "final_classification": "Promising but insufficient evidence"
+  },
+  "sections_completed": [
+    "synthetic_correctness_checks",
+    "query_availability_audit",
+    "main_experiment",
+    "rank_results.csv",
+    "cluster_results.csv",
+    "memory_results.csv",
+    "query_change_results.csv",
+    "learning_curve_results.csv",
+    "m_sweep",
+    "margin_diagnostic",
+    "main_comparison_A0_vs_N2",
+    "r_extra_audit.md",
+    "mathematical_analysis.md",
+    "synthetic_tests.md",
+    "experimental_design.md",
+    "research_questions.md",
+    "failure_cases.md",
+    "final_verdict",
+    "report.md",
+    "plots"
+  ],
+  "total_runtime_seconds": 188.3568904530257
+}
