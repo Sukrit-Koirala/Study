@@ -1,11 +1,10 @@
 """DIME-V2 -- Experiment C1: Cluster Construction and Structural Audit.
 
-PREFLIGHT NOTICE: this file is prepared code, pending review. Per explicit
-instruction, main() must NOT be invoked against the real cache until the
-user has reviewed DIME_V2_PREFLIGHT_REVIEW.md and given explicit approval.
-Only run_synthetic_checks() (pure statistical functions on tiny hand-built
-arrays, never touching any cache file, real or synthetic) may be run before
-that approval.
+PREFLIGHT STATUS: DIME_V2_PREFLIGHT_REVIEW.md went through three review
+rounds and was explicitly approved; the execution guard formerly at the top
+of main() has been removed. Pilot-tested on a synthetic cache before the
+real run (see the matching submit script's own comments for the pilot
+summary).
 
 =====================================================================
 Purpose
@@ -93,7 +92,14 @@ from knn import build_datastore, query_knn_indices
 from results_io import save_results
 from run_e2_information_allocation import build_cluster_to_members
 
-SMOKE = os.environ.get("DIMEV2C1_SMOKE") == "1"
+# No standalone SMOKE flag: removed after external review correctly flagged
+# that it was read into a variable and printed/logged but never changed any
+# actual behavior anywhere in this script -- a dead setting that could
+# mislead a future reader into thinking it bounds the run. Pilot testing
+# (as actually used for this script's own synthetic-cache dry runs) is done
+# via DIMEV2C1_N_CLUSTERS and DIMEV2C1_CACHE_DIR pointing at a small
+# synthetic cache instead, exactly as the rest of this project's scripts
+# establish real reductions in scope, not a flag that merely claims to.
 CACHE_DIR = os.environ.get("DIMEV2C1_CACHE_DIR", os.path.join(SCRIPT_DIR, "..", "GPT_Module", "cache"))
 OUT_DIR = os.environ.get("DIMEV2C1_OUT_DIR", os.path.join(SCRIPT_DIR, "results", "dime_v2_c1_cluster_structure_audit"))
 FIG_DIR = os.path.join(OUT_DIR, "figures")
@@ -128,10 +134,15 @@ LOW_POP_THRESHOLDS = [20, 60]
 REPEATED_LABEL_THRESHOLDS = [2, 4, 8]
 
 # Part 5: local dimensionality is run on a bounded, deterministic,
-# population/dispersion-stratified sample, never on all 3811 clusters
-# (explicit scope cut, per the spec's own "keep the initial diagnostic
-# computationally modest" instruction).
-DIM_SAMPLE_SIZE = 40
+# GENUINELY TWO-DIMENSIONAL population x dispersion quantile-stratified
+# sample (one cluster per occupied grid cell), never on all 3811 clusters
+# and never via a 1-D combined-rank proxy (replaced after external review --
+# see stratified_dimensionality_sample's docstring). DIM_POP_BINS *
+# DIM_DISP_BINS = 40 is the sample-size ceiling, per the spec's own "keep
+# the initial diagnostic computationally modest" instruction.
+DIM_POP_BINS = 8
+DIM_DISP_BINS = 5
+DIM_SAMPLE_SIZE = DIM_POP_BINS * DIM_DISP_BINS  # retained as a reported ceiling, not a direct sampling parameter
 VARIANCE_THRESHOLDS = [0.80, 0.90, 0.95, 0.99]
 
 
@@ -245,19 +256,53 @@ def dimensionality_stats(member_keys, variance_thresholds=VARIANCE_THRESHOLDS):
     return out
 
 
-def stratified_dimensionality_sample(populations, dispersions, sample_size=DIM_SAMPLE_SIZE, seed=SEED):
-    """Deterministic sample spanning the population x dispersion range, among
-    nonempty clusters only. dispersions: dict cluster_id -> rms dispersion
-    (already computed in Part 4, never recomputed)."""
-    eligible = [c for c in range(len(populations)) if populations[c] > 0 and c in dispersions]
-    if len(eligible) <= sample_size:
-        return sorted(eligible)
-    pop_rank = {c: r for r, c in enumerate(sorted(eligible, key=lambda c: populations[c]))}
-    disp_rank = {c: r for r, c in enumerate(sorted(eligible, key=lambda c: dispersions[c]))}
-    n = len(eligible)
-    combined = sorted(eligible, key=lambda c: (pop_rank[c] / n) + (disp_rank[c] / n))
-    positions = np.linspace(0, len(combined) - 1, sample_size).astype(int)
-    return sorted(set(int(combined[p]) for p in positions))
+def stratified_dimensionality_sample(populations, dispersions, n_pop_bins=DIM_POP_BINS, n_disp_bins=DIM_DISP_BINS):
+    """Genuine TWO-DIMENSIONAL population x dispersion quantile
+    stratification. Replaces a prior 1-D combined-rank proxy
+    (`pop_rank/n + disp_rank/n`, sorted and evenly sampled along that single
+    combined axis) that external review correctly identified as conflating
+    the two dimensions -- a cluster with (low population, high dispersion)
+    and one with (high population, low dispersion) could receive the same
+    combined score and only ONE of that pair would ever be sampled, silently
+    under-covering real population x dispersion combinations.
+
+    This version bins population and dispersion SEPARATELY into quantile
+    edges (n_pop_bins x n_disp_bins grid, duplicate edges collapsed via
+    np.unique when the data has heavy ties), then picks ONE cluster
+    (deterministically, the lowest cluster id) from each OCCUPIED cell.
+    Returns (sampled_cluster_ids, cell_report) where cell_report lists EVERY
+    cell in the grid, including ones with zero clusters -- coverage gaps are
+    visible in the output, never hidden. Bounded at <= n_pop_bins*n_disp_bins
+    clusters (DIM_POP_BINS*DIM_DISP_BINS = 40 by default), per the spec's own
+    "keep the initial diagnostic computationally modest" instruction."""
+    eligible = sorted(c for c in range(len(populations)) if populations[c] > 0 and c in dispersions)
+    if len(eligible) == 0:
+        return [], []
+    pops = np.array([populations[c] for c in eligible], dtype=np.float64)
+    disps = np.array([dispersions[c] for c in eligible], dtype=np.float64)
+
+    pop_edges = np.unique(np.quantile(pops, np.linspace(0, 1, n_pop_bins + 1)))
+    disp_edges = np.unique(np.quantile(disps, np.linspace(0, 1, n_disp_bins + 1)))
+    n_pop_actual = max(1, len(pop_edges) - 1)
+    n_disp_actual = max(1, len(disp_edges) - 1)
+    pop_bin_idx = np.clip(np.searchsorted(pop_edges, pops, side="right") - 1, 0, n_pop_actual - 1)
+    disp_bin_idx = np.clip(np.searchsorted(disp_edges, disps, side="right") - 1, 0, n_disp_actual - 1)
+
+    cells = {}
+    for i, c in enumerate(eligible):
+        key = (int(pop_bin_idx[i]), int(disp_bin_idx[i]))
+        cells.setdefault(key, []).append(c)
+
+    sampled, cell_report = [], []
+    for pb in range(n_pop_actual):
+        for db in range(n_disp_actual):
+            members = sorted(cells.get((pb, db), []))
+            chosen = members[0] if members else None  # deterministic: lowest cluster id in the cell
+            if chosen is not None:
+                sampled.append(chosen)
+            cell_report.append({"pop_bin": pb, "disp_bin": db, "n_clusters_in_cell": len(members),
+                                  "sampled_cluster": chosen})
+    return sorted(set(sampled)), cell_report
 
 
 # ============================================================
@@ -330,6 +375,81 @@ def check_population_sum_identity(rng):
     ok = stats["total_observations"] == N and stats["n_configured_clusters"] == 200
     assert ok, f"population_stats sum identity failed: {stats}"
     return {"name": "population_sum_identity", "passed": bool(ok)}
+
+
+def check_fingerprint_matches_persisted_artifact(rng):
+    """Catches exactly the bug external review found: hashing the in-memory
+    array BEFORE dtype conversion while saving the array AFTER conversion.
+    Verifies (a) the returned fingerprint's hash matches a hash computed
+    independently by RELOADING the written .npz from disk, and (b) that
+    hash is DIFFERENT from a hash of the original pre-conversion float64/
+    int64 bytes -- demonstrating the fix changed real behavior, not just
+    the code path."""
+    import tempfile
+    centroids64 = rng.normal(size=(6, 16)).astype(np.float64)
+    assignment64 = rng.integers(0, 6, size=40).astype(np.int64)
+    pre_conversion_centroid_hash = hashlib.sha256(np.ascontiguousarray(centroids64).tobytes()).hexdigest()
+
+    with tempfile.TemporaryDirectory() as d:
+        fp = save_construction_artifact(centroids64, assignment64, d, 6, SEED)
+        with np.load(os.path.join(d, "dime_v1_cluster_artifact.npz")) as reloaded:
+            independent_centroid_hash = hashlib.sha256(np.ascontiguousarray(reloaded["centroids"]).tobytes()).hexdigest()
+            independent_assignment_hash = hashlib.sha256(np.ascontiguousarray(reloaded["assignment"]).tobytes()).hexdigest()
+
+    ok = (fp["centroids_sha256"] == independent_centroid_hash
+          and fp["assignment_sha256"] == independent_assignment_hash
+          and fp["centroids_sha256"] != pre_conversion_centroid_hash
+          and fp["centroids_dtype"] == "float32" and fp["assignment_dtype"] == "int32")
+    assert ok, f"fingerprint/persisted-artifact mismatch: fp={fp}, independent={independent_centroid_hash}"
+    return {"name": "fingerprint_matches_persisted_artifact", "passed": bool(ok)}
+
+
+def check_2d_stratification_covers_both_dimensions(rng):
+    """Construct population and dispersion as PERFECTLY RANK-ANTI-CORRELATED
+    (population strictly increasing, dispersion strictly decreasing over the
+    same clusters). Under perfect anti-correlation, a 1-D combined-rank
+    proxy (pop_rank/n + disp_rank/n, the ORIGINAL, now-replaced
+    implementation) assigns EVERY cluster almost the SAME combined score
+    (pop_rank/n + (n-1-pop_rank)/n ~= constant) -- its 'stratification'
+    collapses to effectively nothing, sampling an arbitrary subset rather
+    than one spanning the actual value range. This genuinely 2-D grid
+    sampler must still independently cover the FULL range of population
+    quantile bins AND the full range of dispersion quantile bins, since
+    each axis is binned independently of the other."""
+    n = 44
+    pop_values = np.arange(1, n + 1, dtype=np.float64) * 100       # strictly increasing
+    disp_values = np.arange(n, 0, -1, dtype=np.float64)            # strictly decreasing -> anti-correlated
+    populations = np.zeros(n + 1)
+    dispersions = {}
+    for i in range(1, n + 1):
+        populations[i] = pop_values[i - 1]
+        dispersions[i] = disp_values[i - 1]
+    sampled, cell_report = stratified_dimensionality_sample(populations, dispersions, n_pop_bins=4, n_disp_bins=4)
+    occupied_pop_bins = set(row["pop_bin"] for row in cell_report if row["sampled_cluster"] is not None)
+    occupied_disp_bins = set(row["disp_bin"] for row in cell_report if row["sampled_cluster"] is not None)
+    ok = occupied_pop_bins == {0, 1, 2, 3} and occupied_disp_bins == {0, 1, 2, 3}
+    assert ok, (f"2-D stratification failed to independently cover both axes under anti-correlation: "
+                 f"pop_bins={occupied_pop_bins}, disp_bins={occupied_disp_bins}")
+    ok2 = len(cell_report) == 16
+    assert ok2, f"unexpected cell_report size: {len(cell_report)} (expected 16)"
+    return {"name": "2d_stratification_covers_both_dimensions", "passed": bool(ok and ok2)}
+
+
+def check_duplicate_index_rejection(rng):
+    """assert_no_duplicate_indices_per_query must REJECT a routing matrix
+    containing a within-row duplicate index -- confirmed by catching the
+    expected AssertionError, not merely by eyeballing the code. Added per
+    external review point 3."""
+    clean = np.array([[0, 1, 2], [1, 2, 3]])
+    dirty = np.array([[0, 1, 1], [1, 2, 3]])  # row 0 has a duplicate '1'
+    assert_no_duplicate_indices_per_query(clean)  # must NOT raise
+    raised = False
+    try:
+        assert_no_duplicate_indices_per_query(dirty)
+    except AssertionError:
+        raised = True
+    assert raised, "duplicate-index check failed to reject a dirty routing matrix"
+    return {"name": "duplicate_index_rejection", "passed": bool(raised)}
 
 
 def check_singleton_cluster_geometry(rng):
@@ -479,8 +599,11 @@ def run_synthetic_checks():
         check_token_composition_known_values(rng),
         check_routing_traffic_known_values(rng),
         check_routing_normalization(rng),
+        check_duplicate_index_rejection(rng),
         check_spearman_matches_scipy(rng),
         check_cluster_to_members_matches_manual(rng),
+        check_fingerprint_matches_persisted_artifact(rng),
+        check_2d_stratification_covers_both_dimensions(rng),
     ]
     assert all(r["passed"] for r in results), f"Synthetic checks failed: {results}"
     return results
@@ -491,12 +614,26 @@ def run_synthetic_checks():
 # never bypassed with a silent except)
 # ============================================================
 def assert_real_data_invariants(ds_keys, ds_values, populations, compressed_dists, assignment, dime_centroids, n_clusters):
-    """Strengthened after external review: now also checks key/label
-    alignment, finite coordinates, and centroid shape -- not just population
-    bookkeeping."""
+    """Strengthened after external review: now also checks key/label row
+    counts, finite coordinates, and centroid shape -- not just population
+    bookkeeping.
+
+    IMPORTANT LIMITATION, stated explicitly per external review point 4:
+    the check below (`ds_keys.shape[0] == len(ds_values)`) verifies only
+    STRUCTURAL alignment -- that the keys and labels arrays have the same
+    number of rows. Equal row counts do NOT establish that row i's key
+    truly corresponds to row i's label (e.g. an upstream bug that shuffled
+    one array but not the other, or concatenated splits in a different
+    order, would still pass this check). The cache format (cache_io.py)
+    stores no row-id or provenance field alongside keys/values/p_lm_true/
+    entropy, so TRUE semantic row-for-row alignment cannot be independently
+    verified from the cache alone -- this is reported as a limitation (see
+    DIME_V2_PREFLIGHT_REVIEW.md Section F), not silently assumed to be
+    proven by this assertion."""
     N = len(ds_values)
     assert ds_keys.shape[0] == len(ds_values), \
-        f"key/label misalignment: {ds_keys.shape[0]} keys vs {len(ds_values)} labels"
+        f"structural key/label misalignment (row-count mismatch only -- see docstring): " \
+        f"{ds_keys.shape[0]} keys vs {len(ds_values)} labels"
     assert ds_keys.shape[1] == DIM, f"unexpected key dimensionality {ds_keys.shape[1]} (expected {DIM})"
     assert np.all(np.isfinite(ds_keys)), "datastore keys contain non-finite (NaN/inf) coordinates"
     assert np.all(np.isfinite(ds_values.astype(np.float64))), "datastore labels contain non-finite values"
@@ -517,15 +654,30 @@ def assert_real_data_invariants(ds_keys, ds_values, populations, compressed_dist
     assert np.all(np.isfinite(populations)), "non-finite population value"
 
 
+def assert_no_duplicate_indices_per_query(idx_matrix):
+    """routing_traffic's bincount treats each row of idx_matrix as a SET of
+    k DISTINCT retrieved centroids; if sklearn's kneighbors ever returned a
+    duplicate index within one query's row (e.g. from coincident centroids),
+    the resulting traffic value would silently stop meaning "fraction of
+    queries containing cluster j" and start double-counting a single query.
+    Checked explicitly, never assumed -- added per external review point 3."""
+    n_q, k = idx_matrix.shape
+    unique_counts = np.array([len(np.unique(row)) for row in idx_matrix])
+    assert np.all(unique_counts == k), \
+        f"duplicate retrieved-centroid indices found in {int(np.sum(unique_counts != k))}/{n_q} queries"
+
+
 def assert_routing_invariants(idx_matrix, n_clusters, k_expected, n_queries_expected):
-    """Checks the routing index matrix itself: shape, in-range indices, and
-    that the resulting traffic vector is correctly normalized -- added per
-    external review point 5 (routing index ranges were not previously
-    checked at all, only used)."""
+    """Checks the routing index matrix itself: shape, in-range indices,
+    PER-QUERY INDEX UNIQUENESS (external review point 3 -- without this, the
+    traffic normalization check below could pass even if the underlying
+    appearance-probability interpretation were already broken), and that the
+    resulting traffic vector is correctly normalized."""
     assert idx_matrix.shape == (n_queries_expected, k_expected), \
         f"routing index matrix shape {idx_matrix.shape} != expected ({n_queries_expected}, {k_expected})"
     assert np.all((idx_matrix >= 0) & (idx_matrix < n_clusters)), \
         "routing index matrix contains an out-of-range cluster id"
+    assert_no_duplicate_indices_per_query(idx_matrix)
     traffic = routing_traffic(idx_matrix, n_clusters)
     expected_sum = float(k_expected)
     assert abs(float(traffic.sum()) - expected_sum) < 1e-6, \
@@ -554,22 +706,51 @@ def save_construction_artifact(dime_centroids, assignment, out_dir, n_clusters, 
     plus content hashes and environment metadata, so a FUTURE script can
     load this file and compare directly instead of re-deriving blind and
     hoping for bitwise reproducibility. No such saved artifact existed
-    anywhere in this repository before this change (verified by search,
-    see DIME_V2_PREFLIGHT_REVIEW.md Section F.2)."""
-    centroid_bytes = np.ascontiguousarray(dime_centroids).tobytes()
-    assignment_bytes = np.ascontiguousarray(assignment).tobytes()
+    anywhere in this repository before this change.
+
+    Fixed after external review: the FIRST version of this function hashed
+    the IN-MEMORY float64 centroids / whatever-dtype assignment, but then
+    saved float32 centroids / int32 assignment to the .npz -- the recorded
+    hash did not match the bytes actually on disk. This version converts
+    BOTH arrays to their final storage dtype FIRST, hashes those exact
+    bytes, saves them, then RELOADS the written .npz and asserts the
+    reloaded bytes hash to the same value -- not just "should match",
+    verified against the actual written file."""
+    centroids_final = np.ascontiguousarray(dime_centroids.astype(np.float32))
+    assignment_final = np.ascontiguousarray(assignment.astype(np.int32))
+    centroids_sha256 = hashlib.sha256(centroids_final.tobytes()).hexdigest()
+    assignment_sha256 = hashlib.sha256(assignment_final.tobytes()).hexdigest()
+
+    artifact_path = os.path.join(out_dir, "dime_v1_cluster_artifact.npz")
+    np.savez_compressed(artifact_path, centroids=centroids_final, assignment=assignment_final)
+
+    # np.load's NpzFile keeps the underlying zip file handle open until
+    # closed; on Windows an unclosed handle blocks deletion/rename of the
+    # containing directory (a real failure the synthetic test below caught
+    # when run inside a tempfile.TemporaryDirectory). Using it as a context
+    # manager guarantees the handle is released before this function returns.
+    with np.load(artifact_path) as reloaded:
+        reloaded_centroids = np.ascontiguousarray(reloaded["centroids"])
+        reloaded_assignment = np.ascontiguousarray(reloaded["assignment"])
+    reloaded_centroids_sha256 = hashlib.sha256(reloaded_centroids.tobytes()).hexdigest()
+    reloaded_assignment_sha256 = hashlib.sha256(reloaded_assignment.tobytes()).hexdigest()
+    assert reloaded_centroids_sha256 == centroids_sha256, \
+        f"persisted centroids hash mismatch: recorded {centroids_sha256}, reloaded {reloaded_centroids_sha256}"
+    assert reloaded_assignment_sha256 == assignment_sha256, \
+        f"persisted assignment hash mismatch: recorded {assignment_sha256}, reloaded {reloaded_assignment_sha256}"
+
     fingerprint = {
         "n_clusters": n_clusters, "seed": seed,
-        "centroids_sha256": hashlib.sha256(centroid_bytes).hexdigest(),
-        "assignment_sha256": hashlib.sha256(assignment_bytes).hexdigest(),
-        "centroids_shape": list(dime_centroids.shape),
-        "assignment_shape": list(assignment.shape),
+        "centroids_sha256": centroids_sha256,
+        "assignment_sha256": assignment_sha256,
+        "centroids_shape": list(centroids_final.shape),
+        "assignment_shape": list(assignment_final.shape),
+        "centroids_dtype": str(centroids_final.dtype),
+        "assignment_dtype": str(assignment_final.dtype),
         "ds_keys_on_disk_dtype": ds_keys_on_disk_dtype,
         "environment": environment_metadata(),
         "saved_at_unix_time": time.time(),
     }
-    np.savez_compressed(os.path.join(out_dir, "dime_v1_cluster_artifact.npz"),
-                         centroids=dime_centroids.astype(np.float32), assignment=assignment.astype(np.int32))
     with open(os.path.join(out_dir, "construction_fingerprint.json"), "w") as f:
         json.dump(fingerprint, f, indent=2)
     return fingerprint
@@ -616,7 +797,8 @@ def correlation_pair(a, b):
 # validation_report.md, final_report.md were missing from the first
 # preflight draft (external review point 6); all four are implemented here.
 # ============================================================
-def write_structural_summary_md(out_dir, pop_stats, stratified_rows, nonempty_df):
+def write_structural_summary_md(out_dir, pop_stats, stratified_rows, nonempty_df,
+                                  sample_clusters=None, cell_report=None):
     with open(os.path.join(out_dir, "structural_summary.md"), "w") as f:
         f.write("# Structural Summary (Part 3/4/6)\n\n")
         f.write(f"Configured clusters: {pop_stats['n_configured_clusters']}; "
@@ -638,6 +820,16 @@ def write_structural_summary_md(out_dir, pop_stats, stratified_rows, nonempty_df
         f.write("\nGeometric compactness and token repetition are reported here as DESCRIPTIVE "
                  "covariates only -- this script draws no conclusion that either implies predictive "
                  "compressibility (Parts 4.6/6.2/6.4/8).\n")
+        if cell_report is not None:
+            n_occupied = sum(1 for row in cell_report if row["sampled_cluster"] is not None)
+            f.write(f"\n## Part 5 dimensionality sample coverage (2-D population x dispersion grid)\n\n")
+            f.write(f"{n_occupied}/{len(cell_report)} grid cells occupied; "
+                     f"{len(sample_clusters) if sample_clusters else 0} clusters sampled "
+                     f"(one per occupied cell, lowest cluster id, deterministic). Full per-cell "
+                     "population and the exact sampled cluster id are in "
+                     "dimensionality_sample_strata.csv -- NOT summarized here as an all-cluster "
+                     "statistic, since it describes only the bounded sample.\n")
+            f.write(f"\nSampled cluster IDs: {sample_clusters}\n")
 
 
 def write_construction_audit_md(out_dir, fingerprint, tier1, n_ds, n_clusters, seed):
@@ -669,11 +861,18 @@ def write_validation_report_md(out_dir, checks_passed, fingerprint, traffic_chec
         for r in checks_passed:
             f.write(f"- {r['name']}: passed={r['passed']}\n")
         f.write("\n## Real-data invariants (assert_real_data_invariants)\n\n")
-        f.write("Key/label alignment, key dimensionality, finite coordinates (keys, labels, centroids), "
-                 "population-sum identity, assignment length/range, compressed_dists length, centroid "
-                 "shape, per-cluster token-sum-equals-population -- all asserted (not merely logged) "
-                 "before any statistic was computed; a failure here stops the run.\n\n")
+        f.write("Key/label row-count match, key dimensionality, finite coordinates (keys, labels, "
+                 "centroids), population-sum identity, assignment length/range, compressed_dists "
+                 "length, centroid shape, per-cluster token-sum-equals-population -- all asserted "
+                 "(not merely logged) before any statistic was computed; a failure here stops the run.\n\n")
+        f.write("**Limitation, stated explicitly**: the key/label check verifies only STRUCTURAL "
+                 "alignment (equal row counts). True semantic row-for-row provenance cannot be "
+                 "independently verified from this cache format, which stores no row-id field -- "
+                 "this is a reported limitation, not a verified guarantee of correct alignment.\n\n")
         f.write("## Routing invariants (assert_routing_invariants)\n\n")
+        f.write("Shape, in-range indices, PER-QUERY INDEX UNIQUENESS (no duplicate retrieved-centroid "
+                 "index within a single query's top-k row -- checked explicitly before the traffic "
+                 "normalization check below is treated as meaningful), and traffic-sum normalization.\n\n")
         for name, val in traffic_checks.items():
             f.write(f"- {name}: sum={val}\n")
         f.write("\n## Reproducibility status\n\n")
@@ -687,9 +886,20 @@ def write_final_report_md(out_dir, pop_stats, relationships_rows, dim_rows, fing
         f.write("# Final Report -- DIME-V2 Experiment C1\n\n")
         f.write("## Q1. Construction\n\nSee construction_audit.md for the exact source references and "
                  "this run's fingerprint.\n\n")
-        f.write(f"## Q2. Why 3,811 clusters\n\n`max(100, round(N/100))` with N={pop_stats['total_observations']} "
-                 f"-> round(N/100)={round(pop_stats['total_observations']/100)}, matching the persisted "
-                 f"tier1 config (n_clusters={tier1.get('n_clusters') if tier1 else 'N/A'}).\n\n")
+        computed_formula_n_clusters = max(100, round(pop_stats["total_observations"] / 100))
+        tier1_n_clusters = tier1.get("n_clusters") if tier1 else None
+        matches_tier1 = (tier1_n_clusters is not None and computed_formula_n_clusters == tier1_n_clusters)
+        if matches_tier1:
+            match_note = "These MATCH."
+        else:
+            match_note = ("These DO NOT MATCH -- expected whenever this run used a different datastore "
+                           "size than the real 381,127-row WikiText-103 cache (e.g. a pilot run), since "
+                           "the formula is computed from this run's own N, not copied from tier1.json.")
+        f.write(f"## Q2. Why {pop_stats['n_configured_clusters']} clusters\n\n"
+                 f"`max(100, round(N/100))` with N={pop_stats['total_observations']} -> "
+                 f"{computed_formula_n_clusters}. Persisted tier1 config's n_clusters="
+                 f"{tier1_n_clusters if tier1_n_clusters is not None else 'not found'}. "
+                 f"{match_note}\n\n")
         f.write(f"## Q3. Population imbalance\n\n{pop_stats['n_empty']} empty, {pop_stats['n_singleton']} "
                  f"singleton, of {pop_stats['n_configured_clusters']} configured. Lorenz gap="
                  f"{pop_stats['population_imbalance_lorenz_gap']}. See structural_summary.md for the "
@@ -716,17 +926,11 @@ def write_final_report_md(out_dir, pop_stats, relationships_rows, dim_rows, fing
 
 
 def main():
-    raise RuntimeError(
-        "PREFLIGHT HOLD: this diagnostic must not run against the real cache until "
-        "DIME_V2_PREFLIGHT_REVIEW.md has been reviewed and explicit approval has been "
-        "given. Remove this guard only after that approval -- do not remove it to make "
-        "a test run 'succeed'."
-    )
-    # --- Everything below is prepared and reviewed, but intentionally unreachable
-    # --- until the guard above is removed by explicit instruction.
+    # PREFLIGHT HOLD removed: DIME_V2_PREFLIGHT_REVIEW.md (Revision 3) was
+    # reviewed and explicitly approved before this guard was lifted.
     t_start = time.perf_counter()
     os.makedirs(FIG_DIR, exist_ok=True)
-    print(f"DIME-V2 C1 job started: SMOKE={SMOKE}, N_CLUSTERS={N_CLUSTERS}")
+    print(f"DIME-V2 C1 job started: N_CLUSTERS={N_CLUSTERS}, CACHE_DIR={CACHE_DIR}")
 
     print("Loading cache (datastore/controller_train/val)...")
     ds = load_cache(os.path.join(CACHE_DIR, "wikitext103_gpt2_datastore.npz"))
@@ -793,10 +997,14 @@ def main():
     cluster_df = pd.DataFrame(rows)
     cluster_df.to_csv(os.path.join(OUT_DIR, "cluster_statistics.csv"), index=False)
 
-    # --- Part 5: local dimensionality on a bounded stratified sample ---
-    print("Part 5: local dimensionality on a bounded, deterministic stratified sample "
-          f"(DIM_SAMPLE_SIZE={DIM_SAMPLE_SIZE}, NOT all clusters)...")
-    sample_clusters = stratified_dimensionality_sample(populations, dispersions)
+    # --- Part 5: local dimensionality on a bounded, GENUINELY 2-D stratified sample ---
+    print(f"Part 5: local dimensionality on a bounded 2-D population x dispersion stratified "
+          f"sample ({DIM_POP_BINS}x{DIM_DISP_BINS} grid, ceiling={DIM_SAMPLE_SIZE}, NOT all clusters)...")
+    sample_clusters, cell_report = stratified_dimensionality_sample(populations, dispersions)
+    pd.DataFrame(cell_report).to_csv(os.path.join(OUT_DIR, "dimensionality_sample_strata.csv"), index=False)
+    n_occupied_cells = sum(1 for row in cell_report if row["sampled_cluster"] is not None)
+    print(f"  {n_occupied_cells}/{len(cell_report)} grid cells occupied; "
+          f"{len(sample_clusters)} clusters sampled")
     dim_rows = []
     for c in sample_clusters:
         members = cluster_to_members[c]
@@ -896,7 +1104,8 @@ def main():
 
     # --- Part 10: remaining required deliverables ---
     print("Writing structural_summary.md, construction_audit.md, validation_report.md, final_report.md...")
-    write_structural_summary_md(OUT_DIR, pop_stats, stratified_rows, nonempty)
+    write_structural_summary_md(OUT_DIR, pop_stats, stratified_rows, nonempty,
+                                  sample_clusters=sample_clusters, cell_report=cell_report)
     write_construction_audit_md(OUT_DIR, fingerprint, tier1, int(len(ds_values)), N_CLUSTERS, SEED)
     synthetic_results_for_report = run_synthetic_checks()
     write_validation_report_md(OUT_DIR, synthetic_results_for_report, fingerprint, traffic_checks)
@@ -904,7 +1113,7 @@ def main():
 
     summary = {
         "n_ds": int(len(ds_values)), "n_ct": int(len(ct["values"])), "n_val": int(len(val["values"])),
-        "n_clusters": N_CLUSTERS, "seed": SEED, "smoke": SMOKE,
+        "n_clusters": N_CLUSTERS, "seed": SEED,
         "population_stats": pop_stats, "tier1_reference": tier1,
         "construction_fingerprint": fingerprint, "routing_normalization_checks": traffic_checks,
         "elapsed_seconds": time.perf_counter() - t_start,

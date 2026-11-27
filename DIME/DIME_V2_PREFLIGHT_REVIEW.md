@@ -1,75 +1,58 @@
-# DIME-V2 Experiment C1 — Preflight Review (Revision 2)
+# DIME-V2 Experiment C1 — Preflight Review (Revision 3)
 
-Audience: an external research assistant with no repository access, who already read Revision 1 and raised 7 points. This revision addresses each one; it replaces Revision 1 in full.
+Audience: an external research assistant with no repository access. Revision 2's overall design was approved, subject to 5 corrections. This revision addresses each; it replaces Revision 2 in full.
 
 ## Revision summary (point-by-point)
 
-1. **sklearn version / historical reproducibility.** `environment_metadata()` and `save_construction_artifact()` (new, lines 541–578) now record `python/numpy/sklearn/scipy/pandas` versions and `platform.platform()`, and persist the actual fitted `centroids`/`assignment` plus their SHA-256 hashes to `dime_v1_cluster_artifact.npz` / `construction_fingerprint.json` the moment this script re-derives clustering. No such artifact existed anywhere in the repository before this change (confirmed by search in Revision 1). This makes the **next** run comparable against a real saved ground truth; it does **not**, and cannot, retroactively recover the sklearn version used for the historical `tier1.json`/`run_manifest.json` artifacts — that remains genuinely unrecoverable and is stated as such, not glossed over.
-2. **Routing distinction.** Inspected `DIME/mixing.py` directly (not inferred): `mix_dime_and_lm` loops over **all `k`** retrieved centroids per query with distance-weighted softmax mixing (`for j in range(k): ... weights[i,j] * p_state`) — genuine multi-centroid production inference. Separately, `build_splits_for` (R3 onward) reads **only `idx[:, 0]`**, the single nearest centroid, purely as a diagnostic "which cluster does this query belong to" grouping, never for prediction. The script now computes and reports **both**, as separate columns (`traffic_top1_*`, `traffic_top{k}_*`), with explicit normalization assertions for each (`assert_routing_invariants`, lines 520–539).
-3. **Singleton clusters.** `population_stats` now reports `n_singleton` (count of `n_j==1`) as a field **separate from** `n_empty` (lines 141–168). A new synthetic check, `check_singleton_cluster_geometry`, verifies `cluster_geometry` on a single point returns finite, mathematically correct `R_j/mean_dist/rms/delta_j` (all equal to the one point's distance to the *fitted* centroid, which need not be the point itself) rather than being skipped or producing NaN; `dimensionality_stats` correctly returns `None` for `n<2` (PCA is genuinely undefined there) and that `None` is now kept **visible** in `dimensionality_results.csv` (with an explanatory `note` field) instead of being silently dropped, which Revision 1's sampling loop did.
-4. **Spearman + stratified summaries.** `correlation_pair()` (lines 601–609) now returns `(pearson_r, spearman_r, n)` together, never one alone. `structural_relationships.csv` carries an explicit `scope` column: `all_nonempty_clusters` for every `n_j`/`R_j`/`sigma_j`/`V_j`/`rho_j`/entropy/traffic relationship, vs. `dimensionality_sample_n=40` for the two relationships involving `effective_rank` (which only exists for the bounded sample) — the two scopes are never mixed in one row. `stratified_population_summary()` (lines 580–599) buckets **all nonempty clusters** into 5 population quintiles and reports mean/median geometry and token statistics per quintile, written to `structural_summary.md`.
-5. **Invariant checks.** `assert_real_data_invariants` (lines 493–518) is substantially strengthened: now also checks key/label alignment (`len(ds_keys)==len(ds_values)`), key dimensionality (`==768`), finite coordinates on keys/labels/centroids, `compressed_dists` length, and centroid array shape — not just the population-sum/assignment-range checks Revision 1 had. `assert_routing_invariants` (new) checks the routing index matrix's shape and that every index is in `[0, n_clusters)`, plus the resulting traffic vector's sum.
-6. **Missing deliverables.** Revision 1 generated only 4 of 8 required files. The 4 missing ones — `structural_summary.md`, `construction_audit.md`, `validation_report.md`, `final_report.md` — are now implemented (`write_structural_summary_md`, `write_construction_audit_md`, `write_validation_report_md`, `write_final_report_md`) and called from `main()`. All 8 (plus the new `dime_v1_cluster_artifact.npz`/`construction_fingerprint.json`) are listed in Section C below.
-7. **Execution guard.** Unchanged and still the first line of `main()` (`raise RuntimeError("PREFLIGHT HOLD...")`, line ~719). Only `run_synthetic_checks()` (now 10 checks, all on hand-built synthetic arrays — never a cache file) was run to validate this revision; verified again just before writing this document.
+1. **Fingerprint hash/dtype mismatch (real bug, confirmed exactly as described).** `save_construction_artifact` (lines 705–744) previously hashed the IN-MEMORY float64 centroids / whatever-dtype assignment, then saved float32/int32 to disk — the recorded hash did not match the persisted bytes. Fixed: both arrays are now converted to their final storage dtype **first**, hashed, saved, then the written `.npz` is **reloaded** and its bytes re-hashed and asserted equal to the recorded hash. A new synthetic check, `check_fingerprint_matches_persisted_artifact` (lines 381–406), independently reloads the artifact and confirms the fingerprint's hash matches, and that it **differs** from a hash of the original pre-conversion bytes — demonstrating the fix changed real behavior. This check itself caught a second real bug on first run: `np.load`'s returned `NpzFile` kept its file handle open, which blocked `tempfile.TemporaryDirectory`'s cleanup on Windows (`PermissionError`). Fixed by using `np.load(...)` as a context manager (`with np.load(path) as reloaded:`) in both the production function and the test.
+2. **1-D combined-rank sampler replaced with genuine 2-D stratification.** `stratified_dimensionality_sample` (lines 260–299) now bins population and dispersion **independently** into quantile edges (`DIM_POP_BINS=8 x DIM_DISP_BINS=5`, duplicate edges collapsed via `np.unique`), forms a grid, and samples one deterministic cluster (lowest id) per **occupied** cell — reporting every cell, including empty ones, in a new `dimensionality_sample_strata.csv`. The synthetic check (`check_2d_stratification_covers_both_dimensions`, lines 408–436) needed two iterations: my first version hand-placed 4 "corner" clusters among random filler and asserted all 4 would be individually selected — this was WRONG (quantile bins are count-based, not threshold-based, so a filler cluster can legitimately share a corner's cell and win the deterministic tie-break; that is correct sampler behavior, not a bug). Replaced with a test that constructs PERFECTLY RANK-ANTI-CORRELATED population/dispersion (so a 1-D combined score would be ~constant for every cluster) and asserts the 2-D sampler still independently covers all 4 population bins AND all 4 dispersion bins — verified empirically before committing it, not just reasoned about. `structural_relationships.csv`'s `scope` column (`all_nonempty_clusters` vs. `dimensionality_sample_n=40`) and `structural_summary.md`'s explicit "NOT summarized here as an all-cluster statistic" wording (added to the new Part 5 coverage section) ensure sample-only statistics are never presented as population estimates.
+3. **Duplicate-index assertion added.** `assert_no_duplicate_indices_per_query` (lines 658–668), called from inside `assert_routing_invariants` (lines 671–686) BEFORE the traffic-sum check, verifies every query's top-k row contains `k` distinct cluster ids — because `routing_traffic`'s bincount-based statistic is only a true "fraction of queries containing cluster j" if no row has an internal duplicate. `check_duplicate_index_rejection` (lines 439–453) confirms the assertion passes on a clean matrix and raises `AssertionError` on a hand-built matrix with one duplicated index.
+4. **Alignment-check wording clarified, limitation stated explicitly.** `assert_real_data_invariants`'s key/label check (lines ~600–625) is now documented as checking only **structural** alignment (equal row counts) — not semantic row-for-row provenance, which the cache format (`cache_io.py`) cannot support since it stores no row-id field. This limitation is now stated in the function's docstring, in `validation_report.md`'s generated text, and in Section F below — not implied to be proven.
+5. **Dead SMOKE flag removed.** `SMOKE = os.environ.get("DIMEV2C1_SMOKE") == "1"` was read into a variable and printed/logged but never changed any actual behavior anywhere in the script. Removed entirely (constant, print statement, and summary-dict entry); a comment at its former location explains that pilot testing is done via the already-functional `DIMEV2C1_N_CLUSTERS` + `DIMEV2C1_CACHE_DIR` overrides against a small synthetic cache, exactly as this project's other scripts establish real scope reductions rather than a flag that merely claims to.
 
-A full unified diff against Revision 1's script is available on request (575 lines); SHA-256 of the current file is given in Section B.
+**Historical sklearn-version uncertainty remains an acknowledged, unresolved limitation** (Section F, items 1–2) — saving this run's own fingerprint prevents the problem recurring going forward; it does not and cannot retroactively resolve what version produced the historical `tier1.json`/`run_manifest.json` artifacts. Not claimed as resolved.
+
+MiniBatchKMeans configuration (n_clusters=3811, seed=42), full top-20 routing, and the experiment's objectives are all unchanged from Revision 2.
 
 ## A. Verified baseline configuration
 
-Unchanged from Revision 1 except as noted; not repeated in full here to keep this revision compact. Key facts, still verified from source/artifact: datastore=381,127, controller_train=90,170, val=77,089, n_clusters=3,811 (`round(381127/100)`), `MiniBatchKMeans(n_clusters=3811, random_state=42)` with every other parameter left at the installed sklearn default, Euclidean distance, no normalization, float32 at fit time, centroids fit on the full datastore. **New in this revision**: the script itself now records and persists its own `python/numpy/sklearn/scipy/pandas` versions and `platform.platform()` on every real run (see point 1 above) — still local-dev-verified only as of this review (`sklearn 1.8.0`), not yet cluster-verified, since the real job has not run.
+Unchanged from Revision 2; not repeated here to keep this revision compact (see Revision 2 history, or `construction_audit.md`'s generated output once the real job runs, for the full table).
 
-## B. Exact source-code references (new/changed since Revision 1)
+## B. Exact source-code references (new/changed since Revision 2)
 
-**Routing mechanism, resolved** — `DIME/mixing.py`, lines 9–25 (exact, unmodified; the file this revision additionally inspected to resolve point 2):
+**Fixed fingerprint function** — `run_dime_v2_c1_cluster_structure_audit.py`, lines 705–744 (in full):
 
 ```python
-def mix_dime_and_lm(distances, retrieved_dists, true_targets, p_lm_true, tau=1.0, alpha=0.25, beta = 0.0, global_freq=None):
-    """distances, retrieved_dists: [M, k] (retrieved_dists holds Counter objects).
-    true_targets, p_lm_true: [M]."""
-    M, k = distances.shape
-    weights = softmax_np(-distances / tau, axis=1)  # [M, k]
+def save_construction_artifact(dime_centroids, assignment, out_dir, n_clusters, seed, ds_keys_on_disk_dtype=None):
+    centroids_final = np.ascontiguousarray(dime_centroids.astype(np.float32))
+    assignment_final = np.ascontiguousarray(assignment.astype(np.int32))
+    centroids_sha256 = hashlib.sha256(centroids_final.tobytes()).hexdigest()
+    assignment_sha256 = hashlib.sha256(assignment_final.tobytes()).hexdigest()
 
-    p_knn_true = np.zeros(M, dtype=np.float64)
-    for i in range(M):
-        true_tok = int(true_targets[i])
-        global_p = global_freq[true_tok] if (beta > 0 and global_freq is not None) else 0.0
-        for j in range(k):
-            dist_counter = retrieved_dists[i, j]
-            total = sum(dist_counter.values())
-            denom = total + beta
-            if denom > 0:
-                count = dist_counter.get(true_tok, 0)
-                p_state = (count + beta * global_p) / denom
-                p_knn_true[i] += weights[i, j] * p_state
+    artifact_path = os.path.join(out_dir, "dime_v1_cluster_artifact.npz")
+    np.savez_compressed(artifact_path, centroids=centroids_final, assignment=assignment_final)
+
+    with np.load(artifact_path) as reloaded:
+        reloaded_centroids = np.ascontiguousarray(reloaded["centroids"])
+        reloaded_assignment = np.ascontiguousarray(reloaded["assignment"])
+    reloaded_centroids_sha256 = hashlib.sha256(reloaded_centroids.tobytes()).hexdigest()
+    reloaded_assignment_sha256 = hashlib.sha256(reloaded_assignment.tobytes()).hexdigest()
+    assert reloaded_centroids_sha256 == centroids_sha256, \
+        f"persisted centroids hash mismatch: recorded {centroids_sha256}, reloaded {reloaded_centroids_sha256}"
+    assert reloaded_assignment_sha256 == assignment_sha256, \
+        f"persisted assignment hash mismatch: recorded {assignment_sha256}, reloaded {reloaded_assignment_sha256}"
+    # ... fingerprint dict assembly (environment, dtypes, shapes) and json.dump, unchanged in structure
+    return fingerprint
 ```
 
-This is genuine multi-centroid mixing over all `k` retrieved centroids, confirming the production-inference routing mechanism. SHA-256 of `mixing.py`: `000785e75f827789b10a8c05fda43e10c09e1c7f31de246fc0a1e48bc38554b3`.
-
-**New real-data invariant checks** — `run_dime_v2_c1_cluster_structure_audit.py`, lines 493–539 (both functions, in full):
+**New routing check** — lines 658–686 (in full):
 
 ```python
-def assert_real_data_invariants(ds_keys, ds_values, populations, compressed_dists, assignment, dime_centroids, n_clusters):
-    N = len(ds_values)
-    assert ds_keys.shape[0] == len(ds_values), \
-        f"key/label misalignment: {ds_keys.shape[0]} keys vs {len(ds_values)} labels"
-    assert ds_keys.shape[1] == DIM, f"unexpected key dimensionality {ds_keys.shape[1]} (expected {DIM})"
-    assert np.all(np.isfinite(ds_keys)), "datastore keys contain non-finite (NaN/inf) coordinates"
-    assert np.all(np.isfinite(ds_values.astype(np.float64))), "datastore labels contain non-finite values"
-    assert int(populations.sum()) == N, \
-        f"cluster populations ({int(populations.sum())}) do not sum to datastore size ({N})"
-    assert len(assignment) == N, "assignment length does not match datastore size"
-    assert len(compressed_dists) == n_clusters, \
-        f"compressed_dists has {len(compressed_dists)} entries, expected {n_clusters}"
-    assert np.all((assignment >= 0) & (assignment < n_clusters)), \
-        "assignment contains an out-of-range cluster id"
-    assert dime_centroids.shape == (n_clusters, DIM), \
-        f"centroid array shape {dime_centroids.shape} != expected ({n_clusters}, {DIM})"
-    assert np.all(np.isfinite(dime_centroids)), "fitted centroids contain non-finite coordinates"
-    for c, cd in enumerate(compressed_dists):
-        token_sum = sum(cd.values())
-        assert token_sum == populations[c], \
-            f"cluster {c}: token counts sum to {token_sum}, population is {populations[c]}"
-    assert np.all(np.isfinite(populations)), "non-finite population value"
+def assert_no_duplicate_indices_per_query(idx_matrix):
+    n_q, k = idx_matrix.shape
+    unique_counts = np.array([len(np.unique(row)) for row in idx_matrix])
+    assert np.all(unique_counts == k), \
+        f"duplicate retrieved-centroid indices found in {int(np.sum(unique_counts != k))}/{n_q} queries"
 
 
 def assert_routing_invariants(idx_matrix, n_clusters, k_expected, n_queries_expected):
@@ -77,6 +60,7 @@ def assert_routing_invariants(idx_matrix, n_clusters, k_expected, n_queries_expe
         f"routing index matrix shape {idx_matrix.shape} != expected ({n_queries_expected}, {k_expected})"
     assert np.all((idx_matrix >= 0) & (idx_matrix < n_clusters)), \
         "routing index matrix contains an out-of-range cluster id"
+    assert_no_duplicate_indices_per_query(idx_matrix)
     traffic = routing_traffic(idx_matrix, n_clusters)
     expected_sum = float(k_expected)
     assert abs(float(traffic.sum()) - expected_sum) < 1e-6, \
@@ -84,45 +68,56 @@ def assert_routing_invariants(idx_matrix, n_clusters, k_expected, n_queries_expe
     return traffic
 ```
 
-Full file to review in full (grew from ~420 to ~914 lines): `DIME/run_dime_v2_c1_cluster_structure_audit.py`.
+**New 2-D sampler** — lines 260–299 (signature and core binning logic; full function, including the cell-report loop, is in the file):
 
-**SHA-256 (full files, this revision)**:
-- `38ec302a0474435751ac9ffd0fa3fadebfae5fc3823ebdd826de2ac0066d9487` `DIME/run_dime_v2_c1_cluster_structure_audit.py`
-- `000785e75f827789b10a8c05fda43e10c09e1c7f31de246fc0a1e48bc38554b3` `DIME/mixing.py`
-- (state_object.py / run_tier1_core.py / run_e1_wikitext103.py hashes unchanged from Revision 1, not re-quoted)
+```python
+def stratified_dimensionality_sample(populations, dispersions, n_pop_bins=DIM_POP_BINS, n_disp_bins=DIM_DISP_BINS):
+    eligible = sorted(c for c in range(len(populations)) if populations[c] > 0 and c in dispersions)
+    if len(eligible) == 0:
+        return [], []
+    pops = np.array([populations[c] for c in eligible], dtype=np.float64)
+    disps = np.array([dispersions[c] for c in eligible], dtype=np.float64)
+    pop_edges = np.unique(np.quantile(pops, np.linspace(0, 1, n_pop_bins + 1)))
+    disp_edges = np.unique(np.quantile(disps, np.linspace(0, 1, n_disp_bins + 1)))
+    # ... independent per-axis bin assignment, grid cell construction,
+    # one deterministic (lowest-id) sample per OCCUPIED cell, every cell
+    # (including empty ones) reported in cell_report
+    return sorted(set(sampled)), cell_report
+```
+
+Full file to review in full (grew to 1,122 lines): `DIME/run_dime_v2_c1_cluster_structure_audit.py`.
+
+**SHA-256**: `a764ee4d28b3e38c76eff9954ae651ddb093e648dbf4df95171683344cfad1a0` `DIME/run_dime_v2_c1_cluster_structure_audit.py`
 
 ## C. Diagnostic implementation (updated)
 
-Same file, `main()` still opens with the `RuntimeError` guard (unchanged). New/changed functions beyond Revision 1:
+New/changed since Revision 2:
 
-1. `environment_metadata()` / `save_construction_artifact(...)` (lines 541–578) — records package versions + platform, hashes and persists the fitted centroids/assignment.
-2. `assert_real_data_invariants(...)` / `assert_routing_invariants(...)` (lines 493–539) — quoted in full above.
-3. `correlation_pair(a, b)` (lines 601–609) — returns `(pearson_r, spearman_r, n)`.
-4. `stratified_population_summary(cluster_df, n_strata=5)` (lines 580–599) — population-quintile stratified means/medians, all-nonempty-cluster scope.
-5. `write_structural_summary_md`, `write_construction_audit_md`, `write_validation_report_md`, `write_final_report_md` — the 4 previously-missing deliverable writers.
-6. `main()`'s Part 7 block now computes `idx_*_top1` (`= idx_*_topk[:, :1]`) and `idx_*_topk` (`k=20`) separately, running `assert_routing_invariants` on each before writing `traffic_top1_*` and `traffic_top{k}_*` as distinct `cluster_statistics.csv` columns.
-7. Part 4/6's per-cluster loop now proceeds for every `n_j>=1` (singleton clusters included, tagged `is_singleton`), only `n_j==0` short-circuits to a population-only row. Part 5's sampling loop keeps a visible row (with `note`) when `dimensionality_stats` returns `None`, instead of dropping it.
+1. `save_construction_artifact` — hash-then-save-then-reload-then-verify, fixed dtype-before-hash ordering, `with np.load(...)` context manager.
+2. `assert_no_duplicate_indices_per_query` (new) — called inside `assert_routing_invariants` before the traffic-sum check.
+3. `stratified_dimensionality_sample` — replaced in full with genuine 2-D quantile-grid stratification; now returns `(sampled_cluster_ids, cell_report)` instead of a plain list. `main()`'s Part 5 updated to unpack this and write `dimensionality_sample_strata.csv`; `write_structural_summary_md` gained optional `sample_clusters`/`cell_report` parameters and a new coverage section.
+4. `assert_real_data_invariants`'s docstring and assertion message, plus `write_validation_report_md`'s generated text, now explicitly state the key/label check is structural-only.
+5. `SMOKE` constant, its print statement, and its summary-dict entry all removed.
 
-**Full deliverable list produced by `main()` (all 8 required + 2 new reproducibility artifacts)**: `cluster_statistics.csv`, `structural_summary.md`, `construction_audit.md`, `dimensionality_results.csv`, `structural_relationships.csv`, `figures/` (4 PNGs), `validation_report.md`, `final_report.md`, plus `dime_v1_cluster_artifact.npz` and `construction_fingerprint.json` (new, addressing point 1).
+**Deliverable list unchanged in count (8 required + 2 reproducibility artifacts) plus one new file**: `dimensionality_sample_strata.csv` (the full 2-D grid, including empty cells).
 
 ## D. Planned calculations (addition)
 
-- `pearson_r, spearman_r = correlation_pair(a, b)` — both computed over the same finite-value mask, reported together, never collapsed into one number (addresses point 4).
-- Population-quintile stratified summary: `pd.qcut(n_j, 5)` over all nonempty clusters, reporting mean/median of `R_j, sigma_j, V_j, rho_j, H_j, delta_j` per quintile.
-- `T_j^{(1)}` (top-1, diagnostic-grouping scope) and `T_j^{(k=20)}` (top-20, production-mixing scope) are now DISTINCT reported quantities, each separately asserted to sum to `1.0` and `k` respectively across clusters.
+- Fingerprint hashes are now computed on, and verified against, the EXACT bytes written to `dime_v1_cluster_artifact.npz` (float32 centroids, int32 assignment) — never the pre-conversion in-memory arrays.
+- 2-D stratified sample: independent quantile bins per axis, `DIM_POP_BINS=8 x DIM_DISP_BINS=5` grid (ceiling 40, actual count depends on occupied cells after duplicate-edge collapsing).
+- Routing traffic's appearance-probability interpretation is now conditioned on `assert_no_duplicate_indices_per_query` passing first.
 
-## E. Sanity checks (updated — now 10, all passed, all synthetic-only)
+## E. Sanity checks (updated — now 13, all passed, all synthetic-only)
 
-`population_sum_identity`, **`population_stats_singleton_vs_empty`** (new), `geometry_known_values`, **`singleton_cluster_geometry`** (new — hand-computed single-point case), `effective_rank_bounds`, `token_composition_known_values`, `routing_traffic_known_values`, **`routing_normalization`** (new — hand-built `[97,11,4]`-shaped synthetic routing matrix, confirms `sum(top1)=1.0`, `sum(topk)=k`), **`spearman_matches_scipy`** (new — monotonic-nonlinear `x` vs `x**3`, confirms Pearson and Spearman visibly differ, so they are not accidentally the same computation), `cluster_to_members_matches_manual`. Re-ran immediately before writing this document: 10/10 passed. The markdown-writer functions and the fingerprint/stratified-summary helpers were also dry-run on hand-built synthetic DataFrames/arrays (never a cache file) to confirm they do not crash; outputs inspected manually.
+All 10 from Revision 2, plus: `duplicate_index_rejection` (new), `fingerprint_matches_persisted_artifact` (new — also caught and fixed the Windows file-handle bug above), `2d_stratification_covers_both_dimensions` (new — rewritten once after the first version's own flawed premise was caught by actually running it). Re-ran immediately before writing this document: **13/13 passed**.
 
 ## F. Unresolved issues (updated)
 
-1. **Still genuinely unresolved**: the sklearn version that produced the historical `tier1.json`/`run_manifest.json` artifacts cannot be recovered retroactively — no amount of code change fixes a measurement that was never taken. This revision only prevents the problem from recurring (every future run now saves its own fingerprint).
-2. **Still genuinely unresolved**: no artifact existed before this revision, so there is still no historical ground truth to diff this run's centroids against — only forward-looking comparison is now possible.
-3. Unchanged from Revision 1: the exact `extract_and_cache.py` CLI invocation for the base-`gpt2` WikiText-103 cache specifically was not found verbatim (only indirectly confirmed via two manifests).
-4. **Partially addressed**: whether any real cluster is empty or a singleton will now be reported explicitly and separately (`n_empty`, `n_singleton` in `population_stats`) the moment the real job runs — still not verified from any existing artifact, since the real job has not run.
-5. **Resolved**: the single-nearest vs. multi-centroid routing distinction is now fully attributed to specific source (`mixing.py` vs. `build_splits_for`) and reported as two separate column families with independent normalization checks.
-6. Unchanged from Revision 1: `GPT2LMHeadModel.from_pretrained` defaults to float32; not independently cross-checked against the actual saved `.npz` dtype (will be logged when the real job runs, since `assert_real_data_invariants` now reports key dimensionality/finiteness explicitly, though not dtype by name — noting this as a residual gap worth a one-line addition if the reviewer wants it before approval).
+1. **Still genuinely unresolved, not claimed otherwise**: the sklearn version behind the historical `tier1.json`/`run_manifest.json` artifacts cannot be recovered retroactively.
+2. **Still genuinely unresolved**: no historical ground-truth artifact existed before Revision 2, so only forward-looking fingerprint comparison is possible from here on.
+3. Unchanged: the exact `extract_and_cache.py` CLI invocation for the base-`gpt2` WikiText-103 cache was not found verbatim.
+4. Unchanged: real empty/singleton cluster counts will be reported the moment the real job runs; not yet verified from any artifact.
+5. **New, per this revision's point 4**: the key/label alignment check verifies row-count equality only, not semantic row-for-row provenance — the cache format has no row-id field to check against. Stated explicitly, not implied to be proven.
 
 ## G. Execution status
 
