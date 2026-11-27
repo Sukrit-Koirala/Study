@@ -1,0 +1,22 @@
+DIME-V2 job started: Mon Nov 23 01:53:40 PM CST 2026
+Node: Slurm-2-7
+DIME-V2 job started: 2026-11-23 13:54:22. SMOKE=False, N_CLUSTERS=3811
+Running synthetic correctness checks (S0, exact-reduction, S1-S5) BEFORE touching any real cache...
+  all 7 synthetic checks passed
+Loading cache (datastore/controller_train/val)...
+Re-deriving DIME clusters (seed=42, identical to every prior script in this series)...
+  2678/3811 clusters eligible (population >= 60, >=2 distinct tokens)
+  sampled 10 clusters (rho_j-stratified, deterministic): [883, 1118, 1312, 1313, 1380, 1428, 2533, 2534, 3348, 3531]
+  cluster 883: n_j=105, rho_j=1.33, n_geometry_tokens=3, retrieval_rows=1
+  cluster 1118: n_j=110, rho_j=3.44, n_geometry_tokens=5, retrieval_rows=1
+  cluster 1312: n_j=143, rho_j=1.21, n_geometry_tokens=1, retrieval_rows=1
+  cluster 1313: n_j=62, rho_j=1.48, n_geometry_tokens=1, retrieval_rows=1
+  cluster 1380: n_j=81, rho_j=1.69, n_geometry_tokens=0, retrieval_rows=1
+  cluster 1428: n_j=84, rho_j=1.02, n_geometry_tokens=0, retrieval_rows=1
+  cluster 2533: n_j=118, rho_j=1.97, n_geometry_tokens=5, retrieval_rows=1
+  cluster 2534: n_j=136, rho_j=2.43, n_geometry_tokens=8, retrieval_rows=1
+  cluster 3348: n_j=129, rho_j=64.50, n_geometry_tokens=1, retrieval_rows=1
+  cluster 3531: n_j=136, rho_j=1.13, n_geometry_tokens=0, retrieval_rows=1
+Outcome: C -- Token-conditioned residuals are NOT measurably more compact than the label-agnostic baseline at matched storage -- no clear geometric structure to exploit.
+DIME-V2 job done in 171.8s
+DIME-V2 job done: Mon Nov 23 01:57:15 PM CST 2026

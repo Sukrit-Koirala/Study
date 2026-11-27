@@ -1,0 +1,12 @@
+var_a,var_b,scope,pearson_r,spearman_r,n
+n_j,R_j,all_nonempty_clusters,-0.06608748612642691,-0.06518019175647795,3811
+n_j,rms_dispersion,all_nonempty_clusters,-0.05222833039207648,-0.10307078419993454,3811
+n_j,V_j,all_nonempty_clusters,0.8124729946186275,0.8060557302676246,3811
+rms_dispersion,entropy,all_nonempty_clusters,0.22370564200109772,0.1972543779638052,3811
+rho_j,rms_dispersion,all_nonempty_clusters,-0.19097424058596627,-0.28746518014768,3811
+traffic_top20_val,n_j,all_nonempty_clusters,0.8537200287664936,0.8376803231067741,3811
+traffic_top20_val,rms_dispersion,all_nonempty_clusters,-0.08807435007722761,-0.15820381056331645,3811
+traffic_top20_val,V_j,all_nonempty_clusters,0.7540740229520853,0.7320551949871911,3811
+traffic_top1_val,n_j,all_nonempty_clusters,0.9121542243080725,0.9145411404479405,3811
+n_j,effective_rank,dimensionality_sample_n=40,0.9296893850648972,0.9346092545118042,40
+rms_dispersion,effective_rank,dimensionality_sample_n=40,0.32642344118687816,0.16435272045028146,40

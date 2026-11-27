@@ -1,0 +1,100 @@
+{
+  "synthetic_checks": [
+    {
+      "name": "S0_centering_identity",
+      "passed": true
+    },
+    {
+      "name": "exact_reduction",
+      "passed": true,
+      "max_err": 1.1102230246251565e-16
+    },
+    {
+      "name": "S1_one_compact_region",
+      "passed": true,
+      "tv": 0.0011541193051198132
+    },
+    {
+      "name": "S2_multiple_regions",
+      "passed": true,
+      "tv_r1": 0.4848707095269874,
+      "tv_r2": 0.0007137354208894396,
+      "multimodality_reduction_ratio": 0.9957558186414982
+    },
+    {
+      "name": "S3_interleaved_labels",
+      "passed": true,
+      "tv": 0.0011916262608165048
+    },
+    {
+      "name": "S4_rare_but_important",
+      "passed": true,
+      "tv_starved": 0.36459010117336066,
+      "tv_preserved": 0.06843250034471443
+    },
+    {
+      "name": "S5_candidate_vs_weight",
+      "passed": true,
+      "candidate_recall": 1.0,
+      "weight_tv": 0.02797259204497804
+    }
+  ],
+  "n_ds": 381127,
+  "n_ct": 90170,
+  "n_val": 77089,
+  "n_clusters": 3811,
+  "seed": 42,
+  "smoke": false,
+  "tau": 2.0,
+  "primary_m": 20,
+  "n_eligible_clusters": 2678,
+  "sample_clusters": [
+    883,
+    1118,
+    1312,
+    1313,
+    1380,
+    1428,
+    2533,
+    2534,
+    3348,
+    3531
+  ],
+  "comparisons": {
+    "tv_all_member_cond_minus_agn": {
+      "mean": 0.016158082119944194,
+      "ci_95_low": 0.0009923192237592038,
+      "ci_95_high": 0.034624546207846274,
+      "n_clusters": 10
+    },
+    "tv_topm_cond_minus_agn": {
+      "mean": 0.010356282469941112,
+      "ci_95_low": -0.0011015291317840292,
+      "ci_95_high": 0.024027885048407416,
+      "n_clusters": 10
+    },
+    "candidate_recall_cond_minus_agn": {
+      "mean": 0.016007538109333187,
+      "ci_95_low": 0.002745888789440809,
+      "ci_95_high": 0.03887167071152734,
+      "n_clusters": 10
+    },
+    "distortion_cond_minus_agn": {
+      "mean": 7.17051187422336,
+      "ci_95_low": 2.621006213193699,
+      "ci_95_high": 11.8592883570959,
+      "n_clusters": 7
+    }
+  },
+  "outcome_code": "C",
+  "outcome_text": "Token-conditioned residuals are NOT measurably more compact than the label-agnostic baseline at matched storage -- no clear geometric structure to exploit.",
+  "query_change": {
+    "mean_e_delta_conditioned": 0.19722598759590235,
+    "mean_e_delta_agnostic": 0.1681131445395325,
+    "mean_e_delta_static_baseline": 1.0003237680479142,
+    "conditioned_beats_static_frac_mean": 0.9824999999999999,
+    "agnostic_beats_static_frac_mean": 0.9924999999999999
+  },
+  "mean_freq_importance_correlation": 0.587255797353877,
+  "elapsed_seconds": 171.17117985058576
+}
