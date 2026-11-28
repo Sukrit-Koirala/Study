@@ -1,0 +1,34 @@
+{
+  "n_ds": 381127,
+  "n_ct": 90170,
+  "n_val": 77089,
+  "n_clusters": 3811,
+  "seed": 42,
+  "k_route": 20,
+  "tau_route": 2.0,
+  "m_local": 20,
+  "tau_local": 2.0,
+  "n_sampled_clusters": 67,
+  "sampling_coverage": {
+    "n_eligible": 3811,
+    "n_occupied_cells": 77,
+    "n_total_possible_cells": 81,
+    "n_cells_kept": 60,
+    "n_sampled": 60,
+    "axes": [
+      "n_j",
+      "rms_dispersion",
+      "distinct_token_fraction",
+      "traffic_top20_val"
+    ],
+    "n_bins_per_axis": 3,
+    "cell_keep_prob": 0.7792207792207793
+  },
+  "c1_centroids_sha256": "e7adc93629e102ad7dc16fee9b1c0b1a29be599c44e1f5e42fedbf514d96957e",
+  "c1_assignment_sha256": "9dae0c746a8f89dc6f6a3e96b4e0cead73d00965f474d7c3795bdffe6767f13e",
+  "synthetic_checks_passed": 20,
+  "synthetic_checks_total": 20,
+  "elapsed_seconds": 20.00400790013373,
+  "mode": "real_approved",
+  "is_real_cache": true
+}
